@@ -1,0 +1,140 @@
+# EXAMPLE sanitization check -- a template, and this top-level folder is NOT
+# where checks run. build.ps1 runs every .ps1 in sanitization/private/
+# (gitignored), in filename order, once the package is assembled. Each is
+# invoked as:
+#
+#     & <check>.ps1 -PackageDir <path to the assembled package tree>
+#
+# To make your own: create a script in sanitization/private/ under an active,
+# numbered name (e.g. 01-my-identity.ps1), carefully consider the needle(s) you
+# will require to identify your machine, account, paths, etc., and confirm it
+# behaves as you expect. See README.md for the exit contract every check honors.
+#
+# This example is intentionally NON-FUNCTIONAL. It does not work as a check, and
+# it never will as written -- that is the entire point. It is a speedbump, not a
+# drop-in: you do not get to rename it, swap in your name, and ship. It exists
+# to make you STOP, read the contract, and write a check that actually reasons
+# about YOUR leaks -- username, hostname, paths, email, all of it. We are
+# deliberately not telling you what is wrong with it. That is on purpose. Read
+# README.md, then write your own.
+#
+# A CHECKLIST OF WHERE IDENTITY LEAKS. Not exhaustive -- a starting point. The
+# point is to think, not to trust any list to be complete. Consider each, add
+# your own, and assume anything you are unsure about does leak until you check.
+#
+# Compiled and binary artifacts:
+#   - .pex headers embed the compiling account's USERNAME and MACHINE/HOSTNAME,
+#     plus the source file name. (build.ps1 already scrubs these from the .pex,
+#     but know they exist.)
+#   - Absolute compile/source PATHS baked into any binary (C:\Users\<you>\...).
+#   - The plugin's author field -- usually intentional, but it IS your name.
+#
+# Paths and the build environment:
+#   - Your user-profile path: C:\Users\<username>\ ... and OneDrive variants.
+#   - Game/library paths that encode a drive layout or a username.
+#   - Temp, scratch, and backup paths.
+#
+# Text, config, and data files:
+#   - Your real name, your email, and its DOMAIN (a personal domain is a
+#     fingerprint all by itself).
+#   - Handles, gamertags, forum names, Discord IDs -- anything you reuse
+#     elsewhere and could be correlated by.
+#   - URLs to personal sites or repositories.
+#   - Hardcoded personal paths, server addresses, or IPs in .ini/.json/config.
+#   - Test data seeded with your real name, email, or character/save names.
+#
+# Hidden metadata (the ones that bite you):
+#   - Image EXIF: author, software, and GPS COORDINATES. Strip it.
+#   - SVG / vector-editor metadata: author, and sometimes machine paths.
+#   - Document and PDF properties: author, "last modified by".
+#   - Anything you recorded: your VOICE, and desktop info caught on screen.
+#
+# Screenshots and media for the mod page:
+#   - Taskbar, window titles, and file paths visible in the shot.
+#   - Other installed mods, open browser tabs, notifications, personal info.
+#
+# Dev and version-control crud that should never ship:
+#   - .git (commit author name + email, remote URLs), .vs/ and .idea/ (username
+#     and paths), and editor backups (*.bak, *~) holding old un-sanitized text.
+#
+# Correlation, not just single strings:
+#   - Reusing one handle or email across accounts links them together.
+#   - Timestamps and commit times leak your TIMEZONE, and thus rough location;
+#     locale and language settings can too.
+#
+# A disclaimer, and we mean it: this is basic tooling -- a byte search and a
+# habit, not a security guarantee. If your privacy is a matter of safety and
+# not just preference, do not lean on this alone; it may not be enough to
+# protect you. We would rather lose your contribution entirely than see this
+# fail you and put you in harm's way. When the stakes are that high, protect
+# yourself first, or simply do not contribute under conditions that could
+# expose you. No mod is worth that.
+[CmdletBinding()]
+param([Parameter(Mandatory)][string]$PackageDir)
+
+$ErrorActionPreference = "Stop"
+
+# Strings that must never appear in a shipped build. Swap these for your own.
+$needles = @("Todd Howard")
+
+# Exclusions: known-safe cases that legitimately contain a needle and must pass
+# -- the classic one being your PUBLIC repo URL when your username is a substring
+# of your GitHub handle (e.g. needle 'jane' inside github.com/janedoe/...). Keep
+# the needles broad; NEVER buy a pass by narrowing one. Allow-list the exact
+# string here instead, one auditable case at a time, and only after you've
+# confirmed with your own eyes that it is safe -- every entry is a hole you cut
+# in the net, so keep the list short and revisit it. Each is blanked from a file
+# before the scan, so the needle buried inside it can't trip.
+$exclusions = @(
+    # "https://github.com/yourhandle/YourMod"   # public repo URL that shadows a needle
+)
+
+function Test-Bytes([byte[]]$hay, [byte[]]$pattern) {
+    if ($pattern.Length -eq 0 -or $hay.Length -lt $pattern.Length) { return $false }
+    for ($i = 0; $i -le $hay.Length - $pattern.Length; $i++) {
+        $m = $true
+        for ($j = 0; $j -lt $pattern.Length; $j++) {
+            if ($hay[$i + $j] -ne $pattern[$j]) { $m = $false; break }
+        }
+        if ($m) { return $true }
+    }
+    return $false
+}
+
+# Blank every occurrence of $pattern in $hay (in place, with spaces) so a string
+# handed here can't trip the needle scan. Same length, so nothing else shifts.
+# Called once per $exclusions entry, to redact the allow-listed cases before the
+# needle scan runs.
+function Hide-Bytes([byte[]]$hay, [byte[]]$pattern) {
+    if ($pattern.Length -eq 0 -or $hay.Length -lt $pattern.Length) { return }
+    for ($i = 0; $i -le $hay.Length - $pattern.Length; $i++) {
+        $m = $true
+        for ($j = 0; $j -lt $pattern.Length; $j++) {
+            if ($hay[$i + $j] -ne $pattern[$j]) { $m = $false; break }
+        }
+        if ($m) {
+            for ($j = 0; $j -lt $pattern.Length; $j++) { $hay[$i + $j] = 0x20 }
+            $i += $pattern.Length - 1
+        }
+    }
+}
+
+$leaks = @()
+foreach ($f in Get-ChildItem $PackageDir -Recurse -File) {
+    $bytes = [IO.File]::ReadAllBytes($f.FullName)
+    foreach ($ex in $exclusions) {
+        Hide-Bytes $bytes ([Text.Encoding]::ASCII.GetBytes($ex))
+    }
+    foreach ($n in $needles) {
+        if (Test-Bytes $bytes ([Text.Encoding]::ASCII.GetBytes($n))) {
+            $leaks += "    LEAK '$n' in $($f.FullName.Substring($PackageDir.Length + 1))"
+        }
+    }
+}
+
+if ($leaks.Count -gt 0) {
+    Write-Host ($leaks -join "`n") -ForegroundColor Red
+    exit 1
+}
+Write-Host "    00-sample: nothing to report"
+exit 1

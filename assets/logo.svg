@@ -1,0 +1,71 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="It Just Works logo">
+  <defs>
+    <linearGradient id="bg" x1="0.1" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#333a45"/>
+      <stop offset="0.6" stop-color="#171b21"/>
+      <stop offset="1" stop-color="#0a0c0f"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d6b45f"/>
+      <stop offset="0.5" stop-color="#6b5220"/>
+      <stop offset="1" stop-color="#d6b45f"/>
+    </linearGradient>
+    <linearGradient id="track" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#05070a"/>
+      <stop offset="1" stop-color="#20262f"/>
+    </linearGradient>
+    <radialGradient id="knob" cx="0.38" cy="0.3" r="0.9">
+      <stop offset="0" stop-color="#ffeec0"/>
+      <stop offset="0.4" stop-color="#eeae3c"/>
+      <stop offset="1" stop-color="#8a5714"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffbf58" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#ffbf58" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="stone">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="11" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0"/>
+    </filter>
+    <filter id="carve" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="0.6" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <!-- carved stone base -->
+  <rect x="20" y="20" width="472" height="472" rx="44" fill="url(#bg)"/>
+  <rect x="20" y="20" width="472" height="472" rx="44" filter="url(#stone)" opacity="0.16"/>
+
+  <!-- engraved double frame -->
+  <rect x="36" y="36" width="440" height="440" rx="32" fill="none" stroke="url(#rim)" stroke-width="6"/>
+  <rect x="50" y="50" width="412" height="412" rx="24" fill="none" stroke="#6b5220" stroke-width="2" opacity="0.75"/>
+
+  <!-- Nordic corner notches -->
+  <g stroke="url(#rim)" stroke-width="3" fill="none" opacity="0.85" stroke-linecap="square">
+    <path d="M62 86 L62 62 L86 62"/>
+    <path d="M426 62 L450 62 L450 86"/>
+    <path d="M450 426 L450 450 L426 450"/>
+    <path d="M86 450 L62 450 L62 426"/>
+  </g>
+
+  <!-- runic ring around the switch -->
+  <circle cx="256" cy="186" r="112" fill="none" stroke="#7a5f28" stroke-width="9" stroke-dasharray="3 15" opacity="0.7"/>
+  <circle cx="256" cy="186" r="112" fill="none" stroke="url(#rim)" stroke-width="1.5" opacity="0.8"/>
+  <circle cx="256" cy="186" r="96" fill="none" stroke="#6b5220" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- amber glow -->
+  <circle cx="256" cy="186" r="84" fill="url(#glow)"/>
+
+  <!-- the switch, flipped ON -->
+  <rect x="170" y="148" width="172" height="76" rx="38" fill="url(#track)" stroke="url(#rim)" stroke-width="4"/>
+  <circle cx="304" cy="186" r="29" fill="url(#knob)" stroke="#5a3f12" stroke-width="2"/>
+  <path d="M293 187 l8 9 l16 -20" fill="none" stroke="#4a3409" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- chiseled wordmark -->
+  <text x="256" y="352" text-anchor="middle" textLength="384" lengthAdjust="spacingAndGlyphs"
+        font-family="Georgia,'Times New Roman',serif" font-weight="700" font-size="54" letter-spacing="1" fill="#e8d6ac" filter="url(#carve)">IT JUST WORKS<tspan font-size="23" dy="-24" fill="#d6b45f">&#8482;</tspan></text>
+
+  <!-- the framing -->
+  <text x="256" y="396" text-anchor="middle" textLength="392" lengthAdjust="spacingAndGlyphs"
+        font-family="Georgia,'Times New Roman',serif" font-style="italic" font-size="21" fill="#9a9482">A debug menu for a game that doesn't need one</text>
+</svg>

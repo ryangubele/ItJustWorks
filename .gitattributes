@@ -1,0 +1,6 @@
+# The MCM translation tables are UTF-16LE (with a BOM and CRLF line endings).
+# Marking them `binary` (= -text -diff) guarantees Git never applies line-ending
+# conversion to them, which would corrupt the 2-byte encoding. Git already
+# auto-detects them as binary via their null bytes; this pins that behavior so a
+# checkout on any platform or Git version can't mangle them.
+interface/translations/*.txt binary

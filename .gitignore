@@ -1,0 +1,29 @@
+# Build output
+dist/
+
+# .NET
+bin/
+obj/
+*.user
+
+# Papyrus compiler leftovers
+*.pex.bak
+
+# Editor / OS
+.vs/
+.idea/
+Thumbs.db
+desktop.ini
+
+# The real identity-scrub checks live in sanitization/private/ — a folder you
+# fill with your own private repo (see sanitization/README.md). It's ignored
+# wholesale so those checks can never land in this public repo. The public
+# README + example script sit at sanitization/ top level and ARE tracked, so a
+# fresh clone still learns the system.
+sanitization/private/
+
+# Third-party Papyrus API stubs (MCM Helper, po3 Extender, SkyUI, PapyrusUtil,
+# UIExtensions, and base-game signatures). Compile-time only, and not ours to
+# redistribute - they belong to their authors - so they live here locally but stay
+# out of the public repo. See docs/BUILDING.md for how to supply them.
+headers/

@@ -1,0 +1,33 @@
+# Changelog
+
+All notable changes to It Just Works™ are recorded here. This project follows
+[Semantic Versioning](https://semver.org/); see [docs/VERSIONING.md](docs/VERSIONING.md)
+for what the numbers mean for a mod. The top heading's version must match `VERSION` -
+the build gate checks it.
+
+## 0.2.0
+
+First public release. A scene watchdog and debug menu for the stuck-state bug - the
+switch Skyrim forgets to flip back.
+
+- **Scene watchdog.** Polls the scene you're in (every 30s by default, tunable 10-240s
+  or off) and fires a single advisory notification once you've been in one past a
+  threshold (3 minutes by default, or never). You never have to remember to check.
+- **Stop Scene.** The fix: ends a scene you're stuck in, with a deliberate two-step
+  confirm so it can't misfire on a working one.
+- **A live readout.** The current scene, its owning quest and form ID, a rough
+  time-in-scene, and the last ten scenes you passed through.
+- **A rebindable hotkey** that names your current scene without opening the menu, with
+  a Clear button to unbind it.
+- **Enable/disable.** Shelve the whole mod mid-playthrough without uninstalling - it
+  goes dormant and restores exactly, no cleanup and no lost state.
+- **Diagnostics.** An "Editor IDs loaded" status light (names vs. ID numbers, via po3
+  Tweaks) and a Papyrus-log toggle for troubleshooting.
+- **Built to be safe.** ESL-flagged, alias-free, save-safe to add and to remove, and
+  self-healing across reloads.
+- **Ten languages.** Menu and manual in English plus nine more - Chinese, Czech,
+  French, German, Italian, Japanese, Polish, Russian, Spanish - each chosen at install
+  through a FOMOD picker, so only what you pick touches your Data folder. Non-English
+  is machine-translated; corrections welcome.
+- **Documented.** An in-game manual in every language, plus a technical and build
+  writeup in the repository.

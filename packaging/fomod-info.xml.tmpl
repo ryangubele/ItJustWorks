@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Metadata only. This is info.xml with NO ModuleConfig.xml beside it: no
+     install-time wizard, just the name/author/version/site/category that
+     Vortex, MO2 and Nexus read. build.ps1 fills {{VERSION}} and {{WEBSITE}}. -->
+<fomod>
+  <!-- &#8482; = the ™ glyph, written as an XML entity so no encoding round-trip
+       through build.ps1 can mangle it. Display name only; the plugin, MCM menu,
+       and archive filename stay plain ASCII on purpose. -->
+  <Name>It Just Works&#8482;</Name>
+  <Author>{{AUTHOR}}</Author>
+  <Version MachineVersion="{{VERSION}}">{{VERSION}}</Version>
+  <Website>{{WEBSITE}}</Website>
+  <Description>Un-sticks the transient states Skyrim forgets to switch off - starting with stuck scenes, the near-unknown bug that silently ends playthroughs. Watches for it, warns you, and hands you a one-click fix. More states to come.</Description>
+  <Groups>
+    <element>Bug Fixes</element>
+    <element>Utilities</element>
+  </Groups>
+</fomod>

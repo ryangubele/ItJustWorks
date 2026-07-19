@@ -1,0 +1,74 @@
+# Usare It Just Works™
+
+Tutto ciò che fa la mod si gestisce da un'unica pagina: **Menu di Configurazione della Mod > It Just Works**. Ecco cosa fa ogni parte.
+
+La versione breve, se l'hai appena installata: lascia stare i valori predefiniti, continua a giocare, e lascia che la sentinella ti dia un colpetto sulla spalla se mai resti troppo a lungo in una scena. Tutto il resto qui sotto è per quando vuoi guardare più da vicino.
+
+## Scena attuale
+
+La parte alta della pagina è una lettura dal vivo della scena in cui ti trovi, o "None" se non sei in nessuna. Aprire la pagina esegue una nuova lettura, quindi non è mai obsoleta.
+
+- **Scena** - la scena in cui sei, per nome (il suo Editor ID) quando i nomi sono disponibili, o un numero ID grezzo quando non lo sono (vedi la spia qui sotto).
+- **Form ID** - il numero ID grezzo della scena, sempre mostrato, nel caso ti serva per la console o una segnalazione di bug.
+- **Missione proprietaria** - la missione a cui appartiene la scena. Di solito il nome più utile: ti dice *cosa* ti sta trattenendo.
+- **Tempo nella scena** - all'incirca da quanto sei in questa scena. Contrassegnato con `~` perché la mod controlla su un timer, quindi conosce la risposta a un controllo di precisione.
+
+## La spia "Editor ID caricati"
+
+Una spia di stato, non un interruttore - cliccarla non fa altro che riportarla alla verità.
+
+- **Accesa** - bene. powerofthree's Tweaks sta caricando gli Editor ID, quindi scene e missioni compaiono per nome.
+- **Spenta** - i nomi sono disattivati; tutto compare come numeri ID invece. La mod funziona esattamente allo stesso modo in entrambi i casi - è solo più difficile da leggere.
+
+Per attivare i nomi: apri `po3_Tweaks.ini` (nella tua installazione di powerofthree's Tweaks) e imposta `Load EditorIDs = true`, poi riavvia Skyrim. La spia si accende e i nomi compaiono.
+
+La mod lo segnala anche una volta, da sola, la prima volta che nota che i nomi sono disattivati. Questa spia è la versione permanente di quell'avviso - la cosa da indicare in un thread di aiuto quando qualcuno chiede perché le sue scene sono tutte numeri.
+
+## Azioni
+
+- **Ferma scena** - la soluzione. Se sei davvero bloccato, questo termina la scena in cui sei. È volutamente in due passi: premi **Ferma scena** una volta per armarlo (compare una riga che conferma che si fermerà alla chiusura del menu) e premi di nuovo per annullare. L'arresto vero e proprio avviene nel momento in cui chiudi il menu, perché è l'unico istante in cui il gioco gira abbastanza da farlo valere. Quindi: armalo, chiudi il menu, fatto.
+
+  Ricorri a questo solo se pensi che la scena sia bloccata. Fermare una scena che funziona normalmente può rompere qualcosa, e fermarne una bloccata può scatenare una breve raffica di eventi ritardati mentre il gioco recupera - è previsto, non è un nuovo bug.
+
+- **Aggiorna** - esegue subito una nuova lettura della scena attuale, senza chiudere e riaprire la pagina.
+
+## Scene recenti
+
+Le ultime dieci scene che hai attraversato, la più recente per prima, ciascuna con la durata approssimativa. Utile per "aspetta, cos'era quella cosa di poco fa", specie quando una scena passa troppo in fretta per coglierla.
+
+## Sentinella
+
+La parte che sorveglia così non devi farlo tu.
+
+- **Avvisami dopo** - dopo quanti minuti in una singola scena la mod ti avvisa. Predefinito 3. Imposta 0 per non avvisare mai.
+- **Controlla ogni** - ogni quanto guarda la sentinella, in secondi. Predefinito 30. Imposta 0 per spegnere del tutto la sentinella. È pensato per il caso che ci si accorge molto dopo, quindi non serve che sia veloce: da 10 a 240 secondi basta e avanza, ed è più leggero per il tuo gioco.
+- **Registra su Papyrus** - scrive ogni cambio di scena nel log di Papyrus. Lascialo spento a meno che tu non stia diagnosticando o compilando una segnalazione di bug.
+
+Quando la sentinella scatta, sono due brevi righe nell'angolo - da quanto sei nella scena e che ne sta bloccando altre, poi il nome della mod. Non serve avere il menu aperto per vederlo.
+
+## Impostazioni
+
+- **Mostra la scena attuale** - assegna un tasto qui, e premerlo mostra il nome della scena in cui sei, senza aprire affatto il menu. Il più rapido "in cosa sono adesso".
+- **Cancella tasto** - rimuove l'assegnazione di quel tasto. Qui non c'è un ESC per cancellare (in questo menu ESC è Pausa, e il gioco ti avvisa del conflitto), quindi è con questo pulsante che togli l'assegnazione una volta che ne hai impostata una.
+
+## Informazioni
+
+La versione, così vedi a colpo d'occhio quale build stai giocando - comodo quando chiedi aiuto o controlli se sei aggiornato.
+
+## Spegnerla, o rimuoverla
+
+Non devi disinstallarla per fermare la mod. La pagina **Disinstalla** ha un solo interruttore **Abilitata**: spegnilo e la mod diventa inattiva - la sentinella smette di controllare e il tasto viene deregistrato - senza ripulire nulla né toccare il tuo salvataggio. Riaccendila quando vuoi e riprende esattamente da dove aveva lasciato. È il modo garbato di metterla da parte a metà partita, e un modo facile per verificare se era proprio lei a darti fastidio.
+
+Se invece la vuoi via per sempre, rimuovila in quest'ordine:
+
+1. **Spegnila** nella pagina Disinstalla.
+2. **Salva, poi esci** al desktop.
+3. **Rimuovi la mod** nel tuo gestore di mod (Vortex, MO2, o a mano).
+
+È davvero tutto ciò che serve. Niente di ciò che fa questa mod rovinerà un salvataggio all'uscita - non tiene in ostaggio alcun oggetto di gioco, non blocca nulla, e niente dipende da lei. Ciò che lascia dietro di sé è ciò che lascia *ogni* mod con script: un piccolo residuo inerte nel salvataggio dove viveva il suo script. Skyrim lo ignora. Se vuoi eliminare anche quello, puoi spazzare via il residuo con un pulitore di salvataggi una volta rimossa la mod.
+
+### Sui pulitori di salvataggi (ReSaver)
+
+Con un salvataggio di lunga data, ogni tanto eseguirai un pulitore - **ReSaver** (parte di FallrimTools) è quello di prassi - per rimuovere i residui di script lasciati da *altre* mod che hai sostituito o rimosso. Puoi lasciare It Just Works installata mentre lo fai. È costruita per sopravvivere a una pulizia: senza alias, nessuno stato del mondo, si ripara da sola. Un passaggio normale non la tocca, e anche uno aggressivo che ne cancella il timer di controllo o il tasto si riarma la volta successiva che apri il menu. Il rischio per *questa* mod è basso quanto può esserlo per una mod con script, per come è progettata.
+
+Le cautele che restano riguardano lo strumento, non noi: sappi cosa fa ReSaver prima di puntarlo a un salvataggio a cui tieni, e mira a ciò che hai davvero rimosso invece di uno spazzamento alla cieca.
