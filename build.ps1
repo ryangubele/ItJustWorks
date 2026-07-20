@@ -4,7 +4,9 @@
 # mutagen -> papyrus -> scrub -> assemble -> metadata -> verify gate -> zip.
 # Every step that emits a version reads it from VERSION; never a literal.
 #
-# This script does NO git. History is the operator's to make.
+# This script writes no git history -- that's the operator's to make. It does *read* HEAD's
+# commit date (clean tree only) to stamp stable, commit-dated .pex timestamps; git is a soft,
+# read-only dependency for that and nothing else.
 
 [CmdletBinding()]
 param(
@@ -94,6 +96,37 @@ function Find-SkyrimSE {
     return $null
 }
 
+# Resolve the .pex compile timestamp (unix seconds), SOURCE_DATE_EPOCH-style. Precedence:
+# explicit env var -> HEAD commit date on a CLEAN tree -> current time. git is read-only
+# here; a dirty tree or no git falls back to "now" (a non-deterministic timestamp) and says
+# so. Announces the source either way. NB: this only pins the timestamp -- it does not make
+# the .pex byte-reproducible (the compiler's string-table order isn't deterministic), and with
+# current tools it can't, so reproducibility isn't claimed.
+function Resolve-CompileTime {
+    if ($env:SOURCE_DATE_EPOCH -match '^\d+$') {
+        Write-Host "  timestamp: SOURCE_DATE_EPOCH from environment ($($env:SOURCE_DATE_EPOCH))" -ForegroundColor DarkGray
+        return [long]$env:SOURCE_DATE_EPOCH
+    }
+    $inGit = $false
+    try { $inGit = ((git rev-parse --is-inside-work-tree 2>$null) -eq 'true') } catch {}
+    if ($inGit) {
+        if (@(git status --porcelain 2>$null).Count -eq 0) {
+            $ct = (git log -1 --format=%ct 2>$null)
+            if ($ct -match '^\d+$') {
+                Write-Host "  timestamp: HEAD commit date, clean tree ($ct)" -ForegroundColor DarkGray
+                return [long]$ct
+            }
+        } else {
+            Write-Host "  WARN: working tree is DIRTY -- stamping current time (non-deterministic). Commit (or set SOURCE_DATE_EPOCH) for a stable, commit-dated timestamp." -ForegroundColor Yellow
+        }
+    } else {
+        Write-Host "  WARN: no readable git and SOURCE_DATE_EPOCH unset -- stamping current time (non-deterministic). Set SOURCE_DATE_EPOCH for a stable timestamp." -ForegroundColor Yellow
+    }
+    $now = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+    Write-Host "  timestamp: current time ($now)" -ForegroundColor DarkGray
+    return $now
+}
+
 $Version = (Get-Content (Join-Path $root "VERSION") -Raw).Trim()
 if ($Version -notmatch '^\d+\.\d+\.\d+$') { Fail "VERSION '$Version' is not X.Y.Z" }
 Write-Host "It Just Works build - version $Version" -ForegroundColor Green
@@ -158,8 +191,9 @@ Write-Host "  compiled: $($pex.Name -join ', ')"
 
 # --- 3. Scrub .pex identity --------------------------------------------------
 Step 3 "Scrub .pex headers"
+$compileEpoch = Resolve-CompileTime
 & dotnet run --project (Join-Path $root "src\Fth.ItJustWorks.PexScrub") -c Release -- `
-    (Join-Path $scriptsOut "*.pex")
+    --time $compileEpoch (Join-Path $scriptsOut "*.pex")
 if ($LASTEXITCODE -ne 0) { Fail "PexScrub exited $LASTEXITCODE" }
 
 # --- 4. Assemble the archive tree -------------------------------------------

@@ -62,7 +62,7 @@ Full prerequisites and options: [BUILDING.md](BUILDING.md).
 
 `PexScrub` matters for privacy: a compiled `.pex` embeds the building machine's
 username and hostname in plaintext. It replaces them with fixed constants and pins
-the compile timestamp (which also makes builds reproducible).
+the compile timestamp to a stable, commit-dated value.
 
 ## Runtime dependencies
 

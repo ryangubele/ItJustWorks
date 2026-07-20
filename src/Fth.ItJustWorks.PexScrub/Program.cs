@@ -4,8 +4,14 @@
 // Rewrites Skyrim .pex headers to strip machine-local identity. A compiled .pex
 // embeds, in plaintext, the account username and hostname of whoever built it.
 // Those are machine trivia that don't belong in a shipped binary. We replace
-// them with fixed constants and pin the compile timestamp, which also makes
-// builds byte-reproducible.
+// them with fixed constants and set the compile timestamp to a caller-supplied
+// value instead of a machine clock. (Pinning it keeps the one field we control stable
+// and coherent; it does not by itself make the .pex byte-reproducible -- the compiler's
+// string-table order isn't deterministic.)
+//
+// The timestamp comes from --time <unix-epoch>. build.ps1 resolves it
+// (SOURCE_DATE_EPOCH env var, else the clean-tree HEAD commit date, else the
+// current time) and passes it in. Absent --time, it defaults to now.
 //
 // Skyrim PEX header (big-endian):
 //   u32 magic (0xFA57C0DE) | u8 major | u8 minor | u16 gameID
@@ -18,13 +24,31 @@ using System.Text;
 const uint Magic = 0xFA57C0DE;
 const string NewUser = "ItJustWorks";
 const string NewMachine = "BUILD";
-// Fixed synthetic timestamp: 2024-01-01T00:00:00Z. Byte-reproducible builds.
-const long FixedTime = 1704067200L;
 
-var files = ExpandArgs(args);
+// Compile timestamp (unix seconds). Overridden by --time; defaults to now.
+long compileTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+var files = new List<string>();
+for (int i = 0; i < args.Length; i++)
+{
+    if (args[i] == "--time")
+    {
+        if (i + 1 >= args.Length || !long.TryParse(args[i + 1], out compileTime))
+        {
+            Console.Error.WriteLine("FATAL: --time requires an integer unix-epoch value");
+            return 1;
+        }
+        i++;
+    }
+    else
+    {
+        files.AddRange(ExpandArg(args[i]));
+    }
+}
+
 if (files.Count == 0)
 {
-    Console.Error.WriteLine("PexScrub: no .pex files matched. Usage: PexScrub <file-or-glob> [...]");
+    Console.Error.WriteLine("PexScrub: no .pex files matched. Usage: PexScrub [--time <epoch>] <file-or-glob> [...]");
     return 1;
 }
 
@@ -33,7 +57,7 @@ foreach (var path in files)
 {
     try
     {
-        Scrub(path);
+        Scrub(path, compileTime);
         scrubbed++;
     }
     catch (Exception ex)
@@ -46,32 +70,29 @@ foreach (var path in files)
 Console.WriteLine($"PexScrub: scrubbed {scrubbed} file(s).");
 return 0;
 
-static List<string> ExpandArgs(string[] args)
+static List<string> ExpandArg(string a)
 {
     var result = new List<string>();
-    foreach (var a in args)
+    if (a.Contains('*') || a.Contains('?'))
     {
-        if (a.Contains('*') || a.Contains('?'))
-        {
-            var dir = Path.GetDirectoryName(a);
-            dir = string.IsNullOrEmpty(dir) ? "." : dir;
-            var pattern = Path.GetFileName(a);
-            if (Directory.Exists(dir))
-                result.AddRange(Directory.GetFiles(dir, pattern));
-        }
-        else if (File.Exists(a))
-        {
-            result.Add(a);
-        }
-        else
-        {
-            Console.Error.WriteLine($"WARN: no match for '{a}'");
-        }
+        var dir = Path.GetDirectoryName(a);
+        dir = string.IsNullOrEmpty(dir) ? "." : dir;
+        var pattern = Path.GetFileName(a);
+        if (Directory.Exists(dir))
+            result.AddRange(Directory.GetFiles(dir, pattern));
+    }
+    else if (File.Exists(a))
+    {
+        result.Add(a);
+    }
+    else
+    {
+        Console.Error.WriteLine($"WARN: no match for '{a}'");
     }
     return result;
 }
 
-static void Scrub(string path)
+static void Scrub(string path, long compileTime)
 {
     byte[] data = File.ReadAllBytes(path);
 
@@ -96,8 +117,8 @@ static void Scrub(string path)
     using var ms = new MemoryStream();
     // header up through gameID, unchanged
     ms.Write(data, 0, timeOff);
-    // fixed timestamp
-    WriteU64BE(ms, (ulong)FixedTime);
+    // caller-supplied timestamp
+    WriteU64BE(ms, (ulong)compileTime);
     // source filename, unchanged
     WriteStr(ms, src);
     // scrubbed identity
@@ -108,7 +129,7 @@ static void Scrub(string path)
 
     File.WriteAllBytes(path, ms.ToArray());
 
-    Console.WriteLine($"  {Path.GetFileName(path)}: user '{oldUser}'->'{NewUser}', machine '{oldMachine}'->'{NewMachine}', time pinned");
+    Console.WriteLine($"  {Path.GetFileName(path)}: user '{oldUser}'->'{NewUser}', machine '{oldMachine}'->'{NewMachine}', time={compileTime}");
 }
 
 static (string, int) ReadStr(byte[] data, int pos)

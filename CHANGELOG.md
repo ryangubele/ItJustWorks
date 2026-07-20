@@ -5,6 +5,16 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.2.1
+
+Build tooling only - no change to the mod itself. Compiled `.pex` timestamps are now
+controlled by the `SOURCE_DATE_EPOCH` convention instead of a fixed constant: the build
+uses `SOURCE_DATE_EPOCH` when set, otherwise the HEAD commit date on a clean tree, otherwise
+the current build time - announcing which it used. This makes the compile timestamp coherent
+and honest. (Full byte-reproducibility isn't claimed: the Papyrus compiler's output isn't
+deterministic, which no header rewrite can fix - coherent timestamps are as close as the
+current tools allow.)
+
 ## 0.2.0
 
 First public release. A scene watchdog and debug menu for the stuck-state bug - the
