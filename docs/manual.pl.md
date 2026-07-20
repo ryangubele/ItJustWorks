@@ -4,6 +4,10 @@ Wszystkim, co robi mod, sterujesz z jednej strony: **Menu Konfiguracji Modów > 
 
 Wersja krótka, jeśli dopiero go zainstalowałeś: zostaw ustawienia domyślne w spokoju, graj dalej i pozwól, by strażnik klepnął cię w ramię, jeśli kiedyś utkniesz w jednej scenie zbyt długo. Wszystko poniżej jest na chwile, gdy zechcesz przyjrzeć się bliżej.
 
+## Wyświetlanie menu po polsku
+
+Mod zawiera tłumaczenia menu dla kilku języków - wybierz je w instalatorze. Skyrim wczytuje tłumaczenie zgodne z **ustawieniem języka** twojej gry; więc jeśli gra działa po angielsku, a chcesz menu w innym języku, wciąż czyta plik angielski i menu pozostaje angielskie, mimo że tłumaczenie jest zainstalowane. Dwa rozwiązania: w instalatorze ustaw polski jako **domyślny język menu** (zapisze tłumaczenie na pliku angielskim za ciebie); albo ręcznie zmień nazwę swojego pliku językowego w `Interface\Translations\` - `fth_ItJustWorks_POLISH.txt` - na `fth_ItJustWorks_ENGLISH.txt`, zastępując angielski.
+
 ## Bieżąca scena
 
 Góra strony to podgląd na żywo sceny, w której właśnie jesteś, albo "None", jeśli w żadnej nie jesteś. Otwarcie strony pobiera świeży odczyt, więc nigdy nie jest nieaktualny.

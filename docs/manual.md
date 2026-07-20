@@ -4,6 +4,10 @@ Everything the mod does, you drive from one page: **Mod Configuration Menu > It 
 
 The short version, if you just installed it: leave the defaults alone, keep playing, and let the watchdog tap you on the shoulder if you ever sit in one scene too long. Everything below is for when you want to look closer.
 
+## Seeing the menu in another language
+
+The mod ships menu translations for several languages - pick them in the installer. Skyrim loads the translation that matches your game's **language setting**, so if your game runs in English but you want the menu in another language, it keeps reading the English file and the menu stays English even though the translation is installed. Two fixes: in the installer, set that language as your **default menu language** (it writes the translation over the English file for you); or by hand, rename your language's file in `Interface\Translations\` - `fth_ItJustWorks_<LANGUAGE>.txt` - to `fth_ItJustWorks_ENGLISH.txt`, replacing the English one.
+
 ## Current scene
 
 The top of the page is a live readout of the scene you're in right now, or "None" if you aren't in one. Opening the page takes a fresh reading, so it's never stale.

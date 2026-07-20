@@ -233,10 +233,17 @@ $cfg = Get-Content $cfgPath -Raw
 $cfg = $cfg -replace '("text"\s*:\s*")Version \d+\.\d+\.\d+(")', "`${1}Version $Version`${2}"
 Set-Content -Path $cfgPath -Value $cfg -Encoding UTF8
 
-# FOMOD installer: mod + English install unconditionally, every other language is an
-# opt-in checkbox, so only the translations a player picks touch their Data folder.
-# Endonyms (each language in its own script). Non-ASCII as XML numeric entities to
-# keep build.ps1 ASCII; the FOMOD parser resolves them to glyphs.
+# FOMOD installer, two steps:
+#   1. "Extra language files" - opt-in checkboxes; each installs its own
+#      fth_ItJustWorks_<LANG>.txt (the file the game reads when its language matches)
+#      and raises a flag so step 2 can offer it.
+#   2. "Default menu language" - one radio pick that overwrites the ENGLISH file the
+#      game reads on an English-language install. English is the default; every other
+#      option is greyed out until its box is ticked in step 1. Picking one there thus
+#      installs BOTH files, so the menu shows through whatever the game's language is.
+# The mod + the English file install unconditionally, so there is always a valid menu.
+# Endonyms (each language in its own script). Non-ASCII as XML numeric entities to keep
+# build.ps1 ASCII; the FOMOD parser resolves them to glyphs.
 $fomodLangs = [ordered]@{
     CHINESE  = '&#31616;&#20307;&#20013;&#25991; (Chinese)'
     CZECH    = '&#268;e&#353;tina (Czech)'
@@ -248,17 +255,39 @@ $fomodLangs = [ordered]@{
     RUSSIAN  = '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian)'
     SPANISH  = 'Espa&#241;ol (Spanish)'
 }
-$fomodPlugins = ""
+$engRel = "Interface\translations\fth_ItJustWorks_ENGLISH.txt"
+$fomodLangFiles = ""   # step 1: install the native-name file, raise a flag
+$fomodDefaults  = ""   # step 2: overwrite the ENGLISH file, greyed until the step-1 flag is set
 foreach ($lang in $fomodLangs.Keys) {
     $rel = "Interface\translations\fth_ItJustWorks_$lang.txt"
     if (-not (Test-Path (Join-Path $pkg $rel))) { Fail "FOMOD: missing translation $rel" }
     $disp = $fomodLangs[$lang]
-    $fomodPlugins += "          <plugin name=`"$disp`">`n" +
+    $fomodLangFiles += "          <plugin name=`"$disp`">`n" +
         "            <description>$disp menu translation. Machine-translated; corrections welcome (see TRANSLATIONS).</description>`n" +
         "            <files>`n" +
         "              <file source=`"$rel`" destination=`"$rel`" priority=`"0`"/>`n" +
         "            </files>`n" +
+        "            <conditionFlags>`n" +
+        "              <flag name=`"default_$lang`">On</flag>`n" +
+        "            </conditionFlags>`n" +
         "            <typeDescriptor><type name=`"Optional`"/></typeDescriptor>`n" +
+        "          </plugin>`n"
+    $fomodDefaults += "          <plugin name=`"$disp`">`n" +
+        "            <description>Show the menu in $disp by default. Writes it over the English file Skyrim reads on an English-language install. Requires the matching box in the previous step.</description>`n" +
+        "            <files>`n" +
+        "              <file source=`"$rel`" destination=`"$engRel`" priority=`"1`"/>`n" +
+        "            </files>`n" +
+        "            <typeDescriptor>`n" +
+        "              <dependencyType>`n" +
+        "                <defaultType name=`"NotUsable`"/>`n" +
+        "                <patterns>`n" +
+        "                  <pattern>`n" +
+        "                    <dependencies operator=`"And`"><flagDependency flag=`"default_$lang`" value=`"On`"/></dependencies>`n" +
+        "                    <type name=`"Optional`"/>`n" +
+        "                  </pattern>`n" +
+        "                </patterns>`n" +
+        "              </dependencyType>`n" +
+        "            </typeDescriptor>`n" +
         "          </plugin>`n"
 }
 $moduleConfig = @"
@@ -269,15 +298,27 @@ $moduleConfig = @"
     <file source="fth_ItJustWorks.esp" destination="fth_ItJustWorks.esp" priority="0"/>
     <folder source="Scripts" destination="Scripts" priority="0"/>
     <folder source="MCM" destination="MCM" priority="0"/>
-    <file source="Interface\translations\fth_ItJustWorks_ENGLISH.txt" destination="Interface\translations\fth_ItJustWorks_ENGLISH.txt" priority="0"/>
+    <file source="$engRel" destination="$engRel" priority="0"/>
     <file source="fth_ItJustWorks_LICENSE.md" destination="fth_ItJustWorks_LICENSE.md" priority="0"/>
   </requiredInstallFiles>
   <installSteps order="Explicit">
-    <installStep name="Translations">
+    <installStep name="Extra language files">
       <optionalFileGroups order="Explicit">
-        <group name="Extra languages (English is always installed)" type="SelectAny">
+        <group name="Install extra language files (English always installed)" type="SelectAny">
           <plugins order="Explicit">
-$fomodPlugins          </plugins>
+$fomodLangFiles          </plugins>
+        </group>
+      </optionalFileGroups>
+    </installStep>
+    <installStep name="Default menu language">
+      <optionalFileGroups order="Explicit">
+        <group name="Which language should the menu show by default?" type="SelectExactlyOne">
+          <plugins order="Explicit">
+          <plugin name="English (default)">
+            <description>Leave the menu in English. This is the default and ships with the mod. Pick another language only if you ticked its file in the previous step and want it to show even on an English-language game.</description>
+            <typeDescriptor><type name="Recommended"/></typeDescriptor>
+          </plugin>
+$fomodDefaults          </plugins>
         </group>
       </optionalFileGroups>
     </installStep>
@@ -285,7 +326,7 @@ $fomodPlugins          </plugins>
 </config>
 "@
 Set-Content -Path (Join-Path $fomodDir "ModuleConfig.xml") -Value $moduleConfig -Encoding UTF8
-Write-Host "  fomod: ModuleConfig.xml with $($fomodLangs.Count) language checkboxes"
+Write-Host "  fomod: ModuleConfig.xml - $($fomodLangs.Count) language files + $($fomodLangs.Count + 1) default-language options"
 
 # --- 6. Verify gate ----------------------------------------------------------
 Step 6 "Verify gate (fail on any hit)"
@@ -359,16 +400,30 @@ if ($clVer -ne $Version) { Fail "CHANGELOG top heading '$clVer' != VERSION '$Ver
 Write-Host "  version $Version consistent across info.xml, ESP, MCM title, CHANGELOG"
 
 # FOMOD sanity: a scripted installer copies ONLY what it lists. Prove every referenced
-# source exists, there are exactly 9 language checkboxes, English is required (not a
-# checkbox), and no shipped file is left unreferenced (it wouldn't install).
+# source exists; the two steps are shaped right (9 language checkboxes with English
+# required and never a checkbox; 10 default-language radio options, each writing a
+# translation over the ENGLISH file); and no shipped file is left unreferenced.
 [xml]$mc = Get-Content (Join-Path $fomodDir "ModuleConfig.xml") -Raw
+$steps = @($mc.config.installSteps.installStep)
+if ($steps.Count -ne 2) { Fail "FOMOD: expected 2 install steps, got $($steps.Count)" }
+$langStep = $steps | Where-Object { $_.name -eq 'Extra language files' }
+$defStep  = $steps | Where-Object { $_.name -eq 'Default menu language' }
+if (-not $langStep) { Fail "FOMOD: missing 'Extra language files' step" }
+if (-not $defStep)  { Fail "FOMOD: missing 'Default menu language' step" }
+$langPlugins   = @($langStep.optionalFileGroups.group.plugins.plugin)
+$defPlugins    = @($defStep.optionalFileGroups.group.plugins.plugin)
+# XPath, not $plugin.files.file: the "English (default)" option has no <files> node,
+# and property access on a missing node trips Set-StrictMode.
+$langFileNodes = @($langStep.SelectNodes('.//plugin/files/file'))
+$defFileNodes  = @($defStep.SelectNodes('.//plugin/files/file'))
+
 $fomodRefs = [System.Collections.Generic.HashSet[string]]::new()
-$fomodPluginNodes = @($mc.config.installSteps.installStep.optionalFileGroups.group.plugins.plugin)
 $fomodSources = @()
 $fomodSources += $mc.config.requiredInstallFiles.file.source
 $fomodSources += $mc.config.requiredInstallFiles.folder.source
-$fomodSources += $fomodPluginNodes.files.file.source
-foreach ($src in $fomodSources) {
+$fomodSources += $langFileNodes.source
+$fomodSources += $defFileNodes.source
+foreach ($src in ($fomodSources | Where-Object { $_ })) {
     $full = Join-Path $pkg $src
     if (-not (Test-Path $full)) { Fail "FOMOD references a missing source: $src" }
     if (Test-Path $full -PathType Container) {
@@ -377,11 +432,16 @@ foreach ($src in $fomodSources) {
         [void]$fomodRefs.Add((Resolve-Path $full).Path.ToLower())
     }
 }
-if ($fomodPluginNodes.Count -ne 9) { Fail "FOMOD: expected 9 language checkboxes, got $($fomodPluginNodes.Count)" }
-if (@($fomodPluginNodes.files.file.source | Where-Object { $_ -match 'ENGLISH' }).Count -gt 0) { Fail "FOMOD: ENGLISH must be required, not an optional checkbox" }
+if ($langPlugins.Count -ne 9) { Fail "FOMOD: expected 9 language checkboxes, got $($langPlugins.Count)" }
+if (@($langFileNodes.source | Where-Object { $_ -match 'ENGLISH' }).Count -gt 0) { Fail "FOMOD: ENGLISH must be required, not an optional checkbox" }
+if ($defPlugins.Count -ne 10) { Fail "FOMOD: expected 10 default-language options (English + 9), got $($defPlugins.Count)" }
+foreach ($f in $defFileNodes) {
+    if ($f.destination -notmatch 'fth_ItJustWorks_ENGLISH\.txt$') { Fail "FOMOD: a default-language option writes to '$($f.destination)', not the ENGLISH file" }
+    if ($f.source -match 'ENGLISH') { Fail "FOMOD: a default-language option sources the ENGLISH file; it should source a translation" }
+}
 $fomodOrphans = @(Get-ChildItem $pkg -Recurse -File | Where-Object { $_.FullName -notlike "*\fomod\*" -and -not $fomodRefs.Contains($_.FullName.ToLower()) })
 if ($fomodOrphans.Count -gt 0) { Fail "FOMOD: $($fomodOrphans.Count) shipped file(s) not referenced, would not install: $($fomodOrphans.Name -join ', ')" }
-Write-Host "  fomod: valid; all $($fomodRefs.Count) shipped files referenced, 9 language checkboxes, English required"
+Write-Host "  fomod: valid; all $($fomodRefs.Count) shipped files referenced, 9 language checkboxes + 10 default-language options, English required"
 
 # --- 7. Zip ------------------------------------------------------------------
 Step 7 "Package"

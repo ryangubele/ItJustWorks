@@ -4,6 +4,10 @@ Tout ce que fait le mod se pilote depuis une seule page : **Menu de configuratio
 
 La version courte, si vous venez de l'installer : ne touchez pas aux valeurs par défaut, continuez à jouer, et laissez la surveillance vous tapoter l'épaule si jamais vous restez trop longtemps dans une scène. Tout ce qui suit est pour quand vous voulez regarder de plus près.
 
+## Afficher le menu en français
+
+Le mod fournit des traductions du menu pour plusieurs langues - choisissez-les dans l'installateur. Skyrim charge la traduction qui correspond au **réglage de langue** de votre jeu ; donc si votre jeu tourne en anglais mais que vous voulez le menu en français, il continue de lire le fichier anglais et le menu reste en anglais, même si la traduction est installée. Deux solutions : dans l'installateur, définissez le français comme **langue par défaut du menu** (il écrit la traduction par-dessus le fichier anglais pour vous) ; ou à la main, renommez votre fichier de langue dans `Interface\Translations\` - `fth_ItJustWorks_FRENCH.txt` - en `fth_ItJustWorks_ENGLISH.txt`, en remplaçant le fichier anglais.
+
 ## Scène actuelle
 
 Le haut de la page est un affichage en direct de la scène dans laquelle vous êtes, ou "None" si vous n'êtes dans aucune. Ouvrir la page effectue une nouvelle lecture, elle n'est donc jamais périmée.

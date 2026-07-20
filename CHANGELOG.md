@@ -5,6 +5,22 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.2.2
+
+Packaging and docs - the mod's runtime behavior is unchanged.
+
+- **Default menu language (installer).** The FOMOD gained a second step: choose which
+  language the menu shows by *default*. Skyrim loads the translation that matches the
+  game's language setting, so on an English-language install a non-English menu would
+  otherwise stay English. Picking a language here writes it over the English file the
+  game reads (installing both files), so the menu shows through whatever the game's
+  language is. English stays the default; every other option is greyed out until you
+  tick its file in the first step.
+- **Display-language note.** The README and all ten manuals now explain the above and
+  its by-hand workaround - renaming your language's file to `fth_ItJustWorks_ENGLISH.txt`.
+- **Build.** The FOMOD generator and its verify gate were updated for the two-step
+  installer.
+
 ## 0.2.1
 
 Build tooling only - no change to the mod itself. Compiled `.pex` timestamps are now

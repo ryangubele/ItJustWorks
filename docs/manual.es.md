@@ -4,6 +4,10 @@ Todo lo que hace el mod se controla desde una sola página: **Menú de Configura
 
 La versión corta, si acabas de instalarlo: deja los valores por defecto como están, sigue jugando y deja que el vigilante te dé un toque en el hombro si alguna vez te quedas demasiado tiempo en una escena. Todo lo de abajo es para cuando quieras mirar más de cerca.
 
+## Ver el menú en español
+
+El mod incluye traducciones del menú para varios idiomas - elígelas en el instalador. Skyrim carga la traducción que coincide con la **configuración de idioma** de tu juego; así que si tu juego está en inglés pero quieres el menú en español, sigue leyendo el archivo inglés y el menú permanece en inglés aunque la traducción esté instalada. Dos soluciones: en el instalador, establece el español como **idioma predeterminado del menú** (escribe la traducción sobre el archivo inglés por ti); o a mano, renombra tu archivo de idioma en `Interface\Translations\` - `fth_ItJustWorks_SPANISH.txt` - a `fth_ItJustWorks_ENGLISH.txt`, reemplazando el inglés.
+
 ## Escena actual
 
 La parte de arriba de la página es una lectura en vivo de la escena en la que estás, o "None" si no estás en ninguna. Abrir la página toma una lectura nueva, así que nunca está desactualizada.

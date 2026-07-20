@@ -4,6 +4,10 @@ Vše, co mod dělá, ovládáš z jediné stránky: **Menu konfigurace modů > I
 
 Krátká verze, pokud jsi ho právě nainstaloval: nech výchozí hodnoty být, hraj dál a nech hlídače, ať tě ťukne do ramene, kdybys někdy uvízl v jedné scéně příliš dlouho. Vše níže je pro chvíle, kdy se chceš podívat blíž.
 
+## Zobrazení menu v češtině
+
+Mod obsahuje překlady menu pro několik jazyků - vyber si je v instalátoru. Skyrim načítá překlad odpovídající **nastavení jazyka** tvé hry; takže pokud hra běží v angličtině, ale chceš menu v jiném jazyce, dál čte anglický soubor a menu zůstává anglické, přestože je překlad nainstalovaný. Dvě řešení: v instalátoru nastav češtinu jako **výchozí jazyk menu** (zapíše překlad přes anglický soubor za tebe); nebo ručně přejmenuj svůj jazykový soubor v `Interface\Translations\` - `fth_ItJustWorks_CZECH.txt` - na `fth_ItJustWorks_ENGLISH.txt` a nahraď tím anglický.
+
 ## Aktuální scéna
 
 Horní část stránky je živý výpis scény, ve které právě jsi, nebo "None", pokud v žádné nejsi. Otevření stránky provede čerstvé načtení, takže nikdy není zastaralá.
