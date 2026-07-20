@@ -388,5 +388,36 @@ Step 7 "Package"
 $zip = Join-Path $dist "It Just Works $Version.zip"
 if (Test-Path $zip) { Remove-Item $zip -Force }
 Compress-Archive -Path (Join-Path $pkg "*") -DestinationPath $zip -Force
+
+# --- 8. Nexus BBCode docs (NOT shipped in the zip) ---------------------------
+# Convert the markdown docs to NexusMods-flavour BBCode for pasting into the mod
+# page: manuals -> Articles, README -> description, CHANGELOG -> changelog. Uses
+# the pinned dotnet tool in .config/dotnet-tools.json (BUTR's md->NexusMods-BBCode
+# converter); its manifest rollForward lets that .NET 7 tool run on the installed
+# runtime with no extra flags. Non-critical: a hiccup here warns and skips -- these
+# are author-side upload helpers, never part of the shipped archive.
+Step 8 "Nexus BBCode docs"
+$bbOut = Join-Path $dist "bbcode"
+if (Test-Path $bbOut) { Remove-Item $bbOut -Recurse -Force }
+New-Item -ItemType Directory -Force $bbOut | Out-Null
+& dotnet tool restore 2>&1 | Out-Null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "  WARN: 'dotnet tool restore' failed -- skipping BBCode docs (the mod zip is unaffected)." -ForegroundColor Yellow
+} else {
+    # manual.md -> manual.en.bb; manual.<lang>.md keeps its language; README/CHANGELOG by name.
+    $srcDocs = @(Get-ChildItem (Join-Path $root "docs") -Filter "manual*.md" -File)
+    $srcDocs += Get-Item (Join-Path $root "README.md")
+    $srcDocs += Get-Item (Join-Path $root "CHANGELOG.md")
+    $bbOk = 0
+    foreach ($doc in $srcDocs) {
+        $name = if ($doc.BaseName -eq "manual") { "manual.en" } else { $doc.BaseName }
+        $bbFile = Join-Path $bbOut "$name.bb"
+        & dotnet tool run markdown_to_bbcodenm -i $doc.FullName -o $bbFile 2>&1 | Out-Null
+        if ($LASTEXITCODE -eq 0 -and (Test-Path $bbFile)) { $bbOk++ }
+        else { Write-Host "  WARN: BBCode conversion failed for $($doc.Name)" -ForegroundColor Yellow }
+    }
+    Write-Host "  bbcode: $bbOk file(s) -> dist\bbcode\  (NB: the converter flattens markdown tables -- hand-fix the README's one if you use it)"
+}
+
 Write-Host "`nBUILD OK -> $zip" -ForegroundColor Green
 Get-ChildItem $pkg -Recurse -File | ForEach-Object { "  " + $_.FullName.Substring($pkg.Length + 1) } | Sort-Object

@@ -8,7 +8,7 @@
 
 ## You have almost certainly hit this and never known
 
-Here is a bug in Skyrim. It is thirteen years old. It has survived every re-release, remaster, and anniversary edition they've sold you. Hardly anyone talks about it, and it has quietly ended more playthroughs than you'd believe:
+Here is a bug in Skyrim. It's as old as the game itself. It has survived every re-release, remaster, and anniversary edition they've sold you. Hardly anyone talks about it, and it has quietly ended more playthroughs than you'd believe:
 
 **Get stuck in a scene** - a conversation, a cutscene, a little scripted moment - and it can silently stop *later* scenes from ever playing. No error. No crash. Sometimes no symptom at all. Just a quest, hours later, that won't advance, and an internet full of people telling you your save is corrupted and to start a new game.
 

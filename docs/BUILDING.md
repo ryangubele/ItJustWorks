@@ -18,7 +18,8 @@ This is a Windows build (Skyrim's Papyrus compiler is Windows-only).
 - **The Creation Kit**, installed under the game (free, on Steam). This is what
   supplies the Papyrus compiler (`Papyrus Compiler\PapyrusCompiler.exe`), the flags
   file, and the base-game script *sources* the compiler needs on its import path.
-- **Internet**, for the first build only - it restores the Mutagen NuGet package.
+- **Internet**, for the first build only - it restores the Mutagen NuGet package and the
+  pinned BBCode-converter dotnet tool (see *Nexus BBCode* below).
 
 ### Dependency script sources (the `headers/` folder)
 
@@ -52,6 +53,25 @@ way, so your own identity is still cleaned.)
 
 Output: `dist\It Just Works <version>.zip`, plus the staged tree in `dist\pkg\`.
 
+## Nexus BBCode (`dist\bbcode\`)
+
+As a final, non-shipping step, the build converts the markdown docs to NexusMods-flavour
+BBCode for pasting straight into the mod page - the manuals into Articles, `README.md` into
+the description, `CHANGELOG.md` into the changelog. Output lands in `dist\bbcode\` as one
+`.bb` per doc (all ten manual languages included, e.g. `manual.en.bb`, `manual.ru.bb`). None
+of it goes into the zip; it's an author-side upload helper, gitignored like the rest of
+`dist\`.
+
+The converter is a **pinned dotnet tool** declared in `.config\dotnet-tools.json` (BUTR's
+`Converter.MarkdownToBBCodeNM.Tool`). The build restores it with `dotnet tool restore`, so a
+fresh clone just needs internet on the first build. The tool targets .NET 7; the manifest's
+`rollForward` runs it on your installed SDK with no extra setup.
+
+This step is **non-critical**: if the tool can't be restored, the build warns and skips it,
+and the mod zip is unaffected. One known limitation - the converter flattens markdown
+*tables* into literal pipes, so hand-fix the README's single table if you paste `README.bb`
+as the description (the manuals and changelog have none).
+
 ## Options
 
 Pass these as parameters to `build.ps1`:
@@ -80,3 +100,6 @@ Pass these as parameters to `build.ps1`:
   `MCM_ConfigBase.psc`, `SKI_ConfigBase.psc`) - the `headers/` stubs aren't present.
   Supply them (see "Dependency script sources" above).
 - **`dotnet` not recognized** - install the .NET 10 SDK and reopen the terminal.
+- **BBCode docs skipped / `dotnet tool restore` failed** - non-critical; the mod zip still
+  builds. The step needs internet on the first run to pull the pinned converter from NuGet.
+  Re-run online, or ignore it if you don't need the `.bb` files.
