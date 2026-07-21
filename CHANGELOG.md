@@ -5,6 +5,22 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.2.3
+
+- **English fallback preserved.** Choosing a non-English default menu language now also
+  drops an English `.bak` sidecar (`fth_ItJustWorks_ENGLISH.txt.bak`), so the English menu
+  can be restored by renaming one file instead of reinstalling.
+- **Localized installer descriptions.** The FOMOD option tooltips are now written in each
+  option's own language, not English - the reader who wants a non-English menu can read the
+  one caveat that makes it work.
+- **Clearer manual.** Each manual now opens with a short "what this does, and why," and the
+  display-language section names both installer steps (tick the language in step one, then
+  choose it as your default in step two).
+- **Mod page linked.** The Nexus page URL is stamped into the FOMOD metadata.
+- **Build hygiene.** Reworded a template comment that shipped as a dangling fragment in
+  `fomod/info.xml`, and the verify gate now also proves the default-language flag links,
+  overwrite priority, and English `.bak` are all in place.
+
 ## 0.2.2
 
 Packaging and docs - the mod's runtime behavior is unchanged.

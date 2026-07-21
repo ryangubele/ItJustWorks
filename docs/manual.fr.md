@@ -1,12 +1,16 @@
 # Utiliser It Just Works™
 
+## Ce qu'il fait, et pourquoi
+
+Skyrim fonctionne à base de *scènes* - des moments scriptés comme les conversations et les cinématiques, censés se terminer d'eux-mêmes. Parfois l'une d'elles ne se termine pas, et une scène bloquée peut silencieusement empêcher celles qui suivent, cassant discrètement une quête ou même une sauvegarde entière, sans la moindre erreur pour vous prévenir. Ce mod surveille la scène dans laquelle vous êtes et vous alerte si vous y restez bloqué trop longtemps, vous montre dans un menu celle où vous êtes, et vous laisse arrêter une scène qui est coincée. C'est toute l'idée : repérer l'interrupteur resté coincé avant qu'il ne vous coûte la sauvegarde.
+
 Tout ce que fait le mod se pilote depuis une seule page : **Menu de configuration des mods > It Just Works**. Voici ce que fait chaque élément.
 
 La version courte, si vous venez de l'installer : ne touchez pas aux valeurs par défaut, continuez à jouer, et laissez la surveillance vous tapoter l'épaule si jamais vous restez trop longtemps dans une scène. Tout ce qui suit est pour quand vous voulez regarder de plus près.
 
 ## Afficher le menu en français
 
-Le mod fournit des traductions du menu pour plusieurs langues - choisissez-les dans l'installateur. Skyrim charge la traduction qui correspond au **réglage de langue** de votre jeu ; donc si votre jeu tourne en anglais mais que vous voulez le menu en français, il continue de lire le fichier anglais et le menu reste en anglais, même si la traduction est installée. Deux solutions : dans l'installateur, définissez le français comme **langue par défaut du menu** (il écrit la traduction par-dessus le fichier anglais pour vous) ; ou à la main, renommez votre fichier de langue dans `Interface\Translations\` - `fth_ItJustWorks_FRENCH.txt` - en `fth_ItJustWorks_ENGLISH.txt`, en remplaçant le fichier anglais.
+Le mod fournit des traductions du menu pour plusieurs langues - choisissez-les dans l'installateur. Skyrim charge la traduction qui correspond au **réglage de langue** de votre jeu ; donc si votre jeu tourne en anglais mais que vous voulez le menu en français, il continue de lire le fichier anglais et le menu reste en anglais, même si la traduction est installée. Deux solutions : dans l'installateur, cochez cette langue à la première étape, puis choisissez-la comme **langue par défaut du menu** à la deuxième (il écrit la traduction par-dessus le fichier anglais pour vous, et conserve un fichier anglais `.bak` que vous pouvez renommer pour revenir en arrière) ; ou à la main, renommez le fichier de votre langue dans `Interface\Translations\` - `fth_ItJustWorks_FRENCH.txt` - en `fth_ItJustWorks_ENGLISH.txt`, en remplaçant le fichier anglais.
 
 ## Scène actuelle
 

@@ -1,12 +1,16 @@
 # Korzystanie z It Just Works™
 
+## Co robi i po co
+
+Skyrim działa na *scenach* - skryptowych momentach, jak rozmowy i przerywniki filmowe, które mają zakończyć się same. Czasem któraś się nie kończy, a zablokowana scena potrafi po cichu wstrzymać te, które mają nastąpić po niej, niepostrzeżenie psując zadanie albo nawet cały zapis, bez żadnego błędu, który by cię ostrzegł. Ten mod obserwuje scenę, w której jesteś, i ostrzega cię, jeśli utknąłeś w jednej zbyt długo, pokazuje ci z menu, w czym jesteś, i pozwala zatrzymać scenę, która się zacięła. Na tym polega cały pomysł: złapać zacięty przełącznik, zanim kosztuje cię zapis.
+
 Wszystkim, co robi mod, sterujesz z jednej strony: **Menu Konfiguracji Modów > It Just Works**. Oto co robi każda część.
 
 Wersja krótka, jeśli dopiero go zainstalowałeś: zostaw ustawienia domyślne w spokoju, graj dalej i pozwól, by strażnik klepnął cię w ramię, jeśli kiedyś utkniesz w jednej scenie zbyt długo. Wszystko poniżej jest na chwile, gdy zechcesz przyjrzeć się bliżej.
 
 ## Wyświetlanie menu po polsku
 
-Mod zawiera tłumaczenia menu dla kilku języków - wybierz je w instalatorze. Skyrim wczytuje tłumaczenie zgodne z **ustawieniem języka** twojej gry; więc jeśli gra działa po angielsku, a chcesz menu w innym języku, wciąż czyta plik angielski i menu pozostaje angielskie, mimo że tłumaczenie jest zainstalowane. Dwa rozwiązania: w instalatorze ustaw polski jako **domyślny język menu** (zapisze tłumaczenie na pliku angielskim za ciebie); albo ręcznie zmień nazwę swojego pliku językowego w `Interface\Translations\` - `fth_ItJustWorks_POLISH.txt` - na `fth_ItJustWorks_ENGLISH.txt`, zastępując angielski.
+Mod zawiera tłumaczenia menu dla kilku języków - wybierz je w instalatorze. Skyrim wczytuje tłumaczenie zgodne z **ustawieniem języka** twojej gry; więc jeśli gra działa po angielsku, a chcesz menu w innym języku, wciąż czyta plik angielski i menu pozostaje angielskie, mimo że tłumaczenie jest zainstalowane. Dwa rozwiązania: w instalatorze zaznacz ten język w pierwszym kroku, a potem wybierz go jako **domyślny język menu** w drugim (zapisze tłumaczenie na pliku angielskim za ciebie i zachowa angielski plik `.bak`, którego nazwę możesz przywrócić); albo ręcznie zmień nazwę swojego pliku językowego w `Interface\Translations\` - `fth_ItJustWorks_POLISH.txt` - na `fth_ItJustWorks_ENGLISH.txt`, zastępując angielski.
 
 ## Bieżąca scena
 

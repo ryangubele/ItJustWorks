@@ -1,12 +1,16 @@
 # Usare It Just Works™
 
+## Cosa fa, e perché
+
+Skyrim gira sulle *Scene* - momenti scriptati come conversazioni e filmati che dovrebbero concludersi da soli. A volte una non lo fa, e una scena bloccata può silenziosamente impedire a quelle successive di partire, rompendo in sordina una missione o persino un intero salvataggio senza alcun errore a preavvisarti. Questa mod tiene d'occhio la scena in cui ti trovi e ti avvisa se ci sei rimasto bloccato troppo a lungo, ti mostra da un menu in cosa sei, e ti permette di fermare una scena che si è inceppata. È tutta qui l'idea: cogliere l'interruttore bloccato prima che ti costi il salvataggio.
+
 Tutto ciò che fa la mod si gestisce da un'unica pagina: **Menu di Configurazione della Mod > It Just Works**. Ecco cosa fa ogni parte.
 
 La versione breve, se l'hai appena installata: lascia stare i valori predefiniti, continua a giocare, e lascia che la sentinella ti dia un colpetto sulla spalla se mai resti troppo a lungo in una scena. Tutto il resto qui sotto è per quando vuoi guardare più da vicino.
 
 ## Vedere il menu in italiano
 
-La mod include traduzioni del menu per diverse lingue - scegliile nell'installer. Skyrim carica la traduzione che corrisponde all'**impostazione della lingua** del gioco; quindi se il gioco è in inglese ma vuoi il menu in italiano, continua a leggere il file inglese e il menu resta in inglese anche se la traduzione è installata. Due soluzioni: nell'installer, imposta l'italiano come **lingua predefinita del menu** (scrive la traduzione sopra il file inglese al posto tuo); oppure a mano, rinomina il tuo file di lingua in `Interface\Translations\` - `fth_ItJustWorks_ITALIAN.txt` - in `fth_ItJustWorks_ENGLISH.txt`, sostituendo quello inglese.
+La mod include traduzioni del menu per diverse lingue - scegliile nell'installer. Skyrim carica la traduzione che corrisponde all'**impostazione della lingua** del gioco; quindi se il gioco è in inglese ma vuoi il menu in italiano, continua a leggere il file inglese e il menu resta in inglese anche se la traduzione è installata. Due soluzioni: nell'installer, spunta quella lingua nel primo passaggio, poi scegliela come **lingua predefinita del menu** nel secondo (scrive la traduzione sopra il file inglese al posto tuo, e conserva un `.bak` inglese che puoi rinominare per ripristinarlo); oppure a mano, rinomina il tuo file di lingua in `Interface\Translations\` - `fth_ItJustWorks_ITALIAN.txt` - in `fth_ItJustWorks_ENGLISH.txt`, sostituendo quello inglese.
 
 ## Scena attuale
 

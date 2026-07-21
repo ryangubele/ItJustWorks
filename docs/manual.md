@@ -1,12 +1,16 @@
 # Using It Just Works™
 
+## What it does, and why
+
+Skyrim runs on *scenes* - scripted moments like conversations and cutscenes that are meant to end on their own. Sometimes one doesn't, and a stuck scene can silently block the ones that come after it, quietly breaking a quest or even a whole save with no error to warn you. This mod watches the scene you're in and alerts you if you've been stuck in one too long, shows you what you're in from a menu, and lets you stop a scene that's jammed. That's the whole idea: catch the stuck switch before it costs you the save.
+
 Everything the mod does, you drive from one page: **Mod Configuration Menu > It Just Works**. This is what each part of it does.
 
 The short version, if you just installed it: leave the defaults alone, keep playing, and let the watchdog tap you on the shoulder if you ever sit in one scene too long. Everything below is for when you want to look closer.
 
 ## Seeing the menu in another language
 
-The mod ships menu translations for several languages - pick them in the installer. Skyrim loads the translation that matches your game's **language setting**, so if your game runs in English but you want the menu in another language, it keeps reading the English file and the menu stays English even though the translation is installed. Two fixes: in the installer, set that language as your **default menu language** (it writes the translation over the English file for you); or by hand, rename your language's file in `Interface\Translations\` - `fth_ItJustWorks_<LANGUAGE>.txt` - to `fth_ItJustWorks_ENGLISH.txt`, replacing the English one.
+The mod ships menu translations for several languages - pick them in the installer. Skyrim loads the translation that matches your game's **language setting**, so if your game runs in English but you want the menu in another language, it keeps reading the English file and the menu stays English even though the translation is installed. Two fixes: in the installer, **tick that language in the first step, then choose it as your default menu language in the second** (it writes the translation over the English file for you, and keeps an English `.bak` you can rename back); or by hand, rename your language's file in `Interface\Translations\` - `fth_ItJustWorks_<LANGUAGE>.txt` - to `fth_ItJustWorks_ENGLISH.txt`, replacing the English one.
 
 ## Current scene
 

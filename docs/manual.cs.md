@@ -1,12 +1,16 @@
 # Používání It Just Works™
 
+## Co dělá a proč
+
+Skyrim stojí na *scénách* - skriptovaných okamžicích jako rozhovory a filmové sekvence, které mají skončit samy od sebe. Někdy jedna neskončí, a zaseknutá scéna může tiše zablokovat ty, které přijdou po ní, a nenápadně tak rozbít úkol, nebo i celý save, aniž by tě varovala jakákoli chyba. Tento mod hlídá scénu, ve které právě jsi, a upozorní tě, když v jedné uvízneš příliš dlouho, ukáže ti z menu, v čem právě jsi, a nechá tě zastavit scénu, která se zasekla. O to celé jde: zachytit zaseknutý přepínač dřív, než tě to bude stát save.
+
 Vše, co mod dělá, ovládáš z jediné stránky: **Menu konfigurace modů > It Just Works**. Zde je, co která část dělá.
 
 Krátká verze, pokud jsi ho právě nainstaloval: nech výchozí hodnoty být, hraj dál a nech hlídače, ať tě ťukne do ramene, kdybys někdy uvízl v jedné scéně příliš dlouho. Vše níže je pro chvíle, kdy se chceš podívat blíž.
 
 ## Zobrazení menu v češtině
 
-Mod obsahuje překlady menu pro několik jazyků - vyber si je v instalátoru. Skyrim načítá překlad odpovídající **nastavení jazyka** tvé hry; takže pokud hra běží v angličtině, ale chceš menu v jiném jazyce, dál čte anglický soubor a menu zůstává anglické, přestože je překlad nainstalovaný. Dvě řešení: v instalátoru nastav češtinu jako **výchozí jazyk menu** (zapíše překlad přes anglický soubor za tebe); nebo ručně přejmenuj svůj jazykový soubor v `Interface\Translations\` - `fth_ItJustWorks_CZECH.txt` - na `fth_ItJustWorks_ENGLISH.txt` a nahraď tím anglický.
+Mod obsahuje překlady menu pro několik jazyků - vyber si je v instalátoru. Skyrim načítá překlad odpovídající **nastavení jazyka** tvé hry; takže pokud hra běží v angličtině, ale chceš menu v jiném jazyce, dál čte anglický soubor a menu zůstává anglické, přestože je překlad nainstalovaný. Dvě řešení: v instalátoru zaškrtni ten jazyk v prvním kroku a pak si ho ve druhém zvol jako svůj **výchozí jazyk menu** (zapíše překlad přes anglický soubor za tebe a ponechá anglický `.bak`, který můžeš přejmenovat zpátky); nebo ručně přejmenuj svůj jazykový soubor v `Interface\Translations\` - `fth_ItJustWorks_CZECH.txt` - na `fth_ItJustWorks_ENGLISH.txt` a nahraď tím anglický.
 
 ## Aktuální scéna
 

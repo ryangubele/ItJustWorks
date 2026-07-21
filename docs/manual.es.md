@@ -1,12 +1,16 @@
 # Usar It Just Works™
 
+## Qué hace, y por qué
+
+Skyrim funciona a base de *escenas* - momentos guionizados como conversaciones y secuencias de vídeo que están pensados para terminar por su cuenta. A veces uno no lo hace, y una escena atascada puede bloquear en silencio a las que vienen después, rompiendo sin hacer ruido una misión o incluso una partida guardada entera, sin ningún error que te avise. Este mod vigila la escena en la que estás y te avisa si llevas demasiado tiempo atascado en una, te muestra en qué estás desde un menú, y te deja detener una escena que se ha atascado. Esa es toda la idea: pillar el interruptor atascado antes de que te cueste la partida.
+
 Todo lo que hace el mod se controla desde una sola página: **Menú de Configuración del Mod > It Just Works**. Esto es lo que hace cada parte.
 
 La versión corta, si acabas de instalarlo: deja los valores por defecto como están, sigue jugando y deja que el vigilante te dé un toque en el hombro si alguna vez te quedas demasiado tiempo en una escena. Todo lo de abajo es para cuando quieras mirar más de cerca.
 
 ## Ver el menú en español
 
-El mod incluye traducciones del menú para varios idiomas - elígelas en el instalador. Skyrim carga la traducción que coincide con la **configuración de idioma** de tu juego; así que si tu juego está en inglés pero quieres el menú en español, sigue leyendo el archivo inglés y el menú permanece en inglés aunque la traducción esté instalada. Dos soluciones: en el instalador, establece el español como **idioma predeterminado del menú** (escribe la traducción sobre el archivo inglés por ti); o a mano, renombra tu archivo de idioma en `Interface\Translations\` - `fth_ItJustWorks_SPANISH.txt` - a `fth_ItJustWorks_ENGLISH.txt`, reemplazando el inglés.
+El mod incluye traducciones del menú para varios idiomas - elígelas en el instalador. Skyrim carga la traducción que coincide con la **configuración de idioma** de tu juego; así que si tu juego está en inglés pero quieres el menú en español, sigue leyendo el archivo inglés y el menú permanece en inglés aunque la traducción esté instalada. Dos soluciones: en el instalador, marca ese idioma en el primer paso y luego elígelo como tu **idioma predeterminado del menú** en el segundo (escribe la traducción sobre el archivo inglés por ti, y guarda un `.bak` inglés que puedes volver a renombrar); o a mano, renombra el archivo de tu idioma en `Interface\Translations\` - `fth_ItJustWorks_SPANISH.txt` - a `fth_ItJustWorks_ENGLISH.txt`, reemplazando el inglés.
 
 ## Escena actual
 

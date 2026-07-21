@@ -1,0 +1,38 @@
+{
+  "CHINESE": {
+    "checkbox": "菜单简体中文翻译。机器翻译；欢迎指正（见 TRANSLATIONS）。",
+    "override": "默认以简体中文显示菜单。会把翻译写入 Skyrim 在英文版环境下读取的英文文件。需要在上一步勾选对应的语言。"
+  },
+  "CZECH": {
+    "checkbox": "Český překlad menu. Strojový překlad; opravy vítány (viz TRANSLATIONS).",
+    "override": "Zobrazovat menu ve výchozím nastavení v češtině. Zapíše překlad přes anglický soubor, který Skyrim čte při anglické instalaci. Vyžaduje odpovídající políčko v předchozím kroku."
+  },
+  "FRENCH": {
+    "checkbox": "Traduction française du menu. Traduction automatique ; corrections bienvenues (voir TRANSLATIONS).",
+    "override": "Afficher le menu en français par défaut. Écrit la traduction par-dessus le fichier anglais que Skyrim lit sur une installation en anglais. Nécessite la case correspondante à l'étape précédente."
+  },
+  "GERMAN": {
+    "checkbox": "Deutsche Übersetzung des Menüs. Maschinell übersetzt; Korrekturen willkommen (siehe TRANSLATIONS).",
+    "override": "Das Menü standardmäßig auf Deutsch anzeigen. Schreibt die Übersetzung über die englische Datei, die Skyrim bei einer englischsprachigen Installation liest. Erfordert das passende Kästchen im vorherigen Schritt."
+  },
+  "ITALIAN": {
+    "checkbox": "Traduzione italiana del menu. Tradotta automaticamente; correzioni benvenute (vedi TRANSLATIONS).",
+    "override": "Mostra il menu in italiano per impostazione predefinita. Scrive la traduzione sopra il file inglese che Skyrim legge su un'installazione in inglese. Richiede la casella corrispondente nel passaggio precedente."
+  },
+  "JAPANESE": {
+    "checkbox": "メニューの日本語翻訳。機械翻訳です。修正歓迎（TRANSLATIONS を参照）。",
+    "override": "メニューを既定で日本語表示にします。英語版の環境で Skyrim が読み込む英語ファイルに翻訳を上書きします。前のステップで対応するチェックが必要です。"
+  },
+  "POLISH": {
+    "checkbox": "Polskie tłumaczenie menu. Tłumaczenie maszynowe; poprawki mile widziane (zobacz TRANSLATIONS).",
+    "override": "Wyświetlaj menu domyślnie po polsku. Zapisuje tłumaczenie na pliku angielskim, który Skyrim czyta przy instalacji w języku angielskim. Wymaga odpowiedniego pola w poprzednim kroku."
+  },
+  "RUSSIAN": {
+    "checkbox": "Русский перевод меню. Машинный перевод; исправления приветствуются (см. TRANSLATIONS).",
+    "override": "Показывать меню на русском по умолчанию. Записывает перевод поверх английского файла, который Skyrim читает при английской установке. Требует соответствующего флажка на предыдущем шаге."
+  },
+  "SPANISH": {
+    "checkbox": "Traducción al español del menú. Traducción automática; correcciones bienvenidas (ver TRANSLATIONS).",
+    "override": "Mostrar el menú en español de forma predeterminada. Escribe la traducción sobre el archivo inglés que Skyrim lee en una instalación en inglés. Requiere la casilla correspondiente en el paso anterior."
+  }
+}

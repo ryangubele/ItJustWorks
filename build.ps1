@@ -11,7 +11,7 @@
 [CmdletBinding()]
 param(
     [string]$GameRoot = "",  # install root; else $env:SKYRIM_SE_PATH; else auto-detected
-    [string]$Website = "",  # Nexus URL once the mod ID exists; blank until then
+    [string]$Website = "https://www.nexusmods.com/skyrimspecialedition/mods/185927",  # Nexus mod page; stamped into fomod/info.xml
     [string]$Repo = "https://github.com/ryangubele/ItJustWorks",  # source repo, stamped into the license breadcrumb; override for forks
     [string]$Author = "Ryan Gubele",  # lead copyright holder in the license breadcrumb; override for a fork or on handover
     [switch]$SkipSanitization   # outside builders with no identity of ours to strip
@@ -238,12 +238,14 @@ Set-Content -Path $cfgPath -Value $cfg -Encoding UTF8
 #      fth_ItJustWorks_<LANG>.txt (the file the game reads when its language matches)
 #      and raises a flag so step 2 can offer it.
 #   2. "Default menu language" - one radio pick that overwrites the ENGLISH file the
-#      game reads on an English-language install. English is the default; every other
-#      option is greyed out until its box is ticked in step 1. Picking one there thus
-#      installs BOTH files, so the menu shows through whatever the game's language is.
+#      game reads on an English-language install (and drops an English .bak sidecar so the
+#      original strings can be restored by rename). English is the default; every other
+#      option is greyed out until its box is ticked in step 1. Picking one there installs
+#      BOTH language files, so the menu shows through whatever the game's language is.
 # The mod + the English file install unconditionally, so there is always a valid menu.
-# Endonyms (each language in its own script). Non-ASCII as XML numeric entities to keep
-# build.ps1 ASCII; the FOMOD parser resolves them to glyphs.
+# Endonym display names carry non-ASCII as XML numeric entities to keep build.ps1 ASCII.
+# The per-option descriptions are too long to entity-encode, so they live in a UTF-8 data
+# file (packaging\fomod-descriptions.json) read here and emitted into the UTF-8 XML.
 $fomodLangs = [ordered]@{
     CHINESE  = '&#31616;&#20307;&#20013;&#25991; (Chinese)'
     CZECH    = '&#268;e&#353;tina (Czech)'
@@ -255,15 +257,21 @@ $fomodLangs = [ordered]@{
     RUSSIAN  = '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian)'
     SPANISH  = 'Espa&#241;ol (Spanish)'
 }
+$fomodDescPath = Join-Path $root "packaging\fomod-descriptions.json"
+if (-not (Test-Path $fomodDescPath)) { Fail "FOMOD: missing packaging\fomod-descriptions.json" }
+$fomodDesc = Get-Content $fomodDescPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $engRel = "Interface\translations\fth_ItJustWorks_ENGLISH.txt"
 $fomodLangFiles = ""   # step 1: install the native-name file, raise a flag
-$fomodDefaults  = ""   # step 2: overwrite the ENGLISH file, greyed until the step-1 flag is set
+$fomodDefaults  = ""   # step 2: overwrite ENGLISH (+ English .bak), greyed until the step-1 flag is set
 foreach ($lang in $fomodLangs.Keys) {
     $rel = "Interface\translations\fth_ItJustWorks_$lang.txt"
     if (-not (Test-Path (Join-Path $pkg $rel))) { Fail "FOMOD: missing translation $rel" }
+    if (-not ($fomodDesc.PSObject.Properties.Name -contains $lang)) { Fail "FOMOD: no descriptions for $lang in fomod-descriptions.json" }
     $disp = $fomodLangs[$lang]
+    $descCheckbox = ($fomodDesc.$lang.checkbox) -replace '&', '&amp;' -replace '<', '&lt;' -replace '>', '&gt;'
+    $descOverride = ($fomodDesc.$lang.override) -replace '&', '&amp;' -replace '<', '&lt;' -replace '>', '&gt;'
     $fomodLangFiles += "          <plugin name=`"$disp`">`n" +
-        "            <description>$disp menu translation. Machine-translated; corrections welcome (see TRANSLATIONS).</description>`n" +
+        "            <description>$descCheckbox</description>`n" +
         "            <files>`n" +
         "              <file source=`"$rel`" destination=`"$rel`" priority=`"0`"/>`n" +
         "            </files>`n" +
@@ -273,9 +281,10 @@ foreach ($lang in $fomodLangs.Keys) {
         "            <typeDescriptor><type name=`"Optional`"/></typeDescriptor>`n" +
         "          </plugin>`n"
     $fomodDefaults += "          <plugin name=`"$disp`">`n" +
-        "            <description>Show the menu in $disp by default. Writes it over the English file Skyrim reads on an English-language install. Requires the matching box in the previous step.</description>`n" +
+        "            <description>$descOverride</description>`n" +
         "            <files>`n" +
         "              <file source=`"$rel`" destination=`"$engRel`" priority=`"1`"/>`n" +
+        "              <file source=`"$engRel`" destination=`"${engRel}.bak`" priority=`"0`"/>`n" +
         "            </files>`n" +
         "            <typeDescriptor>`n" +
         "              <dependencyType>`n" +
@@ -400,9 +409,11 @@ if ($clVer -ne $Version) { Fail "CHANGELOG top heading '$clVer' != VERSION '$Ver
 Write-Host "  version $Version consistent across info.xml, ESP, MCM title, CHANGELOG"
 
 # FOMOD sanity: a scripted installer copies ONLY what it lists. Prove every referenced
-# source exists; the two steps are shaped right (9 language checkboxes with English
-# required and never a checkbox; 10 default-language radio options, each writing a
-# translation over the ENGLISH file); and no shipped file is left unreferenced.
+# source exists; the two steps are shaped right; the default-language mechanism is fully
+# wired (step-2 flags match step-1 flags, the translation overwrites ENGLISH at priority 1,
+# and an English .bak sidecar is preserved); and no shipped file is left unreferenced.
+# GetAttribute + SelectNodes throughout: the "English (default)" option has no <files>, and
+# property access on a missing node/attribute trips Set-StrictMode.
 [xml]$mc = Get-Content (Join-Path $fomodDir "ModuleConfig.xml") -Raw
 $steps = @($mc.config.installSteps.installStep)
 if ($steps.Count -ne 2) { Fail "FOMOD: expected 2 install steps, got $($steps.Count)" }
@@ -410,19 +421,16 @@ $langStep = $steps | Where-Object { $_.name -eq 'Extra language files' }
 $defStep  = $steps | Where-Object { $_.name -eq 'Default menu language' }
 if (-not $langStep) { Fail "FOMOD: missing 'Extra language files' step" }
 if (-not $defStep)  { Fail "FOMOD: missing 'Default menu language' step" }
-$langPlugins   = @($langStep.optionalFileGroups.group.plugins.plugin)
-$defPlugins    = @($defStep.optionalFileGroups.group.plugins.plugin)
-# XPath, not $plugin.files.file: the "English (default)" option has no <files> node,
-# and property access on a missing node trips Set-StrictMode.
+$langPlugins   = @($langStep.SelectNodes('.//plugin'))
+$defPlugins    = @($defStep.SelectNodes('.//plugin'))
 $langFileNodes = @($langStep.SelectNodes('.//plugin/files/file'))
 $defFileNodes  = @($defStep.SelectNodes('.//plugin/files/file'))
 
 $fomodRefs = [System.Collections.Generic.HashSet[string]]::new()
-$fomodSources = @()
-$fomodSources += $mc.config.requiredInstallFiles.file.source
-$fomodSources += $mc.config.requiredInstallFiles.folder.source
-$fomodSources += $langFileNodes.source
-$fomodSources += $defFileNodes.source
+$fomodSources  = @($mc.config.SelectNodes('requiredInstallFiles/file')   | ForEach-Object { $_.GetAttribute('source') })
+$fomodSources += @($mc.config.SelectNodes('requiredInstallFiles/folder') | ForEach-Object { $_.GetAttribute('source') })
+$fomodSources += @($langFileNodes | ForEach-Object { $_.GetAttribute('source') })
+$fomodSources += @($defFileNodes  | ForEach-Object { $_.GetAttribute('source') })
 foreach ($src in ($fomodSources | Where-Object { $_ })) {
     $full = Join-Path $pkg $src
     if (-not (Test-Path $full)) { Fail "FOMOD references a missing source: $src" }
@@ -432,16 +440,36 @@ foreach ($src in ($fomodSources | Where-Object { $_ })) {
         [void]$fomodRefs.Add((Resolve-Path $full).Path.ToLower())
     }
 }
+
+# Step 1: 9 language checkboxes, none of them ENGLISH, each raising a default_<LANG> flag.
 if ($langPlugins.Count -ne 9) { Fail "FOMOD: expected 9 language checkboxes, got $($langPlugins.Count)" }
-if (@($langFileNodes.source | Where-Object { $_ -match 'ENGLISH' }).Count -gt 0) { Fail "FOMOD: ENGLISH must be required, not an optional checkbox" }
+if (@($langFileNodes | Where-Object { $_.GetAttribute('source') -match 'ENGLISH' }).Count -gt 0) { Fail "FOMOD: ENGLISH must be required, not an optional checkbox" }
+$step1Flags = @($langStep.SelectNodes('.//plugin/conditionFlags/flag') | ForEach-Object { $_.GetAttribute('name') })
+if ($step1Flags.Count -ne 9) { Fail "FOMOD: expected 9 step-1 condition flags, got $($step1Flags.Count)" }
+
+# Step 2: English (default) + 9 language options. Each language option must (a) overwrite
+# the ENGLISH file with a non-ENGLISH translation at priority 1, (b) drop an English .bak
+# sidecar, and (c) gate on a flagDependency that a step-1 checkbox actually raises.
 if ($defPlugins.Count -ne 10) { Fail "FOMOD: expected 10 default-language options (English + 9), got $($defPlugins.Count)" }
-foreach ($f in $defFileNodes) {
-    if ($f.destination -notmatch 'fth_ItJustWorks_ENGLISH\.txt$') { Fail "FOMOD: a default-language option writes to '$($f.destination)', not the ENGLISH file" }
-    if ($f.source -match 'ENGLISH') { Fail "FOMOD: a default-language option sources the ENGLISH file; it should source a translation" }
+$transNodes = @($defFileNodes | Where-Object { $_.GetAttribute('destination') -match 'fth_ItJustWorks_ENGLISH\.txt$' })
+$bakNodes   = @($defFileNodes | Where-Object { $_.GetAttribute('destination') -match 'fth_ItJustWorks_ENGLISH\.txt\.bak$' })
+if ($transNodes.Count -ne 9) { Fail "FOMOD: expected 9 default-language overwrites of the ENGLISH file, got $($transNodes.Count)" }
+if ($bakNodes.Count   -ne 9) { Fail "FOMOD: expected 9 English .bak sidecars, got $($bakNodes.Count)" }
+foreach ($f in $transNodes) {
+    if ($f.GetAttribute('source') -match 'ENGLISH')  { Fail "FOMOD: a default-language overwrite sources the ENGLISH file; it must source a translation" }
+    if ($f.GetAttribute('priority') -ne '1')         { Fail "FOMOD: a default-language overwrite must be priority 1 to outrank the required ENGLISH file" }
 }
+foreach ($f in $bakNodes) {
+    if ($f.GetAttribute('source') -notmatch 'fth_ItJustWorks_ENGLISH\.txt$') { Fail "FOMOD: the .bak sidecar must source the ENGLISH file, got '$($f.GetAttribute('source'))'" }
+}
+$step2Deps = @($defStep.SelectNodes('.//plugin/typeDescriptor/dependencyType/patterns/pattern/dependencies/flagDependency') | ForEach-Object { $_.GetAttribute('flag') })
+if ($step2Deps.Count -ne 9) { Fail "FOMOD: expected 9 default-language flag dependencies, got $($step2Deps.Count)" }
+foreach ($dep in $step2Deps)  { if ($step1Flags -notcontains $dep)  { Fail "FOMOD: default-language option depends on flag '$dep' that no step-1 checkbox raises" } }
+foreach ($flag in $step1Flags) { if ($step2Deps -notcontains $flag) { Fail "FOMOD: step-1 flag '$flag' is raised but no default-language option consumes it" } }
+
 $fomodOrphans = @(Get-ChildItem $pkg -Recurse -File | Where-Object { $_.FullName -notlike "*\fomod\*" -and -not $fomodRefs.Contains($_.FullName.ToLower()) })
 if ($fomodOrphans.Count -gt 0) { Fail "FOMOD: $($fomodOrphans.Count) shipped file(s) not referenced, would not install: $($fomodOrphans.Name -join ', ')" }
-Write-Host "  fomod: valid; all $($fomodRefs.Count) shipped files referenced, 9 language checkboxes + 10 default-language options, English required"
+Write-Host "  fomod: valid; all $($fomodRefs.Count) shipped files referenced; 9 checkboxes + 10 default options; flags linked, priorities correct, English .bak preserved"
 
 # --- 7. Zip ------------------------------------------------------------------
 Step 7 "Package"

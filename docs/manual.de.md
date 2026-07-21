@@ -1,12 +1,16 @@
 # It Just Works™ verwenden
 
+## Was er macht, und warum
+
+Skyrim läuft auf *Szenen* - skriptgesteuerten Momenten wie Gesprächen und Zwischensequenzen, die eigentlich von selbst enden sollen. Manchmal tut eine das nicht, und eine festhängende Szene kann still die blockieren, die nach ihr kommen, und dabei leise eine Quest oder sogar einen ganzen Spielstand zerstören, ohne dass ein Fehler dich warnt. Dieser Mod beobachtet die Szene, in der du dich befindest, und warnt dich, wenn du zu lange in einer festhängst, zeigt dir in einem Menü, worin du steckst, und lässt dich eine Szene stoppen, die klemmt. Das ist die ganze Idee: den festhängenden Schalter erwischen, bevor er dich den Spielstand kostet.
+
 Alles, was der Mod tut, steuerst du über eine einzige Seite: **Mod-Konfigurationsmenü > It Just Works**. Hier ist, was jeder Teil davon macht.
 
 Die Kurzfassung, wenn du ihn gerade installiert hast: lass die Standardwerte in Ruhe, spiel weiter, und lass den Wächter dir auf die Schulter tippen, falls du je zu lange in einer Szene festhängst. Alles Weitere unten ist für die Momente, in denen du genauer hinsehen willst.
 
 ## Das Menü auf Deutsch anzeigen
 
-Der Mod liefert Menü-Übersetzungen für mehrere Sprachen - wähle sie im Installer aus. Skyrim lädt die Übersetzung, die zur **Spracheinstellung** deines Spiels passt. Läuft dein Spiel also auf Englisch, willst aber das Menü in einer anderen Sprache, liest es weiterhin die englische Datei und das Menü bleibt englisch, obwohl die Übersetzung installiert ist. Zwei Lösungen: Lege im Installer Deutsch als **Standard-Menüsprache** fest (er schreibt die Übersetzung für dich über die englische Datei); oder benenne von Hand deine Sprachdatei in `Interface\Translations\` - `fth_ItJustWorks_GERMAN.txt` - in `fth_ItJustWorks_ENGLISH.txt` um und ersetze damit die englische.
+Der Mod liefert Menü-Übersetzungen für mehrere Sprachen - wähle sie im Installer aus. Skyrim lädt die Übersetzung, die zur **Spracheinstellung** deines Spiels passt. Läuft dein Spiel also auf Englisch, willst aber das Menü in einer anderen Sprache, liest es weiterhin die englische Datei und das Menü bleibt englisch, obwohl die Übersetzung installiert ist. Zwei Lösungen: Hake im Installer im ersten Schritt diese Sprache an und wähle sie im zweiten als deine Standard-Menüsprache (er schreibt die Übersetzung für dich über die englische Datei und behält eine englische `.bak`, die du zurückbenennen kannst); oder benenne von Hand deine Sprachdatei in `Interface\Translations\` - `fth_ItJustWorks_GERMAN.txt` - in `fth_ItJustWorks_ENGLISH.txt` um und ersetze damit die englische.
 
 ## Aktuelle Szene
 
