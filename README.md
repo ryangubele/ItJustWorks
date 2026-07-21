@@ -86,11 +86,9 @@ The pattern, once you see it, is everywhere: Skyrim is constantly flipping switc
 
 After that, whatever else I catch the game leaving switched on when it shouldn't.
 
-**Maybe, a browser for quest stages**, because the console technically already lets you inspect and fix them - it's just so miserable to use that everyone alt-tabs to a wiki instead, which isn't much better. A quest broke on me once; the wiki gave me a console command that swept it off my journal and handed me nothing; I spent an afternoon with a decompiler and a rising blood pressure prying out the step that *actually* finishes it; I marched off to correct the wiki, triumphant, a man with tablets. The answer was two paragraphs down. Had been the whole time. A decent menu would've saved me the afternoon and most of my dignity. Never again.
-
 ### What it will never do
 
-- **Tank your performance.** Or try like hell not to. Every release is tuned to be *unnoticeable* on a moderate machine with a moderate load order - and if a feature can't clear that bar, it doesn't ship. It's a big part of why the quest browser is only a *maybe*: something that has to crawl every quest in your game is exactly the kind of thing that isn't free, and free is the price of entry.
+- **Tank your performance.** Or try like hell not to. Every release is tuned to be *unnoticeable* on a moderate machine with a moderate load order - and if a feature can't clear that bar, it doesn't ship. Something that would have to crawl every quest in your game, say, is exactly the kind of thing that isn't free - and free is the price of entry.
 - **Kill your save.** Not on purpose, anyway - and every design choice bends away from it. Safe to add mid-playthrough, safe to remove, self-healing across reloads. It holds nothing of the world, latches onto nothing, and cleans up after itself. Every scripted mod carries some risk; this one is built to minimize it.
 - **Let you do something risky without a warning.** When an operation can cost you something, it'll tell you first.
 - **Break quietly.** If the mod itself is the one misbehaving, it tries to help you catch it, not hide it - a Papyrus log you can switch on, a nudge when a dependency's set up wrong, a readout of exactly what it's seeing. Better it point at its own faults than leave you guessing.
