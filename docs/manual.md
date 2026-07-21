@@ -50,9 +50,27 @@ The part that watches so you don't have to.
 
 - **Warn me after** - how many minutes in a single scene before the mod alerts you. Default is 3. Set it to 0 to never warn.
 - **Check every** - how often the watchdog looks, in seconds. Default is 30. Set it to 0 to switch the watchdog off entirely. This is meant to catch the you-got-stuck-a-while-ago case, so it doesn't need to be fast: anywhere from 10 to 240 seconds is plenty, and lighter on your game.
-- **Log to Papyrus** - writes each scene change to the Papyrus log. Leave it off unless you're troubleshooting or filing a bug report.
 
 When the watchdog fires, it's two short lines in the corner - how long you've been in the scene and that it's blocking others, then the mod's name. You don't have to have the menu open to see it.
+
+## Watching it work (the Diagnostics page)
+
+- **Watchdog** - one word for whether the background check is running right now: **Running**, **Waking up** (normal for a moment right after a reload), **Off** (you set Check every to 0), or **Dormant** (turned off on the Uninstall page). It's how you confirm the mod is alive without opening a log.
+- **Last self-repair** - the mod quietly re-syncs its own state now and then, most often right after a reload - for instance, re-syncing the scene timer so a scene you were stuck in across a reload still gets caught. A line here is normal, healthy housekeeping (the tool telling you it fixed itself), not a fault.
+- **Diagnostics log** - how much the mod writes to the Papyrus log, for troubleshooting or a bug report:
+  - **Off** - nothing. The default; leave it here for normal play.
+  - **Events** - scene changes, alerts, and every time the mod corrects itself. Set this to file a bug.
+  - **Every check** - adds a line every poll (the loop's heartbeat, the timer climbing). For chasing a timing issue, then set it back.
+
+The log only reaches disk if Papyrus logging is switched on in the game. Add a `[Papyrus]` block to `Skyrim.ini` (or `SkyrimCustom.ini`) in `Documents\My Games\Skyrim Special Edition\`:
+
+```
+[Papyrus]
+bEnableLogging=1
+bEnableTrace=1
+```
+
+Restart Skyrim. The file lands at `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`; search it for `fth_IJW` (`findstr fth_IJW Papyrus.0.log`, or `grep`). With Mod Organizer 2 that's your real Documents folder, not the virtual game folder.
 
 ## Settings
 

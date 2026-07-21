@@ -7,7 +7,25 @@ the build gate checks it.
 
 ## 0.3.0
 
-_(in progress)_
+- **The mod shows its work.** The single on/off "Log to Papyrus" toggle becomes a three-level
+  **Diagnostics log** - Off / Events / Every check - and everything it writes is now a
+  structured, greppable line (`[fth_IJW] <tag> <event> key=value`). Every state change and,
+  for the first time, every one of the mod's silent self-corrections leaves a trace - above all
+  the re-sync that keeps a scene stuck across a reload from going unnoticed.
+- **See it heal itself without a log.** The Diagnostics page gains a **Watchdog** status
+  (Running / Waking up / Off / Dormant / Late - is the background check alive?) and a **Last
+  self-repair** line, so you can confirm the tool is working, and see the last thing it fixed,
+  without ever opening the Papyrus log.
+- **Fixed a quiet bug.** A logging call could fire the one-time "names are off" notice even with
+  logging turned off, because Papyrus builds a call's arguments before checking the switch.
+  Logging is now genuinely silent - and free - when off.
+- **Manual:** a short "Watching it work" section, including how to switch the Papyrus log on.
+
+*Tagged, not shipped on its own.* Post-tag review: mid-playthrough install with the MCM never
+opened was not isolated - testing always opened the menu, which showed a live quest, so set-and-forget
+start is unverified (not proven broken). 0.3.1 ships a SEQ so the engine is told to start the
+StartGameEnabled quest on existing saves regardless of stack quirks. Opening the MCM is not a
+quest-start path; it only reasserts registrations on an already-running quest.
 
 ## 0.2.4
 

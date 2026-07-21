@@ -108,8 +108,8 @@ EndFunction
 Function PushSettingsToWatcher()
     int poll = GetModSettingInt("iPollSeconds:Watchdog")
     int warn = GetModSettingInt("iWarnMinutes:Watchdog")
-    bool trace = GetModSettingBool("bTraceLog:Watchdog")
-    GetWatcher().ApplySettings(poll, warn, trace)
+    int level = GetModSettingInt("iLogLevel:Diagnostics")
+    GetWatcher().ApplySettings(poll, warn, level)
 EndFunction
 
 ; Master switch + hotkey. Disk is the source of truth; the watcher mirrors it.
@@ -128,6 +128,8 @@ Function PublishAll()
     SetModSettingString("sQuest:Current",   w.GetQuestLabel())
     SetModSettingString("sElapsed:Current", w.GetElapsedLabel())
     SetModSettingBool("bNamesLoaded:Diagnostics", w.EditorIdsLoading())
+    SetModSettingString("sLoopStatus:Diagnostics", w.GetLoopStatus())
+    SetModSettingString("sLastFix:Diagnostics", w.GetLastCorrection())
 
     string[] hist = w.GetHistoryLabels()
     int i = 0

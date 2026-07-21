@@ -50,9 +50,27 @@ Der Teil, der wacht, damit du es nicht musst.
 
 - **Warnen nach** - nach wie vielen Minuten in einer einzelnen Szene der Mod dich warnt. Standard ist 3. Auf 0 setzen, um nie zu warnen.
 - **Prüfen alle** - wie oft der Wächter nachsieht, in Sekunden. Standard ist 30. Auf 0 setzen, um den Wächter ganz abzuschalten. Das ist für den Fall gedacht, den man erst später bemerkt, es muss also nicht schnell sein: irgendwo zwischen 10 und 240 Sekunden reicht völlig und schont dein Spiel.
-- **In Papyrus-Log schreiben** - schreibt jeden Szenenwechsel ins Papyrus-Log. Lass es aus, außer du suchst einen Fehler oder erstellst einen Fehlerbericht.
 
 Wenn der Wächter auslöst, sind es zwei kurze Zeilen in der Ecke - wie lange du in der Szene bist und dass sie andere blockiert, dann der Name des Mods. Du musst das Menü nicht offen haben, um es zu sehen.
+
+## Beim Arbeiten zusehen (die Diagnoseseite)
+
+- **Wächter** - ein Wort dafür, ob die Hintergrundprüfung gerade läuft: **Läuft**, **Wacht auf** (einen Moment lang nach einem Neuladen normal), **Aus** (du hast Prüfen alle auf 0 gesetzt) oder **Ruht** (auf der Seite Deinstallation abgeschaltet). So bestätigst du, dass der Mod lebt, ohne ein Log zu öffnen.
+- **Letzte Selbstreparatur** - der Mod synchronisiert hin und wieder still seinen eigenen Zustand neu, meist direkt nach einem Neuladen - zum Beispiel den Szenen-Timer, damit eine Szene, in der du über ein Neuladen hinweg festhingst, trotzdem noch erwischt wird. Eine Zeile hier ist normale, gesunde Routine (das Werkzeug sagt dir, dass es sich selbst behoben hat), kein Fehler.
+- **Diagnoseprotokoll** - wie viel der Mod ins Papyrus-Log schreibt, zur Fehlersuche oder für einen Fehlerbericht:
+  - **Aus** - nichts. Der Standard; lass es fürs normale Spielen hier.
+  - **Ereignisse** - Szenenwechsel, Warnungen und jedes Mal, wenn der Mod sich selbst korrigiert. Stell das ein, um einen Fehler zu melden.
+  - **Jede Prüfung** - fügt bei jeder Abfrage eine Zeile hinzu (der Herzschlag der Schleife, der steigende Timer). Zum Aufspüren eines Timing-Problems, danach wieder zurückstellen.
+
+Das Log landet nur dann auf der Festplatte, wenn die Papyrus-Protokollierung im Spiel eingeschaltet ist. Füge dazu einen `[Papyrus]`-Block zu `Skyrim.ini` (oder `SkyrimCustom.ini`) in `Documents\My Games\Skyrim Special Edition\` hinzu:
+
+```
+[Papyrus]
+bEnableLogging=1
+bEnableTrace=1
+```
+
+Starte Skyrim neu. Die Datei landet unter `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`; durchsuche sie nach `fth_IJW` (`findstr fth_IJW Papyrus.0.log`, oder `grep`). Mit Mod Organizer 2 ist das dein echter Documents-Ordner, nicht der virtuelle Spielordner.
 
 ## Einstellungen
 

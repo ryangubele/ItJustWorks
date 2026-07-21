@@ -50,9 +50,27 @@ Część, która czuwa, żebyś ty nie musiał.
 
 - **Ostrzeż po** - po ilu minutach w jednej scenie mod ma cię ostrzec. Domyślnie 3. Ustaw 0, aby nigdy nie ostrzegać.
 - **Sprawdzaj co** - jak często strażnik zagląda, w sekundach. Domyślnie 30. Ustaw 0, aby całkowicie wyłączyć strażnika. Jest to pomyślane pod przypadek zauważony dużo później, więc nie musi być szybkie: od 10 do 240 sekund w zupełności wystarczy i jest lżejsze dla gry.
-- **Zapisuj do Papyrus** - zapisuje każdą zmianę sceny do logu Papyrus. Zostaw wyłączone, chyba że diagnozujesz problem albo wypełniasz zgłoszenie błędu.
 
 Gdy strażnik zadziała, to dwie krótkie linijki w rogu - jak długo jesteś w scenie i że blokuje inne, potem nazwa moda. Nie musisz mieć otwartego menu, aby to zobaczyć.
+
+## Podglądanie pracy moda (strona Diagnostyka)
+
+- **Strażnik** - jednym słowem, czy sprawdzanie w tle działa właśnie teraz: **Działa**, **Budzi się** (normalne przez chwilę zaraz po wczytaniu zapisu), **Wyłączony** (ustawiłeś Sprawdzaj co na 0) albo **Uśpiony** (wyłączony na stronie Odinstaluj). Tak potwierdzasz, że mod żyje, bez otwierania logu.
+- **Ostatnia samonaprawa** - mod od czasu do czasu po cichu synchronizuje własny stan, najczęściej zaraz po wczytaniu zapisu - na przykład synchronizuje czasomierz sceny, żeby scena, w której utknąłeś przez wczytanie zapisu, wciąż została złapana. Wpis tutaj to normalne, zdrowe porządki (narzędzie mówi ci, że naprawiło się samo), nie usterka.
+- **Log diagnostyczny** - ile mod zapisuje do logu Papyrus, na potrzeby diagnozy albo zgłoszenia błędu:
+  - **Wyłączony** - nic. Ustawienie domyślne; zostaw je do normalnej gry.
+  - **Zdarzenia** - zmiany scen, ostrzeżenia i każda samonaprawa moda. Ustaw to, by zgłosić błąd.
+  - **Każde sprawdzenie** - dodaje wiersz przy każdym sprawdzeniu (puls pętli, rosnący czasomierz). Do ścigania problemu z czasem, potem przywróć poprzednie.
+
+Log trafia na dysk tylko wtedy, gdy logowanie Papyrus jest włączone w grze. Dodaj blok `[Papyrus]` do `Skyrim.ini` (albo `SkyrimCustom.ini`) w `Documents\My Games\Skyrim Special Edition\`:
+
+```
+[Papyrus]
+bEnableLogging=1
+bEnableTrace=1
+```
+
+Uruchom Skyrim ponownie. Plik pojawia się w `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`; przeszukaj go pod kątem `fth_IJW` (`findstr fth_IJW Papyrus.0.log`, albo `grep`). Przy Mod Organizer 2 to twój prawdziwy folder Documents, nie wirtualny folder gry.
 
 ## Ustawienia
 

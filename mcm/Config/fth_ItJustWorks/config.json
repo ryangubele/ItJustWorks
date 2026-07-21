@@ -58,12 +58,14 @@
           "help": "$fth_IJW_NamesLoaded_Help",
           "valueOptions": { "sourceType": "ModSettingBool" }
         },
+        { "id": "sLoopStatus:Diagnostics", "text": "$fth_IJW_LoopStatus", "type": "text", "help": "$fth_IJW_LoopStatus_Help", "valueOptions": { "sourceType": "ModSettingString" } },
+        { "id": "sLastFix:Diagnostics", "text": "$fth_IJW_LastFix", "type": "text", "help": "$fth_IJW_LastFix_Help", "valueOptions": { "sourceType": "ModSettingString" } },
         {
-          "id": "bTraceLog:Watchdog",
-          "text": "$fth_IJW_Trace",
-          "type": "toggle",
-          "help": "$fth_IJW_Trace_Help",
-          "valueOptions": { "sourceType": "ModSettingBool" }
+          "id": "iLogLevel:Diagnostics",
+          "text": "$fth_IJW_LogLevel",
+          "type": "enum",
+          "help": "$fth_IJW_LogLevel_Help",
+          "valueOptions": { "sourceType": "ModSettingInt", "options": ["$fth_IJW_Log_Off", "$fth_IJW_Log_Events", "$fth_IJW_Log_Verbose"] }
         },
         { "text": "$fth_IJW_Header_About", "type": "header" },
         { "text": "Version 0.0.0", "type": "text" }

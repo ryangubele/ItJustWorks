@@ -50,9 +50,27 @@ La parte che sorveglia così non devi farlo tu.
 
 - **Avvisami dopo** - dopo quanti minuti in una singola scena la mod ti avvisa. Predefinito 3. Imposta 0 per non avvisare mai.
 - **Controlla ogni** - ogni quanto guarda la sentinella, in secondi. Predefinito 30. Imposta 0 per spegnere del tutto la sentinella. È pensato per il caso che ci si accorge molto dopo, quindi non serve che sia veloce: da 10 a 240 secondi basta e avanza, ed è più leggero per il tuo gioco.
-- **Registra su Papyrus** - scrive ogni cambio di scena nel log di Papyrus. Lascialo spento a meno che tu non stia diagnosticando o compilando una segnalazione di bug.
 
 Quando la sentinella scatta, sono due brevi righe nell'angolo - da quanto sei nella scena e che ne sta bloccando altre, poi il nome della mod. Non serve avere il menu aperto per vederlo.
+
+## Guardarla lavorare (la pagina Diagnostica)
+
+- **Sentinella** - una sola parola per dire se il controllo in background è attivo in questo momento: **Attivo**, **In avvio** (normale per un istante subito dopo un caricamento), **Spento** (hai impostato Controlla ogni a 0), o **Inattivo** (spenta dalla pagina Disinstalla). È così che confermi che la mod è viva senza aprire un log.
+- **Ultima auto-riparazione** - ogni tanto la mod risincronizza in sordina il proprio stato, il più delle volte subito dopo un caricamento - per esempio, risincronizzando il timer della scena così che una scena in cui eri bloccato a cavallo di un caricamento venga comunque colta. Una riga qui è normale e sana manutenzione (lo strumento che ti dice che si è riparato da sé), non un guasto.
+- **Log diagnostico** - quanto la mod scrive nel log di Papyrus, per la diagnostica o una segnalazione di bug:
+  - **Spento** - niente. Il valore predefinito; lascialo qui per il gioco normale.
+  - **Eventi** - cambi di scena, avvisi e ogni volta che la mod si corregge. Imposta questo per segnalare un bug.
+  - **Ogni controllo** - aggiunge una riga a ogni controllo (il battito del ciclo, il timer che sale). Per inseguire un problema di tempistica, poi rimettilo com'era.
+
+Il log arriva su disco solo se la registrazione di Papyrus è attiva nel gioco. Aggiungi un blocco `[Papyrus]` a `Skyrim.ini` (o `SkyrimCustom.ini`) in `Documents\My Games\Skyrim Special Edition\`:
+
+```
+[Papyrus]
+bEnableLogging=1
+bEnableTrace=1
+```
+
+Riavvia Skyrim. Il file compare in `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`; cerca `fth_IJW` al suo interno (`findstr fth_IJW Papyrus.0.log`, o `grep`). Con Mod Organizer 2 quella è la tua vera cartella Documents, non la cartella di gioco virtuale.
 
 ## Impostazioni
 

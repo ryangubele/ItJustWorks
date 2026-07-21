@@ -50,9 +50,27 @@ Ta část, která hlídá, abys nemusel ty.
 
 - **Upozornit po** - po kolika minutách v jedné scéně tě mod upozorní. Výchozí je 3. Nastav 0, aby neupozorňoval nikdy.
 - **Kontrolovat každých** - jak často se hlídač dívá, v sekundách. Výchozí je 30. Nastav 0, aby ses hlídače úplně zbavil. Je to určeno pro případ, který si všimneš až mnohem později, takže nemusí být rychlé: cokoli mezi 10 a 240 sekundami bohatě stačí a je to šetrnější k tvé hře.
-- **Zapisovat do Papyrus** - zapisuje každou změnu scény do logu Papyrus. Nech vypnuté, ledaže řešíš potíž nebo vyplňuješ hlášení chyby.
 
 Když hlídač spustí, jsou to dva krátké řádky v rohu - jak dlouho jsi ve scéně a že blokuje ostatní, pak název modu. Nemusíš mít otevřené menu, abys to viděl.
+
+## Sledování při práci (stránka Diagnostika)
+
+- **Hlídač** - jedno slovo pro to, zda kontrola na pozadí právě běží: **Běží**, **Probouzí se** (na okamžik hned po načtení normální), **Vypnuto** (nastavil jsi Kontrolovat každých na 0) nebo **Uspáno** (vypnuto na stránce Odinstalovat). Takto ověříš, že mod žije, aniž bys otevíral log.
+- **Poslední samooprava** - mod čas od času tiše sesynchronizuje svůj vlastní stav, nejčastěji hned po načtení - například znovu sesynchronizuje časovač scény, aby scéna, ve které jsi uvízl přes načtení, přesto byla zachycena. Řádek zde je normální, zdravá údržba (nástroj ti říká, že se sám opravil), ne chyba.
+- **Diagnostický log** - kolik toho mod zapisuje do logu Papyrus, pro řešení potíží nebo hlášení chyby:
+  - **Vypnuto** - nic. Výchozí; nech to tak pro běžné hraní.
+  - **Události** - změny scén, upozornění a pokaždé, když se mod sám opraví. Nastav pro vyplnění hlášení chyby.
+  - **Každá kontrola** - přidá řádek při každém dotazu (tep smyčky, stoupající časovač). Pro dohledání problému s časováním, pak vrať zpět.
+
+Log se dostane na disk, jen pokud je v hře zapnuté logování Papyrus. Přidej blok `[Papyrus]` do `Skyrim.ini` (nebo `SkyrimCustom.ini`) v `Documents\My Games\Skyrim Special Edition\`:
+
+```
+[Papyrus]
+bEnableLogging=1
+bEnableTrace=1
+```
+
+Restartuj Skyrim. Soubor přistane v `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`; hledej v něm `fth_IJW` (`findstr fth_IJW Papyrus.0.log`, nebo `grep`). S Mod Organizer 2 je to tvá skutečná složka Documents, ne virtuální herní složka.
 
 ## Nastavení
 

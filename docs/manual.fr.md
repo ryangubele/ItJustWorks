@@ -50,9 +50,27 @@ La partie qui surveille pour que vous n'ayez pas à le faire.
 
 - **M'avertir après** - après combien de minutes dans une même scène le mod vous alerte. Par défaut 3. Mettez 0 pour ne jamais avertir.
 - **Vérifier toutes les** - à quelle fréquence la surveillance regarde, en secondes. Par défaut 30. Mettez 0 pour désactiver entièrement la surveillance. C'est prévu pour le cas repéré bien plus tard, ça n'a donc pas besoin d'être rapide : entre 10 et 240 secondes suffit largement, et c'est plus léger pour votre jeu.
-- **Journaliser dans Papyrus** - écrit chaque changement de scène dans le journal Papyrus. Laissez-le désactivé sauf si vous dépannez ou remplissez un rapport de bug.
 
 Quand la surveillance se déclenche, ce sont deux courtes lignes dans le coin - depuis combien de temps vous êtes dans la scène et qu'elle en bloque d'autres, puis le nom du mod. Pas besoin d'avoir le menu ouvert pour le voir.
+
+## Le voir travailler (la page Diagnostic)
+
+- **Surveillance** - un seul mot pour dire si la vérification en arrière-plan tourne en ce moment : **En marche**, **Réveil en cours** (normal un instant juste après un rechargement), **Désactivée** (vous avez mis Vérifier toutes les à 0), ou **En veille** (désactivée sur la page Désinstallation). C'est ainsi que vous confirmez que le mod est vivant sans ouvrir de journal.
+- **Dernière auto-réparation** - le mod resynchronise discrètement son propre état de temps en temps, le plus souvent juste après un rechargement - par exemple, en resynchronisant la minuterie de scène pour qu'une scène dans laquelle vous étiez bloqué au travers d'un rechargement soit quand même repérée. Une ligne ici, c'est de l'entretien normal et sain (l'outil qui vous dit qu'il s'est réparé lui-même), pas une panne.
+- **Journal de diagnostic** - la quantité de ce que le mod écrit dans le journal Papyrus, pour dépanner ou remplir un rapport de bug :
+  - **Désactivé** - rien. La valeur par défaut ; laissez-le ici pour jouer normalement.
+  - **Événements** - changements de scène, alertes, et chaque fois que le mod se corrige. Mettez-le là pour remplir un rapport de bug.
+  - **Chaque vérification** - ajoute une ligne à chaque passage (le battement de cœur de la boucle, la minuterie qui grimpe). Pour traquer un problème de timing, puis remettez-le comme avant.
+
+Le journal n'atteint le disque que si la journalisation Papyrus est activée dans le jeu. Ajoutez un bloc `[Papyrus]` à `Skyrim.ini` (ou `SkyrimCustom.ini`) dans `Documents\My Games\Skyrim Special Edition\` :
+
+```
+[Papyrus]
+bEnableLogging=1
+bEnableTrace=1
+```
+
+Redémarrez Skyrim. Le fichier apparaît dans `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log` ; cherchez-y `fth_IJW` (`findstr fth_IJW Papyrus.0.log`, ou `grep`). Avec Mod Organizer 2, c'est votre vrai dossier Documents, pas le dossier de jeu virtuel.
 
 ## Paramètres
 

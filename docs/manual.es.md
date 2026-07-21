@@ -50,9 +50,27 @@ La parte que vigila para que tú no tengas que hacerlo.
 
 - **Avisarme tras** - cuántos minutos en una misma escena antes de que el mod te avise. Por defecto 3. Ponlo en 0 para no avisar nunca.
 - **Comprobar cada** - con qué frecuencia mira el vigilante, en segundos. Por defecto 30. Ponlo en 0 para apagar el vigilante por completo. Está pensado para el caso que se detecta un buen rato después, así que no necesita ser rápido: entre 10 y 240 segundos sobra, y es más ligero para tu juego.
-- **Registrar en Papyrus** - escribe cada cambio de escena en el registro de Papyrus. Déjalo apagado salvo que estés diagnosticando o rellenando un informe de error.
 
 Cuando el vigilante salta, son dos líneas cortas en la esquina - cuánto llevas en la escena y que está bloqueando otras, luego el nombre del mod. No necesitas tener el menú abierto para verlo.
+
+## Ver cómo trabaja (la página de Diagnóstico)
+
+- **Vigilante** - una palabra para saber si la comprobación en segundo plano está en marcha ahora mismo: **En marcha**, **Despertando** (normal durante un momento justo tras una recarga), **Apagado** (has puesto Comprobar cada en 0), o **Inactivo** (apagado en la página Desinstalar). Es como confirmas que el mod está vivo sin abrir un registro.
+- **Última autorreparación** - el mod resincroniza en silencio su propio estado de vez en cuando, casi siempre justo tras una recarga - por ejemplo, resincronizando el temporizador de escena para que una escena en la que te quedaste atascado a través de una recarga aún se detecte. Una línea aquí es mantenimiento normal y sano (la herramienta diciéndote que se ha arreglado sola), no un fallo.
+- **Registro de diagnóstico** - cuánto escribe el mod en el registro de Papyrus, para diagnosticar o para un informe de error:
+  - **Apagado** - nada. El valor por defecto; déjalo aquí para jugar con normalidad.
+  - **Eventos** - cambios de escena, avisos, y cada vez que el mod se corrige a sí mismo. Ponlo así para rellenar un informe de error.
+  - **Cada comprobación** - añade una línea en cada comprobación (el latido del bucle, el temporizador subiendo). Para perseguir un problema de tiempos; luego vuelve a dejarlo como estaba.
+
+El registro solo llega al disco si el registro de Papyrus está activado en el juego. Añade un bloque `[Papyrus]` a `Skyrim.ini` (o `SkyrimCustom.ini`) en `Documents\My Games\Skyrim Special Edition\`:
+
+```
+[Papyrus]
+bEnableLogging=1
+bEnableTrace=1
+```
+
+Reinicia Skyrim. El archivo aparece en `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`; búscalo con `fth_IJW` (`findstr fth_IJW Papyrus.0.log`, o `grep`). Con Mod Organizer 2 esa es tu carpeta Documents real, no la carpeta virtual del juego.
 
 ## Ajustes
 
