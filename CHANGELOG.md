@@ -5,6 +5,10 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.3.0
+
+_(in progress)_
+
 ## 0.2.4
 
 - **Tighter watchdog alert.** The status line is now telegraphic - it has to land at a
