@@ -100,7 +100,7 @@ Function RunCheck()
         float elapsed = ElapsedInScene()
         if elapsed > fAlertThreshold && currentScene.IsPlaying()
             ; two short lines -- Skyrim shrinks a single long notification
-            Debug.Notification("In a scene " + ElapsedLabel(elapsed) + "; blocking others.")
+            Debug.Notification("scene blocking others " + ElapsedLabel(elapsed))
             Debug.Notification("See? It Just Works!")
             bAlerted = true
             Trace("ALERT fired for " + LabelFor(currentScene) + " at " + ElapsedLabel(elapsed))

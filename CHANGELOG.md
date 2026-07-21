@@ -5,6 +5,12 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.2.4
+
+- **Tighter watchdog alert.** The status line is now telegraphic - it has to land at a
+  glance before Skyrim shrinks a long notification. `In a scene ~3m; blocking others.`
+  becomes `scene blocking others ~3m`. The punchline stays exactly where it belongs.
+
 ## 0.2.3
 
 - **English fallback preserved.** Choosing a non-English default menu language now also
