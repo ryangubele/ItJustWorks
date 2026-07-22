@@ -19,7 +19,7 @@ Le haut de la page est un affichage en direct de la scène dans laquelle vous ê
 - **Scène** - la scène où vous êtes, par son nom (son Editor ID) quand les noms sont disponibles, ou un numéro d'ID brut sinon (voir le témoin ci-dessous).
 - **Form ID** - le numéro d'ID brut de la scène, toujours affiché, au cas où vous en auriez besoin pour la console ou un rapport de bug.
 - **Quête associée** - la quête à laquelle appartient la scène. Souvent le nom le plus utile : il vous dit *ce qui* vous retient.
-- **Temps dans la scène** - environ depuis combien de temps vous êtes dans cette scène. Marqué d'un `~` parce que le mod vérifie sur une minuterie, il connaît donc la réponse à une vérification près.
+- **Temps dans la scène** - environ depuis combien de temps vous êtes dans cette scène *cette session*. Marqué d'un `~` parce que le mod vérifie sur un minuteur. L'horloge est le temps réel du lancement actuel seulement : **un rechargement la remet à zéro**. Après rechargement, un jeu continu au-delà du seuil d'alerte avertit encore ; de courts rechargements sous le seuil n'additionnent pas les sessions précédentes.
 
 ## Le témoin "Editor ID chargés"
 
@@ -56,7 +56,7 @@ Quand la surveillance se déclenche, ce sont deux courtes lignes dans le coin - 
 ## Le voir travailler (la page Diagnostic)
 
 - **Surveillance** - un seul mot pour dire si la vérification en arrière-plan tourne en ce moment : **En marche**, **Réveil en cours** (normal un instant juste après un rechargement), **En retard** (toujours actif, mais une vérification est arrivée plus lentement que son intervalle - en général signe d'une forte charge de scripts), **Désactivée** (vous avez mis Vérifier toutes les à 0), ou **En veille** (désactivée sur la page Désinstallation). C'est ainsi que vous confirmez que le mod est vivant sans ouvrir de journal.
-- **Dernière auto-réparation** - le mod resynchronise discrètement son propre état de temps en temps, le plus souvent juste après un rechargement - par exemple, en resynchronisant la minuterie de scène pour qu'une scène dans laquelle vous étiez bloqué au travers d'un rechargement soit quand même repérée. Une ligne ici, c'est de l'entretien normal et sain (l'outil qui vous dit qu'il s'est réparé lui-même), pas une panne.
+- **Dernière auto-réparation** - le mod resynchronise discrètement son propre état de temps en temps, le plus souvent juste après un rechargement - par exemple le minuteur de scène, pour qu'une scène bloquée à travers un reload puisse encore alerter après un seuil complet de jeu continu *cette session*. Cette resynchro **redémarre** l'horloge depuis le chargement ; le temps d'avant ne s'ajoute pas. Une ligne ici est de l'entretien normal, pas une panne.
 - **Journal de diagnostic** - la quantité de ce que le mod écrit dans le journal Papyrus, pour dépanner ou remplir un rapport de bug :
   - **Désactivé** - rien. La valeur par défaut ; laissez-le ici pour jouer normalement.
   - **Événements** - changements de scène, alertes, et chaque fois que le mod se corrige. Mettez-le là pour remplir un rapport de bug.

@@ -19,7 +19,7 @@ La parte de arriba de la página es una lectura en vivo de la escena en la que e
 - **Escena** - la escena en la que estás, por su nombre (su Editor ID) cuando los nombres están disponibles, o un número de ID en bruto cuando no (mira el indicador de abajo).
 - **Form ID** - el número de ID en bruto de la escena, siempre visible, por si lo necesitas para la consola o un informe de error.
 - **Misión propietaria** - la misión a la que pertenece la escena. Suele ser el nombre más útil: te dice *qué* te está reteniendo.
-- **Tiempo en la escena** - aproximadamente cuánto llevas en esta escena. Marcado con `~` porque el mod comprueba con un temporizador, así que conoce la respuesta con una precisión de una comprobación.
+- **Tiempo en la escena** - aproximadamente cuánto llevas en esta escena *en esta sesión*. Marcado con `~` porque el mod comprueba con un temporizador. El reloj es tiempo real solo del arranque actual: **recargar lo reinicia a cero**. Tras recargar, jugar de seguido más allá del umbral de aviso sigue alertando; recargas cortas bajo el umbral no suman sesiones anteriores.
 
 ## El indicador "Editor ID cargados"
 
@@ -56,7 +56,7 @@ Cuando el vigilante salta, son dos líneas cortas en la esquina - cuánto llevas
 ## Ver cómo trabaja (la página de Diagnóstico)
 
 - **Vigilante** - una palabra para saber si la comprobación en segundo plano está en marcha ahora mismo: **En marcha**, **Despertando** (normal durante un momento justo tras una recarga), **Con retraso** (sigue activo, pero una comprobación llegó más lenta que su intervalo - normalmente señal de mucha carga de scripts), **Apagado** (has puesto Comprobar cada en 0), o **Inactivo** (apagado en la página Desinstalar). Es como confirmas que el mod está vivo sin abrir un registro.
-- **Última autorreparación** - el mod resincroniza en silencio su propio estado de vez en cuando, casi siempre justo tras una recarga - por ejemplo, resincronizando el temporizador de escena para que una escena en la que te quedaste atascado a través de una recarga aún se detecte. Una línea aquí es mantenimiento normal y sano (la herramienta diciéndote que se ha arreglado sola), no un fallo.
+- **Última autorreparación** - el mod resincroniza en silencio su propio estado de vez en cuando, casi siempre justo tras recargar - por ejemplo el temporizador de escena, para que una escena atascada entre recargas pueda aún alertar tras un umbral completo de juego continuo *en esta sesión*. Esa resincronización **reinicia** el reloj desde la carga; no suma el tiempo anterior. Una línea aquí es mantenimiento normal, no un fallo.
 - **Registro de diagnóstico** - cuánto escribe el mod en el registro de Papyrus, para diagnosticar o para un informe de error:
   - **Apagado** - nada. El valor por defecto; déjalo aquí para jugar con normalidad.
   - **Eventos** - cambios de escena, avisos, y cada vez que el mod se corrige a sí mismo. Ponlo así para rellenar un informe de error.

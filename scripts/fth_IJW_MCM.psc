@@ -77,16 +77,18 @@ EndFunction
 ; Two-step confirm: ShowMessage() can't display from a CallFunction action, so press
 ; once to arm (the hint row says so), again to cancel. The stop itself runs on menu
 ; close (OnConfigClose). Guards against an accidental misfire on a working scene.
+; Hint row uses $-keys so MCM Helper localizes them (same pattern as Diagnostics
+; loop/heal status). Not Debug.Notification -- those stay English on purpose.
 Function StopScene()
     if !GetWatcher().GetCurrentSceneRef()
-        SetStopHint("not in a scene")
+        SetStopHint("$fth_IJW_NoScene")
         return
     endif
     bStopOnClose = !bStopOnClose
     if bStopOnClose
-        SetStopHint("will stop on menu close")
+        SetStopHint("$fth_IJW_StopArmed")
     else
-        SetStopHint("cancelled")
+        SetStopHint("$fth_IJW_StopCancelled")
     endif
 EndFunction
 

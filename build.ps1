@@ -488,6 +488,58 @@ $fomodOrphans = @(Get-ChildItem $pkg -Recurse -File | Where-Object { $_.FullName
 if ($fomodOrphans.Count -gt 0) { Fail "FOMOD: $($fomodOrphans.Count) shipped file(s) not referenced, would not install: $($fomodOrphans.Name -join ', ')" }
 Write-Host "  fomod: valid; all $($fomodRefs.Count) shipped files referenced; 9 checkboxes + 10 default options; flags linked, priorities correct, English .bak preserved"
 
+# Translation key-set: every $fth_IJW_* used by MCM config or scripts must exist in all
+# ten UTF-16 tables; no orphan keys left from retired UX (Trace toggle, old confirm, ...).
+$usedKeys = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+$keyPat = [regex]'\$fth_IJW_[A-Za-z0-9_]+'
+foreach ($src in @(
+        (Join-Path $root "mcm\Config\fth_ItJustWorks\config.json"),
+        (Join-Path $root "scripts\fth_IJW_Watcher.psc"),
+        (Join-Path $root "scripts\fth_IJW_MCM.psc")
+    )) {
+    $raw = Get-Content $src -Raw -Encoding UTF8
+    foreach ($m in $keyPat.Matches($raw)) { [void]$usedKeys.Add($m.Value) }
+}
+if ($usedKeys.Count -eq 0) { Fail "translation gate: no `$fth_IJW_* keys found in config/scripts" }
+
+$transDir = Join-Path $pkg "Interface\translations"
+$transFiles = @(Get-ChildItem $transDir -Filter "fth_ItJustWorks_*.txt" | Sort-Object Name)
+if ($transFiles.Count -ne 10) { Fail "translation gate: expected 10 language tables, got $($transFiles.Count)" }
+
+function Get-TranslationKeys([string]$path) {
+    # UTF-16 LE (BOM). Lines are `$key\tvalue`.
+    $text = [IO.File]::ReadAllText($path, [Text.Encoding]::Unicode)
+    $set = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($line in ($text -split "`r?`n")) {
+        if ($line -match '^(\$fth_IJW_[A-Za-z0-9_]+)\t') { [void]$set.Add($Matches[1]) }
+    }
+    return $set
+}
+
+$engKeys = $null
+foreach ($tf in $transFiles) {
+    $keys = Get-TranslationKeys $tf.FullName
+    if ($keys.Count -eq 0) { Fail "translation gate: no keys parsed in $($tf.Name) (encoding or format?)" }
+    $missing = @($usedKeys | Where-Object { -not $keys.Contains($_) } | Sort-Object)
+    if ($missing.Count -gt 0) {
+        Fail "translation gate: $($tf.Name) missing $($missing.Count) key(s) used by config/scripts: $($missing -join ', ')"
+    }
+    $orphans = @($keys | Where-Object { -not $usedKeys.Contains($_) } | Sort-Object)
+    if ($orphans.Count -gt 0) {
+        Fail "translation gate: $($tf.Name) has $($orphans.Count) orphan key(s) not referenced by config/scripts: $($orphans -join ', ')"
+    }
+    if ($null -eq $engKeys) {
+        $engKeys = $keys
+    } else {
+        $onlyHere = @($keys | Where-Object { -not $engKeys.Contains($_) } | Sort-Object)
+        $onlyEng  = @($engKeys | Where-Object { -not $keys.Contains($_) } | Sort-Object)
+        if ($onlyHere.Count -gt 0 -or $onlyEng.Count -gt 0) {
+            Fail "translation gate: $($tf.Name) key-set differs from ENGLISH (extra: $($onlyHere -join ', '); missing: $($onlyEng -join ', '))"
+        }
+    }
+}
+Write-Host "  translations: $($usedKeys.Count) keys used; all 10 tables complete, no orphans, key-sets match"
+
 # --- 7. Zip ------------------------------------------------------------------
 Step 7 "Package"
 $zip = Join-Path $dist "It Just Works $Version.zip"

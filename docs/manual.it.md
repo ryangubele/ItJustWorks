@@ -19,7 +19,7 @@ La parte alta della pagina è una lettura dal vivo della scena in cui ti trovi, 
 - **Scena** - la scena in cui sei, per nome (il suo Editor ID) quando i nomi sono disponibili, o un numero ID grezzo quando non lo sono (vedi la spia qui sotto).
 - **Form ID** - il numero ID grezzo della scena, sempre mostrato, nel caso ti serva per la console o una segnalazione di bug.
 - **Missione proprietaria** - la missione a cui appartiene la scena. Di solito il nome più utile: ti dice *cosa* ti sta trattenendo.
-- **Tempo nella scena** - all'incirca da quanto sei in questa scena. Contrassegnato con `~` perché la mod controlla su un timer, quindi conosce la risposta a un controllo di precisione.
+- **Tempo nella scena** - all'incirca da quanto sei in questa scena *in questa sessione*. Contrassegnato con `~` perché la mod controlla su un timer. L'orologio è tempo reale solo del lancio attuale: **un ricaricamento lo azzera**. Dopo il reload, il gioco continuo oltre la soglia di avviso avvisa ancora; ricaricamenti brevi sotto soglia non sommano le sessioni precedenti.
 
 ## La spia "Editor ID caricati"
 
@@ -56,7 +56,7 @@ Quando la sentinella scatta, sono due brevi righe nell'angolo - da quanto sei ne
 ## Guardarla lavorare (la pagina Diagnostica)
 
 - **Sentinella** - una sola parola per dire se il controllo in background è attivo in questo momento: **Attivo**, **In avvio** (normale per un istante subito dopo un caricamento), **In ritardo** (ancora attivo, ma un controllo è arrivato più lentamente del suo intervallo - di solito segno di un carico di script elevato), **Spento** (hai impostato Controlla ogni a 0), o **Inattivo** (spenta dalla pagina Disinstalla). È così che confermi che la mod è viva senza aprire un log.
-- **Ultima auto-riparazione** - ogni tanto la mod risincronizza in sordina il proprio stato, il più delle volte subito dopo un caricamento - per esempio, risincronizzando il timer della scena così che una scena in cui eri bloccato a cavallo di un caricamento venga comunque colta. Una riga qui è normale e sana manutenzione (lo strumento che ti dice che si è riparato da sé), non un guasto.
+- **Ultima auto-riparazione** - ogni tanto la mod risincronizza in sordina il proprio stato, il più delle volte subito dopo un ricaricamento - ad esempio il timer scena, così una scena bloccata attraverso un reload può ancora avvisare dopo una soglia piena di gioco continuo *in questa sessione*. Quella risync **riavvia** l'orologio dal caricamento; non somma il tempo precedente. Una riga qui è manutenzione normale, non un guasto.
 - **Log diagnostico** - quanto la mod scrive nel log di Papyrus, per la diagnostica o una segnalazione di bug:
   - **Spento** - niente. Il valore predefinito; lascialo qui per il gioco normale.
   - **Eventi** - cambi di scena, avvisi e ogni volta che la mod si corregge. Imposta questo per segnalare un bug.

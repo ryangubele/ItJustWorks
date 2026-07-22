@@ -19,7 +19,7 @@ Oben auf der Seite steht eine Live-Anzeige der Szene, in der du dich gerade befi
 - **Szene** - die Szene, in der du gerade bist, als Name (ihre Editor ID), wenn Namen verfügbar sind, sonst als rohe ID-Nummer (siehe die Anzeige unten).
 - **Form ID** - die rohe ID-Nummer der Szene, immer sichtbar, falls du sie für die Konsole oder einen Fehlerbericht brauchst.
 - **Zugehörige Quest** - die Quest, zu der die Szene gehört. Meist der nützlichere Name: er sagt dir, *was* dich festhält.
-- **Zeit in der Szene** - ungefähr wie lange du schon in dieser Szene bist. Mit einem `~` markiert, weil der Mod auf einem Timer prüft und die Antwort daher auf eine Prüfung genau kennt.
+- **Zeit in der Szene** - ungefähr wie lange du *in dieser Sitzung* in dieser Szene bist. Mit einem `~` markiert, weil der Mod auf einem Timer prüft. Die Uhr ist Echtzeit nur für den aktuellen Spielstart: **ein Neuladen setzt sie auf null**. Nach dem Neuladen warnt der Mod bei durchgehendem Spiel über dem Schwellenwert weiterhin; kurze Neulade-Schleifen unter dem Schwellenwert addieren frühere Sitzungen nicht.
 
 ## Die Anzeige "Editor IDs geladen"
 
@@ -56,7 +56,7 @@ Wenn der Wächter auslöst, sind es zwei kurze Zeilen in der Ecke - wie lange du
 ## Beim Arbeiten zusehen (die Diagnoseseite)
 
 - **Wächter** - ein Wort dafür, ob die Hintergrundprüfung gerade läuft: **Läuft**, **Wacht auf** (einen Moment lang nach einem Neuladen normal), **Verspätet** (läuft noch, aber eine Prüfung kam langsamer als ihr Intervall - meist ein Zeichen hoher Skriptlast), **Aus** (du hast Prüfen alle auf 0 gesetzt) oder **Ruht** (auf der Seite Deinstallation abgeschaltet). So bestätigst du, dass der Mod lebt, ohne ein Log zu öffnen.
-- **Letzte Selbstreparatur** - der Mod synchronisiert hin und wieder still seinen eigenen Zustand neu, meist direkt nach einem Neuladen - zum Beispiel den Szenen-Timer, damit eine Szene, in der du über ein Neuladen hinweg festhingst, trotzdem noch erwischt wird. Eine Zeile hier ist normale, gesunde Routine (das Werkzeug sagt dir, dass es sich selbst behoben hat), kein Fehler.
+- **Letzte Selbstreparatur** - der Mod synchronisiert hin und wieder still seinen eigenen Zustand neu, meist direkt nach einem Neuladen - zum Beispiel den Szenen-Timer, damit eine über das Neuladen festhängende Szene nach einer vollen Schwelle durchgehenden Spiels *in dieser Sitzung* noch warnen kann. Diese Neu-Sync **startet** die Stuck-Uhr ab dem Laden neu; Zeit vor dem Laden zählt nicht mit. Eine Zeile hier ist normale Routine, kein Fehler.
 - **Diagnoseprotokoll** - wie viel der Mod ins Papyrus-Log schreibt, zur Fehlersuche oder für einen Fehlerbericht:
   - **Aus** - nichts. Der Standard; lass es fürs normale Spielen hier.
   - **Ereignisse** - Szenenwechsel, Warnungen und jedes Mal, wenn der Mod sich selbst korrigiert. Stell das ein, um einen Fehler zu melden.

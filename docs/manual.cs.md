@@ -19,7 +19,7 @@ Horní část stránky je živý výpis scény, ve které právě jsi, nebo "Non
 - **Scéna** - scéna, ve které jsi, podle názvu (její Editor ID), když jsou názvy dostupné, jinak holé číslo ID (viz kontrolka níže).
 - **Form ID** - holé číslo ID scény, vždy zobrazené, pro případ, že bys ho potřeboval do konzole nebo do hlášení chyby.
 - **Nadřazený úkol** - úkol, kterému scéna patří. Obvykle užitečnější název: řekne ti, *co* tě drží.
-- **Čas ve scéně** - přibližně jak dlouho už jsi v této scéně. Označeno znakem `~`, protože mod kontroluje podle časovače, takže odpověď zná s přesností na jednu kontrolu.
+- **Čas ve scéně** - přibližně jak dlouho jsi v této scéně *v této relaci*. Označeno znakem `~`, protože mod kontroluje podle časovače (přesnost na jednu kontrolu). Hodiny jsou reálný čas jen pro aktuální spuštění hry: **načtení je vynuluje**. Po načtení souvislá hra nad prahem varování stále spustí upozornění; krátké smyčky načítání pod prahem nesčítají čas z dřívějších relací.
 
 ## Kontrolka "Editor ID načteny"
 
@@ -56,7 +56,7 @@ Když hlídač spustí, jsou to dva krátké řádky v rohu - jak dlouho jsi ve 
 ## Sledování při práci (stránka Diagnostika)
 
 - **Hlídač** - jedno slovo pro to, zda kontrola na pozadí právě běží: **Běží**, **Probouzí se** (na okamžik hned po načtení normální), **Opožděno** (stále běží, ale kontrola dorazila pomaleji než její interval - obvykle příznak vysoké zátěže skriptů), **Vypnuto** (nastavil jsi Kontrolovat každých na 0) nebo **Uspáno** (vypnuto na stránce Odinstalovat). Takto ověříš, že mod žije, aniž bys otevíral log.
-- **Poslední samooprava** - mod čas od času tiše sesynchronizuje svůj vlastní stav, nejčastěji hned po načtení - například znovu sesynchronizuje časovač scény, aby scéna, ve které jsi uvízl přes načtení, přesto byla zachycena. Řádek zde je normální, zdravá údržba (nástroj ti říká, že se sám opravil), ne chyba.
+- **Poslední samooprava** - mod čas od času tiše sesynchronizuje svůj vlastní stav, nejčastěji hned po načtení - například znovu sesynchronizuje časovač scény, aby scéna zaseklá přes načtení mohla ještě varovat po plném prahu souvislé hry *v této relaci*. Ta resync **restartuje** stuck-hodiny od načtení; čas před nahrávkou se nepřičítá. Řádek zde je normální údržba, ne porucha.
 - **Diagnostický log** - kolik toho mod zapisuje do logu Papyrus, pro řešení potíží nebo hlášení chyby:
   - **Vypnuto** - nic. Výchozí; nech to tak pro běžné hraní.
   - **Události** - změny scén, upozornění a pokaždé, když se mod sám opraví. Nastav pro vyplnění hlášení chyby.

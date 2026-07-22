@@ -19,7 +19,7 @@ Góra strony to podgląd na żywo sceny, w której właśnie jesteś, albo "None
 - **Scena** - scena, w której jesteś, po nazwie (jej Editor ID), gdy nazwy są dostępne, albo surowy numer ID, gdy nie są (patrz kontrolka poniżej).
 - **Form ID** - surowy numer ID sceny, zawsze widoczny, na wypadek gdybyś potrzebował go do konsoli albo zgłoszenia błędu.
 - **Zadanie nadrzędne** - zadanie, do którego należy scena. Zwykle bardziej przydatna nazwa: mówi ci, *co* cię trzyma.
-- **Czas w scenie** - mniej więcej jak długo jesteś w tej scenie. Oznaczone znakiem `~`, bo mod sprawdza według czasomierza, więc zna odpowiedź z dokładnością do jednego sprawdzenia.
+- **Czas w scenie** - mniej więcej jak długo jesteś w tej scenie *w tej sesji*. Oznaczone znakiem `~`, bo mod sprawdza według czasomierza. Zegar to czas rzeczywisty tylko bieżącego uruchomienia gry: **wczytanie zeruje go**. Po wczytaniu ciągła gra powyżej progu ostrzeżenia nadal ostrzega; krótkie pętle wczytań poniżej progu nie sumują wcześniejszych sesji.
 
 ## Kontrolka "Editor ID wczytane"
 
@@ -56,7 +56,7 @@ Gdy strażnik zadziała, to dwie krótkie linijki w rogu - jak długo jesteś w 
 ## Podglądanie pracy moda (strona Diagnostyka)
 
 - **Strażnik** - jednym słowem, czy sprawdzanie w tle działa właśnie teraz: **Działa**, **Budzi się** (normalne przez chwilę zaraz po wczytaniu zapisu), **Opóźniony** (wciąż działa, ale sprawdzenie nadeszło wolniej niż jego interwał - zwykle oznaka dużego obciążenia skryptami), **Wyłączony** (ustawiłeś Sprawdzaj co na 0) albo **Uśpiony** (wyłączony na stronie Odinstaluj). Tak potwierdzasz, że mod żyje, bez otwierania logu.
-- **Ostatnia samonaprawa** - mod od czasu do czasu po cichu synchronizuje własny stan, najczęściej zaraz po wczytaniu zapisu - na przykład synchronizuje czasomierz sceny, żeby scena, w której utknąłeś przez wczytanie zapisu, wciąż została złapana. Wpis tutaj to normalne, zdrowe porządki (narzędzie mówi ci, że naprawiło się samo), nie usterka.
+- **Ostatnia samonaprawa** - mod od czasu do czasu po cichu synchronizuje własny stan, najczęściej zaraz po wczytaniu - na przykład timer sceny, by scena zablokowana przez wczytanie mogła jeszcze ostrzec po pełnym progu ciągłej gry *w tej sesji*. Ta resync **restartuje** zegar od wczytania; nie dodaje czasu sprzed wczytania. Linia tutaj to normalna konserwacja, nie błąd.
 - **Log diagnostyczny** - ile mod zapisuje do logu Papyrus, na potrzeby diagnozy albo zgłoszenia błędu:
   - **Wyłączony** - nic. Ustawienie domyślne; zostaw je do normalnej gry.
   - **Zdarzenia** - zmiany scen, ostrzeżenia i każda samonaprawa moda. Ustaw to, by zgłosić błąd.

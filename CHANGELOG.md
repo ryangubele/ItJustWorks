@@ -5,6 +5,23 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.3.2
+
+- **Honest scene timer docs.** Time-in-scene is session wallclock: a reload restarts the
+  stuck clock from that load. Continuous play past the warn threshold still alerts after a
+  reload; short reload-loops under the threshold may not. Manuals and MCM help say so.
+- **Localized Stop arm hints.** The arm / cancel / not-in-a-scene lines on the Actions page
+  use translation keys like the rest of the MCM (not hard-coded English).
+- **Watchdog off is immediate.** Setting Check every to 0 unregisters any pending poll
+  (same as the master switch), so at most one late tick no longer fires after you disable
+  the loop.
+- **Translation hygiene.** Dropped unused Trace / StopConfirm strings left from older UX.
+- **Translation key gate.** The build verify step requires every `$fth_IJW_*` key used by
+  config or scripts to exist in all ten tables, rejects orphan keys, and checks the tables
+  match each other.
+- **Build hygiene.** FOMOD `info.xml` template comment no longer claims there is no
+  ModuleConfig wizard (the wizard is generated beside it).
+
 ## 0.3.1
 
 - **SEQ file shipped (packaging hygiene).** Start-game-enabled quests are supposed to come with a

@@ -107,7 +107,13 @@ Function ApplySettings(int aiPollSeconds, int aiWarnMinutes, int aiLogLevel)
     if changed && iLogLevel >= LOG_EVENTS
         Log(LOG_EVENTS, "life settings poll=" + aiPollSeconds + "s warn=" + aiWarnMinutes + "m level=" + iLogLevel)
     endif
-    Rearm()                       ; pick up a newly non-zero poll now
+    ; Mirror SetEnabled dormancy: poll 0 must kill a pending single-update, not only
+    ; skip re-arm (otherwise one last OnUpdate can still fire after the user turns the loop off).
+    if bEnabled && fPollInterval >= 1.0
+        Rearm()
+    else
+        UnregisterForUpdate()
+    endif
 EndFunction
 
 ; ===================================================================== the poll

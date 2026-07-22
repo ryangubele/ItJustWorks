@@ -12,7 +12,7 @@ You don't have to be fluent to help, either. If a line in the menu looks **cut o
 
 ## What's translated, and the one thing that isn't
 
-- **The MCM menu** - fully translated: every option label and every help description.
+- **The MCM menu** - fully translated: every option label, every help description, and the dynamic status strings the scripts push into the menu (Stop arm/cancel hints, watchdog state, last self-repair phrases).
 - **The manual** (`docs/manual.<lang>.md`) - fully translated.
 - **The in-game pop-up notifications are still English.** The watchdog alert, the one-time "names are off" notice, and the Stop-result messages are printed straight from the script (Papyrus `Debug.Notification`), which - unlike the MCM - has no built-in way to look up a translated string. So a German player gets a fully German menu but still sees those brief corner messages in English.
 
