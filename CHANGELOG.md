@@ -12,6 +12,10 @@ the build gate checks it.
 - **SEQ / SGE invariants.** The Builder fails the build if the written ESP does not have
   exactly one StartGameEnabled quest, or if that quest is not `fth_IJW`. BUILDING.md notes
   the SEQ file; the verify gate comment matches what the byte scan actually proves.
+- **Author-side build helpers.** Plain-text changelog dumps for Nexus Documentation paste
+  (`dist/bbcode/CHANGELOG.txt` and per-version bodies); dump failures warn-and-skip like
+  BBCode so they never abort after a valid zip; version tokens sanitized for filenames;
+  BUILDING.md names the paste-helpers section (not "Nexus BBCode").
 
 ## 0.3.2
 

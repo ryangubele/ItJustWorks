@@ -634,29 +634,38 @@ function Get-ChangelogNotesByVersion([string]$mdPath) {
     return $sections
 }
 
-$clMd = Join-Path $root "CHANGELOG.md"
-$utf8 = [Text.UTF8Encoding]::new($false)
-if (-not (Test-Path $clMd)) {
-    Write-Host "  WARN: CHANGELOG.md missing -- skipping plain-text dumps" -ForegroundColor Yellow
-} else {
-    $sections = @(Get-ChangelogNotesByVersion $clMd)
-    # Full history: version marker line, then one line per change (no blanks, no dashes).
-    # Split on the version lines when filling Nexus Documentation entries.
-    $full = [System.Collections.Generic.List[string]]::new()
-    foreach ($sec in $sections) {
-        [void]$full.Add($sec.Version)
-        foreach ($n in $sec.Notes) { [void]$full.Add($n) }
+# 8a is an author-side paste helper like 8b -- a failure here must never fail a build
+# whose zip is already written (Step 7). Warn-and-skip, matching 8b's posture.
+try {
+    $clMd = Join-Path $root "CHANGELOG.md"
+    $utf8 = [Text.UTF8Encoding]::new($false)
+    if (-not (Test-Path $clMd)) {
+        Write-Host "  WARN: CHANGELOG.md missing -- skipping plain-text dumps" -ForegroundColor Yellow
+    } else {
+        $sections = @(Get-ChangelogNotesByVersion $clMd)
+        # Full history: version marker line, then one line per change (no blanks, no dashes).
+        # Split on the version lines when filling Nexus Documentation entries.
+        $full = [System.Collections.Generic.List[string]]::new()
+        foreach ($sec in $sections) {
+            [void]$full.Add($sec.Version)
+            foreach ($n in $sec.Notes) { [void]$full.Add($n) }
+        }
+        $clTxt = Join-Path $bbOut "CHANGELOG.txt"
+        [IO.File]::WriteAllText($clTxt, (($full -join "`r`n") + "`r`n"), $utf8)
+        # One file per version: <version>.txt -- body only (Nexus stores the version field).
+        # Sanitize the heading token to a filesystem-safe name so a stray '/' or ':' in a
+        # CHANGELOG heading can't throw on the path and abort an otherwise-good build.
+        $nVer = 0
+        foreach ($sec in $sections) {
+            $safeVer = ($sec.Version -replace '[^0-9A-Za-z._-]', '_')
+            $body = if ($sec.Notes.Count -eq 0) { '' } else { ($sec.Notes -join "`r`n") + "`r`n" }
+            [IO.File]::WriteAllText((Join-Path $bbOut "$safeVer.txt"), $body, $utf8)
+            $nVer++
+        }
+        Write-Host "  plain: CHANGELOG.txt + $nVer version file(s) (e.g. $Version.txt) -> dist\bbcode\"
     }
-    $clTxt = Join-Path $bbOut "CHANGELOG.txt"
-    [IO.File]::WriteAllText($clTxt, (($full -join "`r`n") + "`r`n"), $utf8)
-    # One file per version: <version>.txt -- body only (Nexus stores the version field).
-    $nVer = 0
-    foreach ($sec in $sections) {
-        $body = if ($sec.Notes.Count -eq 0) { '' } else { ($sec.Notes -join "`r`n") + "`r`n" }
-        [IO.File]::WriteAllText((Join-Path $bbOut "$($sec.Version).txt"), $body, $utf8)
-        $nVer++
-    }
-    Write-Host "  plain: CHANGELOG.txt + $nVer version file(s) (e.g. $Version.txt) -> dist\bbcode\"
+} catch {
+    Write-Host "  WARN: plain-text changelog dump failed ($_) -- skipping (the mod zip is unaffected)." -ForegroundColor Yellow
 }
 
 & dotnet tool restore 2>&1 | Out-Null

@@ -19,7 +19,7 @@ This is a Windows build (Skyrim's Papyrus compiler is Windows-only).
   supplies the Papyrus compiler (`Papyrus Compiler\PapyrusCompiler.exe`), the flags
   file, and the base-game script *sources* the compiler needs on its import path.
 - **Internet**, for the first build only - it restores the Mutagen NuGet package and the
-  pinned BBCode-converter dotnet tool (see *Nexus BBCode* below).
+  pinned BBCode-converter dotnet tool (see *Nexus paste helpers* below).
 
 ### Dependency script sources (the `headers/` folder)
 
