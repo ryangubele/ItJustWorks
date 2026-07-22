@@ -28,6 +28,6 @@ sanitization/private/
 # out of the public repo. See docs/BUILDING.md for how to supply them.
 headers/
 
-# Local agent / review scratch
-.scratch/
+# Local scratch
+.scratch/*
 

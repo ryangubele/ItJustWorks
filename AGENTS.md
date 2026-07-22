@@ -93,3 +93,170 @@ Update files and fix stuff
 ### Mid-chat shorthand
 
 > Draft/commit message for current changes: brief, imperative, dense; why over file lists; no AI trailer. Diff is source of truth; don’t ape weak history prose.
+
+---
+
+## Adversarial panel review
+
+Multi-agent code / release review for this repo. **Findings only, read-only** — no panel role edits source. Run only when the user asks (or accepts a release nudge). Do **not** auto-launch a panel; it is expensive.
+
+### Shape (not a filter chain)
+
+Roles are a **mini court**, not a pipeline that silently deletes issues before the end:
+
+| Role | Court analogy | Job |
+|------|----------------|-----|
+| **Claimant** | Prosecution | Raises **claims** under a lens. Argues the change is wrong (bug, design miss, risk). |
+| **Skeptic** | Defense | Answers each claim. Argues refutation, mitigation, by-design, or overclaim — from the real tree and `DESIGN.md`. |
+| **Judge** | Bench (fairness) | Makes the process fair: full docket, both sides heard, junk procedure stripped. **Does not** issue the final recommendation. |
+| **Synthesizer** | Jury | Weighs claim **and** defense on the fair docket; decides what holds, severity, and **recommends** to the user. |
+
+**Order of work** is still sequential (need claims before defense, defense before fairness pass, docket before jury), but **authority** is not “skeptic deletes, judge convicts, synthesizer types it up.”
+
+- Claimant and skeptic are **adversarial peers**. The skeptic files a **defense record**; they do **not** remove claims from the run. Both sides stay on the docket.
+- The judge **prepares and polices** the docket (merge duplicates, demand a real defense, mark unrebutted / non-responsive / out-of-scope, fix severity framing for fairness — not to pre-decide guilt).
+- The synthesizer is the **only** role that issues the user-facing recommendation (what survived, what was cleared, what to do). One synthesizer; it is the jury, not a stenographer.
+
+Metaphor is mixed on purpose; keep the role names, keep this power split.
+
+**Every panel measures the target against the design doc.** The authoritative yardstick is the **current** `DESIGN.md` at review time — both **principles** and **practices**. A review that only hunts bugs and ignores design fit is incomplete. `DESIGN.md` evolves; never grade against a frozen summary from an old session or a paraphrased memory of the principles.
+
+### When to nudge vs run
+
+- **Nudge proactively** if a release is about to happen: cutting/moving a release tag, packing a zip, shipping to a host, or language like “ship / release / cut a build.” Scale the nudge to change size (yell for save-safety / features / redesigns; light prompt for tiny docs-only patches). The user may wave it off — not a gate.
+- **Run** only on explicit go (“run the panel,” “adversarial review,” accept the nudge, etc.).
+
+### Measure against `DESIGN.md` (required)
+
+1. **Read `DESIGN.md` at the start of the run** (orchestrator and every claimant prompt must have it — path and/or verbatim principles+practices). Do not rely on prior-session recall. Skeptics and the synthesizer also need it (defense and jury both cite design).
+2. **Score the change against the design**, not only against “does the code work.” For each principle/practice the target actually touches, ask whether the change upholds, weakens, or is orthogonal to it. Orthogonal is fine; silent violations are claims.
+3. **Tag claims to design when they bear on it.** Prefer a `principle` / `practice` field naming the DESIGN heading (e.g. “Never be the cause of a broken save”, “Make it observable”, “Cost nothing you’d notice”). Pure mechanical bugs may omit it; design-fit issues must not.
+4. **Synthesizer (jury) always includes a design verdict:** short pass/concern/fail (or equivalent) **per principle and practice that the change touches**, plus one overall paragraph on design fit. Untouched principles can be omitted or marked n/a — do not invent theater for principles the diff cannot affect.
+5. **Nearby design notes** (`ideas/*` for deferred scope, `docs/VERSIONING.md`, etc.) inform context; they do **not** override `DESIGN.md`. If a change belongs in `ideas/` deferred work rather than shipping scope, that is a design claim (“Do one thing…” / scope creep).
+
+### Roles (detail)
+
+Phases run **in order**. Width scales with budget; the power split above does not.
+
+#### 1. Claimant
+
+Own one or more *lenses*. Raise concrete **claims** with evidence (file + location), claimed severity, failure scenario, suggested direction (no code dumps), and design linkage when relevant. Empty claim lists are valid after real inspection. Every claimant is seeded with current `DESIGN.md`; the design-adherence lens is not the only place design is argued. Labels: `claim:<lens-key>`.
+
+#### 2. Skeptic (defense)
+
+For each claim, file a **defense** against the real tree and current `DESIGN.md`: wrong facts, wrong principle citation, by-design under DESIGN, unreachable failure scenario, severity inflation, settled choice re-litigated without new evidence, etc. Preferred posture: try hard to refute; when unsure, say so — do not pretend certainty.
+
+Output is a **defense brief**, not a delete flag for the orchestrator. Suggested fields: `defense` (`refuted` \| `mitigated` \| `disputed` \| `conceded`), `reasoning`, optional `corrected_severity` if conceding in part. **Conceded** means the defense admits the claim lands; it still goes to the jury with that admission.
+
+Missing or failed defense → judge marks the claim **unrebutted**; the jury must not treat silence as automatic guilt or automatic innocence — note the gap and weight carefully (default: do not treat unrebutted-but-thin claims as hard blockers without independent check).
+
+#### 3. Judge (fairness / docket)
+
+**Not the recommender.** One (or few) agents that make the adversarial record usable and fair:
+
+- Merge obvious duplicate claims; keep a single docket id.  
+- Ensure every claim has a defense slot (or explicit unrebutted).  
+- Flag non-responsive defenses (didn’t address the failure scenario).  
+- Drop or quarantine only **process junk**: empty claims, pure speculation with zero file anchor, duplicates, claims that only restate settled by-design with no new evidence (after checking the settled list). When in doubt, **leave it for the jury** with a note.  
+- May reframe severity labels for consistency; may not bury a well-evidenced design claim because it is inconvenient.  
+- Produce the **fair docket**: each item = claim + defense + judge notes (admissible / unrebutted / non-responsive / duplicate-of / quarantine reason).
+
+Multiple judges (higher budget) = parallel fairness passes or split dockets, then one merge — still not a guilt vote.
+
+#### 4. Synthesizer (jury)
+
+**Exactly one.** Reads the **fair docket only** (claim + defense + judge notes). Decides disposition per item: holds / partial / cleared; final severity; ranking. Credits strengths. Writes the user-facing report and **recommendations**. Includes the design verdict. “Considered and cleared” is for claims the **jury** rejected after hearing the defense — not items a skeptic deleted upstream.
+
+### Budget `B` (only host knob)
+
+`B` = **max concurrent agents in any single phase** (not lifetime agent count across the whole run). Phases are sequential, so claimants do not share a concurrent pool with skeptics.
+
+**Resolve `B` in order:**
+
+1. Explicit user/arg value (`budget N`, `--budget N`, etc.)
+2. Environment if set (`AGENT_BUDGET` or `MAX_SUBAGENTS`)
+3. Safe default: **4**
+4. Clamp to **`[3, 24]`** — hard ceiling **24**, never ask for more
+
+Optional total-invocation cap: if unset, use **`max_calls = 4 × B`**. When claims × defenses would exceed it, **batch or wave** (see below); log what was batched. Never blow the cap silently.
+
+If the host cannot spawn subagents, run the same four **roles** as sequential labeled passes in one session with the same schemas and power split.
+
+### Scale table
+
+Pick the row for the clamped `B` (or the next lower row). Adapt lens list to the change; do not parrot a fixed historical panel.
+
+| Class | `B` | Claimants | Skeptics (defense) | Judges (fairness) | Synthesizer (jury) |
+|-------|-----|-----------|--------------------|-------------------|--------------------|
+| tight | 3–4 | 1 (multi-lens) | 1 batch defense over all claims | fairness steps folded into synthesizer’s preamble (still write docket notes) | 1 |
+| standard | 5–8 | 3–4 | 1 defense per claim, **waved** ≤ `B` | 1 docket judge | 1 |
+| deep | 9–16 | 5–8 | 1 defense per claim, waved | 1–2 fairness passes | 1 |
+| max | 17–24 | 8–10 | 3 independent defenses on high/blocker; 1 on rest; waved | 2–3 fairness / docket merge | 1 |
+
+**Waves:** when work items > `B`, process in chunks of size `B` until done (still sequential per phase).  
+**Batch:** one agent gets multiple claims/lenses in one prompt when concurrent slots are scarce.  
+**Collapse claimants:** merge lower-priority lenses into fewer claimant prompts when claimant slots < catalog size.  
+**Do not collapse skeptic into “pre-filter that drops claims.”** If budget forces collapse, fold **judge → synthesizer** (jury does a short fairness pass, then deliberates). Keep claimant ⊥ skeptic as two sides whenever at least two agent slots exist beyond the synthesizer.
+
+### Default lens catalog (priority order)
+
+Take the top claimant slots from this list; merge the rest into the last claimant, or drop lenses irrelevant to the target. Reorder or replace when the user names a focus (e.g. SEQ only, FOMOD only).
+
+1. **Save-safety / data hygiene** — maps to prime directive in `DESIGN.md`; add/remove mid-playthrough, no world-state traps, self-heal, bounded persistence  
+2. **Correctness / bugs** — real failure paths in scripts, builder, watcher, MCM  
+3. **Design-doc adherence (dedicated)** — full pass over **current** `DESIGN.md` principles **and** practices vs the target; required whenever claimant count ≥ 2, otherwise folded into the multi-lens claimant  
+4. **Build / packaging / release integrity** — `build.ps1`, FOMOD, zip layout, verify gates, SEQ if present  
+5. **Docs / i18n consistency** — manuals, CHANGELOG honesty, translation files, no drafting-history leaks (honest docs / keep it light)  
+6. **Standards / licensing / contributor path** — BUILDING, NOTICE, LICENSE, headers policy (community standards, shareable license, accessible source)  
+7. **Security / abuse / secrets** — when the change touches inputs, paths, or tooling that could mishandle untrusted data  
+8. **Tests / verification / observability gaps** — claims vs gates; “Make it observable” / unverifiable safety  
+9. **Cost / perf headroom** — “Cost nothing you’d notice” when the change adds work on hot paths  
+10. **Public contracts / APIs** — when surface area or parameters change  
+11. **Unbounded intent** — always consider (dedicated claimant or required probe inside design/correctness): treat every load-bearing “intentional / on purpose / deliberate” as unfinished unless scope is stated; flag seams where a justification for context A annexes context B
+
+### Record shape (all roles)
+
+Prefer structured fields so later phases can merge without prose archaeology.
+
+**Claim (claimant):**
+
+- `title`, `severity` (`blocker` \| `high` \| `medium` \| `low` \| `nit` — map synonyms consistently)
+- `category` / `dimension` (lens key)
+- `principle` / `practice` — DESIGN.md heading when about design fit (required for design claims; optional for pure mechanical bugs)
+- `file`, `location` (line or symbol when known)
+- `claim` / `detail`, `evidence`, `failure_scenario`
+- `suggestion` (direction only; no full patches unless asked)
+
+**Defense (skeptic):** `defense` (`refuted` \| `mitigated` \| `disputed` \| `conceded`), `reasoning`, optional `corrected_severity`
+
+**Docket notes (judge):** `docket_id`, `status` (`admissible` \| `unrebutted` \| `non_responsive_defense` \| `duplicate` \| `quarantine`), short `note`
+
+**Disposition (synthesizer / jury only):** `holds` \| `partial` \| `cleared`, final severity, recommendation line
+
+**Cap per claimant:** at most ~6–8 strongest claims; prefer empty over invented issues.
+
+### Orchestrator duties (parent agent)
+
+1. Resolve target (diff range, tag, paths) and `B`. **Read current `DESIGN.md`.** Announce class + allocation once (and the court shape: claim → defend → fair docket → jury), then run.  
+2. Seed **claimants** with: target, **full current `DESIGN.md` or an accurate verbatim extract of principles + practices**, and a **settled / by-design list** (from conversation, prior reviews, and project notes — e.g. intentional alias-free design, documented i18n limits, easter-egg `fth_` prefix, sanitization sample that must fail). Seed **skeptics** with the same DESIGN + settled list plus the claims they must answer. Claimants/skeptics lack long-term memory; without DESIGN + settled list they re-litigate or invent principles.  
+3. Fan out claimants → collect claims → fan out skeptic **defenses** (wave/batch; **retain every claim**) → judge builds **fair docket** (or synthesizer does fairness preamble on tight budget) → **one** synthesizer deliberates on the docket.  
+4. **Reconcile before presenting:** orchestrator may correct only clear process errors (e.g. jury report omitted an admissible docket item). Do not substitute your own verdicts for the jury’s without saying so. Settled by-design re-litigation: prefer judge quarantine or jury “cleared,” not silent drop mid-pipeline.  
+5. Final user-facing report structure (**synthesizer / jury** produces):
+   - Bottom line / recommendation (include design fit in one breath with ship-readiness)  
+   - **Design verdict** — per touched `DESIGN.md` principle and practice: pass / concern / fail (or n/a), one line each; overall design paragraph  
+   - Strengths worth keeping (code **and** design-aligned habits)  
+   - Claims that **hold** (ranked; severity; brief why defense failed or conceded)  
+   - Considered and **cleared** (jury rejected after hearing defense — include the defense’s winning point in one line)  
+   - Recommended actions (prioritized; distinguish real risk from nits)
+
+### Invariants
+
+- **Read-only** panel; no source edits, no remote git mutation (see Git policy).  
+- **Court power split:** claimant ⊥ skeptic (adversarial); judge = fairness/docket only; synthesizer = sole recommender (jury).  
+- **No silent filter:** skeptic defenses do not remove claims from the docket; only the jury clears a claim in the user report (judge may quarantine process junk with an explicit note).  
+- **Design doc is mandatory yardstick** — every run reads current `DESIGN.md` and reports design fit; bug-only panels are not enough.  
+- **One synthesizer.**  
+- **Never exceed 24** concurrent agents in a phase; prefer the scale table over ad-hoc “more agents = better.”  
+- **Adapt, don’t parrot** a past panel’s dimension list or severity taxonomy if the change or DESIGN has moved.  
+- **Unbounded intent** is in scope for every non-trivial review.  
+- Local LLM / alternate hosts: same roles, schemas, design yardstick, court shape, and budget rules; only the spawn mechanism differs.
