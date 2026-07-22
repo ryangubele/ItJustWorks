@@ -64,15 +64,12 @@ As a final, non-shipping step, the build drops author-side files for the Nexus m
 into `dist\bbcode\` (gitignored like the rest of `dist\`; never in the zip):
 
 1. **Plain changelog dumps** (always, no tools; from `CHANGELOG.md`):
-   - **`CHANGELOG.txt`** — full history for splitting on Nexus: each version is a bare
-     marker line (`0.3.2`), then **one line per change**, no dashes, no blank lines, no
-     markup. Nexus prefixes every paste line with `>`, so list markers are never emitted.
-   - **`<version>.txt`** — one file per release (e.g. `0.3.2.txt`): body only (Nexus
-     already stores the version field). Paste that file into the matching Documentation
-     changelog entry.
-2. **`.bb` files** — NexusMods-flavour BBCode for manuals (Articles), `README.md`
-   (description), and `CHANGELOG.md` (if you still want BBCode). One file per doc, all ten
-   manual languages included (e.g. `manual.en.bb`, `manual.ru.bb`).
+   - **`CHANGELOG.txt`** — full history: each version is a bare marker line (`0.3.3`),
+     then **one flat line per change** (no dashes, no blank lines, no markup).
+   - **`<version>.txt`** — body only for that release (same plain lines). Paste into the
+     file or Documentation changelog field as Nexus is behaving that week.
+2. **`manual.en.bb`** — English manual only, NexusMods-flavour BBCode (for an Article if
+   you still want one). Other languages stay on GitHub; Nexus article titles are not i18n.
 
 The BBCode converter is a **pinned dotnet tool** declared in `.config\dotnet-tools.json`
 (BUTR's `Converter.MarkdownToBBCodeNM.Tool`). The build restores it with `dotnet tool restore`,
@@ -80,9 +77,8 @@ so a fresh clone just needs internet on the first build. The tool targets .NET 7
 manifest's `rollForward` runs it on your installed SDK with no extra setup.
 
 BBCode conversion is **non-critical**: if the tool can't be restored, the build warns and
-skips it; the zip and `CHANGELOG.txt` are unaffected. One known limitation - the converter
-flattens markdown *tables* into literal pipes, so hand-fix the README's single table if you
-paste `README.bb` as the description (the manuals and changelog have none).
+skips it; the zip and plain changelog dumps are unaffected. The converter flattens markdown
+*tables* into literal pipes (the English manual has none).
 
 ## Options
 

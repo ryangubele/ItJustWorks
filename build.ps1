@@ -550,11 +550,11 @@ Compress-Archive -Path (Join-Path $pkg "*") -DestinationPath $zip -Force
 # --- 8. Nexus paste helpers (NOT shipped in the zip) -------------------------
 # Author-side upload helpers for the Nexus mod page. Never part of the archive.
 #
-# 8a. Plain-text CHANGELOG dump -- always runs, no tools. Nexus's Documentation
-#     changelog field does not reliably render markdown or BBCode; paste this.
-# 8b. BBCode for manuals/README/CHANGELOG via the pinned dotnet tool (BUTR's
-#     md->NexusMods-BBCode converter). Non-critical: restore failure warns and
-#     skips; the zip is unaffected.
+# 8a. Plain-text CHANGELOG dump -- always runs, no tools. Flat lines (no "- "):
+#     CHANGELOG.txt (full history with version markers) + <version>.txt bodies.
+#     Nexus's paste fields are inconsistent; plain has been the least painful.
+# 8b. BBCode for the English manual only (docs/manual.md -> manual.en.bb) via the
+#     pinned dotnet tool. Non-critical: restore failure warns and skips.
 Step 8 "Nexus paste helpers"
 $bbOut = Join-Path $dist "bbcode"
 if (Test-Path $bbOut) { Remove-Item $bbOut -Recurse -Force }
@@ -670,21 +670,21 @@ try {
 
 & dotnet tool restore 2>&1 | Out-Null
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "  WARN: 'dotnet tool restore' failed -- skipping BBCode docs (the mod zip is unaffected)." -ForegroundColor Yellow
+    Write-Host "  WARN: 'dotnet tool restore' failed -- skipping BBCode (the mod zip is unaffected)." -ForegroundColor Yellow
 } else {
-    # manual.md -> manual.en.bb; manual.<lang>.md keeps its language; README/CHANGELOG by name.
-    $srcDocs = @(Get-ChildItem (Join-Path $root "docs") -Filter "manual*.md" -File)
-    $srcDocs += Get-Item (Join-Path $root "README.md")
-    $srcDocs += Get-Item (Join-Path $root "CHANGELOG.md")
-    $bbOk = 0
-    foreach ($doc in $srcDocs) {
-        $name = if ($doc.BaseName -eq "manual") { "manual.en" } else { $doc.BaseName }
-        $bbFile = Join-Path $bbOut "$name.bb"
-        & dotnet tool run markdown_to_bbcodenm -i $doc.FullName -o $bbFile 2>&1 | Out-Null
-        if ($LASTEXITCODE -eq 0 -and (Test-Path $bbFile)) { $bbOk++ }
-        else { Write-Host "  WARN: BBCode conversion failed for $($doc.Name)" -ForegroundColor Yellow }
+    # English manual only -- other languages live on GitHub; Nexus article titles are not i18n.
+    $manualEn = Join-Path $root "docs\manual.md"
+    $bbFile = Join-Path $bbOut "manual.en.bb"
+    if (-not (Test-Path $manualEn)) {
+        Write-Host "  WARN: docs\manual.md missing -- skipping BBCode" -ForegroundColor Yellow
+    } else {
+        & dotnet tool run markdown_to_bbcodenm -i $manualEn -o $bbFile 2>&1 | Out-Null
+        if ($LASTEXITCODE -eq 0 -and (Test-Path $bbFile)) {
+            Write-Host "  bbcode: manual.en.bb -> dist\bbcode\"
+        } else {
+            Write-Host "  WARN: BBCode conversion failed for manual.md" -ForegroundColor Yellow
+        }
     }
-    Write-Host "  bbcode: $bbOk file(s) -> dist\bbcode\  (NB: the converter flattens markdown tables -- hand-fix the README's one if you use it)"
 }
 
 Write-Host "`nBUILD OK -> $zip" -ForegroundColor Green
