@@ -5,6 +5,14 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.3.3
+
+- **Russian Watchdog help.** The Diagnostics help text now uses the same «Пробуждение»
+  wording as the Watchdog status readout (it had drifted to «Просыпается»).
+- **SEQ / SGE invariants.** The Builder fails the build if the written ESP does not have
+  exactly one StartGameEnabled quest, or if that quest is not `fth_IJW`. BUILDING.md notes
+  the SEQ file; the verify gate comment matches what the byte scan actually proves.
+
 ## 0.3.2
 
 - **Honest scene timer docs.** Time-in-scene is session wallclock: a reload restarts the

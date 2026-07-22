@@ -396,11 +396,12 @@ if (-not (Contains-Bytes $espBytes ([Text.Encoding]::ASCII.GetBytes("v$Version")
     Fail "version v$Version missing from ESP header description"
 }
 
-# SEQ: the engine-level "start these quests on load" list that arms the StartGameEnabled
-# quest on a mid-playthrough install. One quest -> one 4-byte file FormID, little-endian.
-# Independent checks against the Builder: present, 4 bytes, non-zero high byte (catches a
-# bare object id -- the FormKey.ID trap), object id in the ESL window, and the dword actually
-# appears in the ESP as the quest's FormID (so the SEQ names THIS plugin's quest).
+# SEQ: engine "start these quests on load" list for mid-playthrough installs. This mod
+# ships exactly one StartGameEnabled quest; the Builder asserts that after write, and the
+# SEQ is one 4-byte file FormID (little-endian). Gate checks: present, 4 bytes (one entry),
+# non-zero high byte (bare object-id trap), ESL object-id window, and the same 4 bytes
+# appear somewhere in the ESP (cross-serializer smoke check -- shape + Builder readback
+# carry the load-bearing identity, not a full QUST-header parse here).
 $seqPath = Join-Path $pkg "SEQ\fth_ItJustWorks.seq"
 if (-not (Test-Path $seqPath)) { Fail "SEQ missing: expected $seqPath (the Builder should emit it)" }
 $seqBytes = [IO.File]::ReadAllBytes($seqPath)
@@ -408,7 +409,7 @@ if ($seqBytes.Length -ne 4) { Fail "SEQ must be 4 bytes (one StartGameEnabled qu
 if ($seqBytes[3] -eq 0) { Fail "SEQ high byte is 0x00 -- a bare object id (the FormKey.ID trap), not a file FormID" }
 $seqObj = [int]$seqBytes[0] -bor ([int]$seqBytes[1] -shl 8) -bor ([int]$seqBytes[2] -shl 16)
 if ($seqObj -lt 0x800 -or $seqObj -gt 0xFFF) { Fail ("SEQ object id 0x{0:X} outside the ESL window 0x800-0xFFF" -f $seqObj) }
-if (-not (Contains-Bytes $espBytes $seqBytes)) { Fail "SEQ dword not present in the ESP as a FormID -- it does not name this plugin's quest" }
+if (-not (Contains-Bytes $espBytes $seqBytes)) { Fail "SEQ dword not present in the ESP -- does not match any 4-byte run in the plugin file" }
 $seqHex = ($seqBytes | ForEach-Object { '{0:X2}' -f $_ }) -join ' '
 Write-Host "  SEQ: 4 bytes [$seqHex], object id in ESL window, dword present in ESP"
 

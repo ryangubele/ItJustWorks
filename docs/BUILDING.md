@@ -53,6 +53,11 @@ way, so your own identity is still cleaned.)
 
 Output: `dist\It Just Works <version>.zip`, plus the staged tree in `dist\pkg\`.
 
+The package includes a standard `Data/SEQ/fth_ItJustWorks.seq` (one file FormID for the
+mod's single StartGameEnabled quest) so the watchdog can arm on mid-playthrough installs.
+The Builder derives that dword and asserts exactly one SGE quest; `build.ps1`'s verify
+gate checks the SEQ file's shape and that its bytes appear in the ESP.
+
 ## Nexus paste helpers (`dist\bbcode\`)
 
 As a final, non-shipping step, the build drops author-side files for the Nexus mod page

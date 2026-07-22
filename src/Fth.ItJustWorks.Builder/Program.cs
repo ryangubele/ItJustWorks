@@ -91,14 +91,34 @@ mod.WriteToBinary(outPath, new BinaryWriteParameters
 // written little-endian. NOT the bare object id, and NOT the runtime FE address: the light-slot
 // index is assigned at load order time, so it can never live in a static file. Master count is
 // read back from the file we just wrote so it tracks the real masters, not an assumed 1.
+// Read back masters + StartGameEnabled invariant. The SEQ is a single 4-byte entry;
+// more than one SGE quest would ship unarmed extras if we only ever wrote one dword.
 int masterCount;
+int sgeCount = 0;
+bool ourQuestIsSge = false;
 using (var readback = SkyrimMod.CreateFromBinaryOverlay(outPath, SkyrimRelease.SkyrimSE))
 {
     masterCount = readback.ModHeader.MasterReferences.Count;
+    foreach (var q in readback.Quests)
+    {
+        if (!q.Flags.HasFlag(Quest.Flag.StartGameEnabled)) continue;
+        sgeCount++;
+        if (q.FormKey.ID == quest.FormKey.ID) ourQuestIsSge = true;
+    }
 }
 if (masterCount is < 1 or > 0xFE)
 {
     Console.Error.WriteLine($"FATAL: master count {masterCount} can't form a valid SEQ high byte.");
+    return 1;
+}
+if (sgeCount != 1)
+{
+    Console.Error.WriteLine($"FATAL: expected exactly 1 StartGameEnabled quest (SEQ is single-entry), found {sgeCount}.");
+    return 1;
+}
+if (!ourQuestIsSge)
+{
+    Console.Error.WriteLine("FATAL: fth_IJW is not StartGameEnabled after write -- SEQ would arm the wrong thing (or nothing).");
     return 1;
 }
 uint fileFormId = ((uint)masterCount << 24) | quest.FormKey.ID;
