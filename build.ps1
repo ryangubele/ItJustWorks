@@ -546,17 +546,118 @@ $zip = Join-Path $dist "It Just Works $Version.zip"
 if (Test-Path $zip) { Remove-Item $zip -Force }
 Compress-Archive -Path (Join-Path $pkg "*") -DestinationPath $zip -Force
 
-# --- 8. Nexus BBCode docs (NOT shipped in the zip) ---------------------------
-# Convert the markdown docs to NexusMods-flavour BBCode for pasting into the mod
-# page: manuals -> Articles, README -> description, CHANGELOG -> changelog. Uses
-# the pinned dotnet tool in .config/dotnet-tools.json (BUTR's md->NexusMods-BBCode
-# converter); its manifest rollForward lets that .NET 7 tool run on the installed
-# runtime with no extra flags. Non-critical: a hiccup here warns and skips -- these
-# are author-side upload helpers, never part of the shipped archive.
-Step 8 "Nexus BBCode docs"
+# --- 8. Nexus paste helpers (NOT shipped in the zip) -------------------------
+# Author-side upload helpers for the Nexus mod page. Never part of the archive.
+#
+# 8a. Plain-text CHANGELOG dump -- always runs, no tools. Nexus's Documentation
+#     changelog field does not reliably render markdown or BBCode; paste this.
+# 8b. BBCode for manuals/README/CHANGELOG via the pinned dotnet tool (BUTR's
+#     md->NexusMods-BBCode converter). Non-critical: restore failure warns and
+#     skips; the zip is unaffected.
+Step 8 "Nexus paste helpers"
 $bbOut = Join-Path $dist "bbcode"
 if (Test-Path $bbOut) { Remove-Item $bbOut -Recurse -Force }
 New-Item -ItemType Directory -Force $bbOut | Out-Null
+
+# Flat one-line note from a markdown fragment (links/bold/code/list markers gone).
+function Format-ChangelogNoteLine([string]$s) {
+    $t = [regex]::Replace($s, '\[([^\]]+)\]\([^)]+\)', '$1')
+    $t = [regex]::Replace($t, '\*\*([^*]+)\*\*', '$1')
+    $t = [regex]::Replace($t, '(?<!\*)\*([^*]+)\*(?!\*)', '$1')
+    $t = [regex]::Replace($t, '`([^`]+)`', '$1')
+    return (($t -replace '\*\*', '' -replace '\s+', ' ').Trim() -replace '^[-*+]\s+', '')
+}
+
+# Parse CHANGELOG.md into version -> flat one-line notes (no markdown, no "- ").
+# Nexus prefixes every paste line with ">", so list markers are poison.
+# Free prose under a version (e.g. "Packaging and docs...") is kept as a note line.
+function Get-ChangelogNotesByVersion([string]$mdPath) {
+    $lines = Get-Content $mdPath -Encoding UTF8
+    $sections = [System.Collections.Generic.List[object]]::new()
+    $curVer = $null
+    $curNotes = $null
+    $para = $null
+
+    foreach ($raw in $lines) {
+        $line = $raw
+        if ($line -match '^#\s+') {
+            if ($null -ne $para -and $null -ne $curNotes) {
+                $t = Format-ChangelogNoteLine $para
+                if ($t.Length -gt 0) { [void]$curNotes.Add($t) }
+            }
+            $para = $null
+            continue
+        }
+        if ($line -match '^##\s+(\S+)') {
+            if ($null -ne $para -and $null -ne $curNotes) {
+                $t = Format-ChangelogNoteLine $para
+                if ($t.Length -gt 0) { [void]$curNotes.Add($t) }
+            }
+            $para = $null
+            if ($null -ne $curVer) {
+                [void]$sections.Add([pscustomobject]@{ Version = $curVer; Notes = $curNotes })
+            }
+            $curVer = $Matches[1].Trim()
+            $curNotes = [System.Collections.Generic.List[string]]::new()
+            continue
+        }
+        if ($null -eq $curVer) { continue }
+        if ($line -match '^\s*-\s+') {
+            if ($null -ne $para) {
+                $t = Format-ChangelogNoteLine $para
+                if ($t.Length -gt 0) { [void]$curNotes.Add($t) }
+            }
+            $para = ($line -replace '^\s*-\s+', '')
+            continue
+        }
+        if ($null -ne $para) {
+            if ($line -match '^\s*$') {
+                $t = Format-ChangelogNoteLine $para
+                if ($t.Length -gt 0) { [void]$curNotes.Add($t) }
+                $para = $null
+                continue
+            }
+            $para = $para + ' ' + $line.Trim()
+            continue
+        }
+        if ($line -match '^\s*$') { continue }
+        $para = $line.Trim()
+    }
+    if ($null -ne $para -and $null -ne $curNotes) {
+        $t = Format-ChangelogNoteLine $para
+        if ($t.Length -gt 0) { [void]$curNotes.Add($t) }
+    }
+    if ($null -ne $curVer) {
+        [void]$sections.Add([pscustomobject]@{ Version = $curVer; Notes = $curNotes })
+    }
+    return $sections
+}
+
+$clMd = Join-Path $root "CHANGELOG.md"
+$utf8 = [Text.UTF8Encoding]::new($false)
+if (-not (Test-Path $clMd)) {
+    Write-Host "  WARN: CHANGELOG.md missing -- skipping plain-text dumps" -ForegroundColor Yellow
+} else {
+    $sections = @(Get-ChangelogNotesByVersion $clMd)
+    # Full history: version marker line, then one line per change (no blanks, no dashes).
+    # Split on the version lines when filling Nexus Documentation entries.
+    $full = [System.Collections.Generic.List[string]]::new()
+    foreach ($sec in $sections) {
+        [void]$full.Add($sec.Version)
+        foreach ($n in $sec.Notes) { [void]$full.Add($n) }
+    }
+    $clTxt = Join-Path $bbOut "CHANGELOG.txt"
+    [IO.File]::WriteAllText($clTxt, (($full -join "`r`n") + "`r`n"), $utf8)
+    # One file per version: <version>.txt -- body only (Nexus stores the version field).
+    $nVer = 0
+    foreach ($sec in $sections) {
+        $body = if ($sec.Notes.Count -eq 0) { '' } else { ($sec.Notes -join "`r`n") + "`r`n" }
+        [IO.File]::WriteAllText((Join-Path $bbOut "$($sec.Version).txt"), $body, $utf8)
+        $nVer++
+    }
+    Write-Host "  plain: CHANGELOG.txt + $nVer version file(s) (e.g. $Version.txt) -> dist\bbcode\"
+}
+
 & dotnet tool restore 2>&1 | Out-Null
 if ($LASTEXITCODE -ne 0) {
     Write-Host "  WARN: 'dotnet tool restore' failed -- skipping BBCode docs (the mod zip is unaffected)." -ForegroundColor Yellow
