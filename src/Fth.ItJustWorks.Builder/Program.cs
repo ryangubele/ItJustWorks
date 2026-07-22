@@ -83,7 +83,43 @@ mod.WriteToBinary(outPath, new BinaryWriteParameters
     MastersListContent = MastersListContentOption.Iterate,
 });
 
+// SEQ: reliably start the StartGameEnabled quest on a mid-playthrough save. A StartGameEnabled
+// quest is NOT reliably started when its plugin is added to a save that predates it; Data/SEQ/
+// <plugin>.seq is the engine's deterministic "start these quests on load" list. The entry is the
+// quest's FILE FormID -- the object id (quest.FormKey.ID, forced into 0x800-0xFFF above) under the
+// plugin's own index in its master list (= master count; 0x01 with one master -> 0x01000800),
+// written little-endian. NOT the bare object id, and NOT the runtime FE address: the light-slot
+// index is assigned at load order time, so it can never live in a static file. Master count is
+// read back from the file we just wrote so it tracks the real masters, not an assumed 1.
+int masterCount;
+using (var readback = SkyrimMod.CreateFromBinaryOverlay(outPath, SkyrimRelease.SkyrimSE))
+{
+    masterCount = readback.ModHeader.MasterReferences.Count;
+}
+if (masterCount is < 1 or > 0xFE)
+{
+    Console.Error.WriteLine($"FATAL: master count {masterCount} can't form a valid SEQ high byte.");
+    return 1;
+}
+uint fileFormId = ((uint)masterCount << 24) | quest.FormKey.ID;
+if ((fileFormId >> 24) == 0)
+{
+    Console.Error.WriteLine($"FATAL: SEQ dword 0x{fileFormId:X8} has a zero high byte -- that's a bare object id, not a file FormID.");
+    return 1;
+}
+byte[] seqBytes =
+{
+    (byte)(fileFormId & 0xFF),
+    (byte)((fileFormId >> 8) & 0xFF),
+    (byte)((fileFormId >> 16) & 0xFF),
+    (byte)((fileFormId >> 24) & 0xFF),
+};
+var seqPath = Path.Combine(Path.GetDirectoryName(outPath)!, "SEQ", "fth_ItJustWorks.seq");
+Directory.CreateDirectory(Path.GetDirectoryName(seqPath)!);
+File.WriteAllBytes(seqPath, seqBytes);
+
 Console.WriteLine($"Wrote {outPath}");
 Console.WriteLine($"  QUST fth_IJW  FormID 0x{quest.FormKey.ID:X6}  (ESL-flagged)");
+Console.WriteLine($"  SEQ  0x{fileFormId:X8}  [{BitConverter.ToString(seqBytes).Replace('-', ' ')}]  -> {seqPath}");
 Console.WriteLine($"  Author='{mod.ModHeader.Author}'  Description='{mod.ModHeader.Description}'");
 return 0;

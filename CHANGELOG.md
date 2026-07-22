@@ -5,6 +5,17 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.3.1
+
+- **SEQ file shipped (packaging hygiene).** Start-game-enabled quests are supposed to come with a
+  small `SEQ` list so the engine knows to start them on existing saves. We ship one now - standard
+  Skyrim packaging. Mid-playthrough install was already tested for hours on a real load order; the
+  quest came up fine every time, so this is extra safety for odd setups and for people who never
+  open the menu - not a fix for a break we were hitting in normal play.
+- **Doc fixes.** The README's alert example matches the shipped wording again; the manual's Watchdog
+  list and the MCM status help document the **Late** state (alive, but a check came in slower than
+  its interval).
+
 ## 0.3.0
 
 - **The mod shows its work.** The single on/off "Log to Papyrus" toggle becomes a three-level
@@ -20,12 +31,6 @@ the build gate checks it.
   logging turned off, because Papyrus builds a call's arguments before checking the switch.
   Logging is now genuinely silent - and free - when off.
 - **Manual:** a short "Watching it work" section, including how to switch the Papyrus log on.
-
-*Tagged, not shipped on its own.* Post-tag review: mid-playthrough install with the MCM never
-opened was not isolated - testing always opened the menu, which showed a live quest, so set-and-forget
-start is unverified (not proven broken). 0.3.1 ships a SEQ so the engine is told to start the
-StartGameEnabled quest on existing saves regardless of stack quirks. Opening the MCM is not a
-quest-start path; it only reasserts registrations on an already-running quest.
 
 ## 0.2.4
 

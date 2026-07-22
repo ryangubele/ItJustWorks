@@ -55,7 +55,7 @@ When the watchdog fires, it's two short lines in the corner - how long you've be
 
 ## Watching it work (the Diagnostics page)
 
-- **Watchdog** - one word for whether the background check is running right now: **Running**, **Waking up** (normal for a moment right after a reload), **Off** (you set Check every to 0), or **Dormant** (turned off on the Uninstall page). It's how you confirm the mod is alive without opening a log.
+- **Watchdog** - one word for whether the background check is running right now: **Running**, **Waking up** (normal for a moment right after a reload), **Late** (still alive but a check came in slower than its interval - usually a sign of heavy script load), **Off** (you set Check every to 0), or **Dormant** (turned off on the Uninstall page). It's how you confirm the mod is alive without opening a log.
 - **Last self-repair** - the mod quietly re-syncs its own state now and then, most often right after a reload - for instance, re-syncing the scene timer so a scene you were stuck in across a reload still gets caught. A line here is normal, healthy housekeeping (the tool telling you it fixed itself), not a fault.
 - **Diagnostics log** - how much the mod writes to the Papyrus log, for troubleshooting or a bug report:
   - **Off** - nothing. The default; leave it here for normal play.

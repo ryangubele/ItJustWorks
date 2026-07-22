@@ -55,7 +55,7 @@ Quand la surveillance se déclenche, ce sont deux courtes lignes dans le coin - 
 
 ## Le voir travailler (la page Diagnostic)
 
-- **Surveillance** - un seul mot pour dire si la vérification en arrière-plan tourne en ce moment : **En marche**, **Réveil en cours** (normal un instant juste après un rechargement), **Désactivée** (vous avez mis Vérifier toutes les à 0), ou **En veille** (désactivée sur la page Désinstallation). C'est ainsi que vous confirmez que le mod est vivant sans ouvrir de journal.
+- **Surveillance** - un seul mot pour dire si la vérification en arrière-plan tourne en ce moment : **En marche**, **Réveil en cours** (normal un instant juste après un rechargement), **En retard** (toujours actif, mais une vérification est arrivée plus lentement que son intervalle - en général signe d'une forte charge de scripts), **Désactivée** (vous avez mis Vérifier toutes les à 0), ou **En veille** (désactivée sur la page Désinstallation). C'est ainsi que vous confirmez que le mod est vivant sans ouvrir de journal.
 - **Dernière auto-réparation** - le mod resynchronise discrètement son propre état de temps en temps, le plus souvent juste après un rechargement - par exemple, en resynchronisant la minuterie de scène pour qu'une scène dans laquelle vous étiez bloqué au travers d'un rechargement soit quand même repérée. Une ligne ici, c'est de l'entretien normal et sain (l'outil qui vous dit qu'il s'est réparé lui-même), pas une panne.
 - **Journal de diagnostic** - la quantité de ce que le mod écrit dans le journal Papyrus, pour dépanner ou remplir un rapport de bug :
   - **Désactivé** - rien. La valeur par défaut ; laissez-le ici pour jouer normalement.

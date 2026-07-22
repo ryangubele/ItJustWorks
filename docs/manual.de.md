@@ -55,7 +55,7 @@ Wenn der Wächter auslöst, sind es zwei kurze Zeilen in der Ecke - wie lange du
 
 ## Beim Arbeiten zusehen (die Diagnoseseite)
 
-- **Wächter** - ein Wort dafür, ob die Hintergrundprüfung gerade läuft: **Läuft**, **Wacht auf** (einen Moment lang nach einem Neuladen normal), **Aus** (du hast Prüfen alle auf 0 gesetzt) oder **Ruht** (auf der Seite Deinstallation abgeschaltet). So bestätigst du, dass der Mod lebt, ohne ein Log zu öffnen.
+- **Wächter** - ein Wort dafür, ob die Hintergrundprüfung gerade läuft: **Läuft**, **Wacht auf** (einen Moment lang nach einem Neuladen normal), **Verspätet** (läuft noch, aber eine Prüfung kam langsamer als ihr Intervall - meist ein Zeichen hoher Skriptlast), **Aus** (du hast Prüfen alle auf 0 gesetzt) oder **Ruht** (auf der Seite Deinstallation abgeschaltet). So bestätigst du, dass der Mod lebt, ohne ein Log zu öffnen.
 - **Letzte Selbstreparatur** - der Mod synchronisiert hin und wieder still seinen eigenen Zustand neu, meist direkt nach einem Neuladen - zum Beispiel den Szenen-Timer, damit eine Szene, in der du über ein Neuladen hinweg festhingst, trotzdem noch erwischt wird. Eine Zeile hier ist normale, gesunde Routine (das Werkzeug sagt dir, dass es sich selbst behoben hat), kein Fehler.
 - **Diagnoseprotokoll** - wie viel der Mod ins Papyrus-Log schreibt, zur Fehlersuche oder für einen Fehlerbericht:
   - **Aus** - nichts. Der Standard; lass es fürs normale Spielen hier.

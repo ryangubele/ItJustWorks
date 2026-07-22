@@ -307,6 +307,7 @@ $moduleConfig = @"
     <file source="fth_ItJustWorks.esp" destination="fth_ItJustWorks.esp" priority="0"/>
     <folder source="Scripts" destination="Scripts" priority="0"/>
     <folder source="MCM" destination="MCM" priority="0"/>
+    <folder source="SEQ" destination="SEQ" priority="0"/>
     <file source="$engRel" destination="$engRel" priority="0"/>
     <file source="fth_ItJustWorks_LICENSE.md" destination="fth_ItJustWorks_LICENSE.md" priority="0"/>
   </requiredInstallFiles>
@@ -394,6 +395,22 @@ $espBytes = [IO.File]::ReadAllBytes((Join-Path $pkg "fth_ItJustWorks.esp"))
 if (-not (Contains-Bytes $espBytes ([Text.Encoding]::ASCII.GetBytes("v$Version")))) {
     Fail "version v$Version missing from ESP header description"
 }
+
+# SEQ: the engine-level "start these quests on load" list that arms the StartGameEnabled
+# quest on a mid-playthrough install. One quest -> one 4-byte file FormID, little-endian.
+# Independent checks against the Builder: present, 4 bytes, non-zero high byte (catches a
+# bare object id -- the FormKey.ID trap), object id in the ESL window, and the dword actually
+# appears in the ESP as the quest's FormID (so the SEQ names THIS plugin's quest).
+$seqPath = Join-Path $pkg "SEQ\fth_ItJustWorks.seq"
+if (-not (Test-Path $seqPath)) { Fail "SEQ missing: expected $seqPath (the Builder should emit it)" }
+$seqBytes = [IO.File]::ReadAllBytes($seqPath)
+if ($seqBytes.Length -ne 4) { Fail "SEQ must be 4 bytes (one StartGameEnabled quest), got $($seqBytes.Length)" }
+if ($seqBytes[3] -eq 0) { Fail "SEQ high byte is 0x00 -- a bare object id (the FormKey.ID trap), not a file FormID" }
+$seqObj = [int]$seqBytes[0] -bor ([int]$seqBytes[1] -shl 8) -bor ([int]$seqBytes[2] -shl 16)
+if ($seqObj -lt 0x800 -or $seqObj -gt 0xFFF) { Fail ("SEQ object id 0x{0:X} outside the ESL window 0x800-0xFFF" -f $seqObj) }
+if (-not (Contains-Bytes $espBytes $seqBytes)) { Fail "SEQ dword not present in the ESP as a FormID -- it does not name this plugin's quest" }
+$seqHex = ($seqBytes | ForEach-Object { '{0:X2}' -f $_ }) -join ' '
+Write-Host "  SEQ: 4 bytes [$seqHex], object id in ESL window, dword present in ESP"
 
 $cfgText = Get-Content $cfgPath -Raw
 if ($cfgText -notmatch [regex]::Escape("Version $Version")) { Fail "version missing from MCM version row" }

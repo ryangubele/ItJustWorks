@@ -55,7 +55,7 @@ Quando la sentinella scatta, sono due brevi righe nell'angolo - da quanto sei ne
 
 ## Guardarla lavorare (la pagina Diagnostica)
 
-- **Sentinella** - una sola parola per dire se il controllo in background è attivo in questo momento: **Attivo**, **In avvio** (normale per un istante subito dopo un caricamento), **Spento** (hai impostato Controlla ogni a 0), o **Inattivo** (spenta dalla pagina Disinstalla). È così che confermi che la mod è viva senza aprire un log.
+- **Sentinella** - una sola parola per dire se il controllo in background è attivo in questo momento: **Attivo**, **In avvio** (normale per un istante subito dopo un caricamento), **In ritardo** (ancora attivo, ma un controllo è arrivato più lentamente del suo intervallo - di solito segno di un carico di script elevato), **Spento** (hai impostato Controlla ogni a 0), o **Inattivo** (spenta dalla pagina Disinstalla). È così che confermi che la mod è viva senza aprire un log.
 - **Ultima auto-riparazione** - ogni tanto la mod risincronizza in sordina il proprio stato, il più delle volte subito dopo un caricamento - per esempio, risincronizzando il timer della scena così che una scena in cui eri bloccato a cavallo di un caricamento venga comunque colta. Una riga qui è normale e sana manutenzione (lo strumento che ti dice che si è riparato da sé), non un guasto.
 - **Log diagnostico** - quanto la mod scrive nel log di Papyrus, per la diagnostica o una segnalazione di bug:
   - **Spento** - niente. Il valore predefinito; lascialo qui per il gioco normale.

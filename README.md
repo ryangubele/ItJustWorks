@@ -55,7 +55,7 @@ A level-5 vanilla character will probably never see this. A hundred-hour, level-
 
 **It watches.** Every 30 seconds - tunable, or off - it checks what scene you're in. Sit in one too long (3 minutes by default) and it says so:
 
-> *In a scene ~3m; blocking others.*
+> *scene blocking others ~3m*
 > *See? It Just Works!*
 
 You never have to remember to check, which is the entire point, because you were never going to.

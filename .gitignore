@@ -27,3 +27,7 @@ sanitization/private/
 # redistribute - they belong to their authors - so they live here locally but stay
 # out of the public repo. See docs/BUILDING.md for how to supply them.
 headers/
+
+# Local agent / review scratch
+.scratch/
+

@@ -55,7 +55,7 @@ Gdy strażnik zadziała, to dwie krótkie linijki w rogu - jak długo jesteś w 
 
 ## Podglądanie pracy moda (strona Diagnostyka)
 
-- **Strażnik** - jednym słowem, czy sprawdzanie w tle działa właśnie teraz: **Działa**, **Budzi się** (normalne przez chwilę zaraz po wczytaniu zapisu), **Wyłączony** (ustawiłeś Sprawdzaj co na 0) albo **Uśpiony** (wyłączony na stronie Odinstaluj). Tak potwierdzasz, że mod żyje, bez otwierania logu.
+- **Strażnik** - jednym słowem, czy sprawdzanie w tle działa właśnie teraz: **Działa**, **Budzi się** (normalne przez chwilę zaraz po wczytaniu zapisu), **Opóźniony** (wciąż działa, ale sprawdzenie nadeszło wolniej niż jego interwał - zwykle oznaka dużego obciążenia skryptami), **Wyłączony** (ustawiłeś Sprawdzaj co na 0) albo **Uśpiony** (wyłączony na stronie Odinstaluj). Tak potwierdzasz, że mod żyje, bez otwierania logu.
 - **Ostatnia samonaprawa** - mod od czasu do czasu po cichu synchronizuje własny stan, najczęściej zaraz po wczytaniu zapisu - na przykład synchronizuje czasomierz sceny, żeby scena, w której utknąłeś przez wczytanie zapisu, wciąż została złapana. Wpis tutaj to normalne, zdrowe porządki (narzędzie mówi ci, że naprawiło się samo), nie usterka.
 - **Log diagnostyczny** - ile mod zapisuje do logu Papyrus, na potrzeby diagnozy albo zgłoszenia błędu:
   - **Wyłączony** - nic. Ustawienie domyślne; zostaw je do normalnej gry.

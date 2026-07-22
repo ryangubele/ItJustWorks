@@ -55,7 +55,7 @@ Když hlídač spustí, jsou to dva krátké řádky v rohu - jak dlouho jsi ve 
 
 ## Sledování při práci (stránka Diagnostika)
 
-- **Hlídač** - jedno slovo pro to, zda kontrola na pozadí právě běží: **Běží**, **Probouzí se** (na okamžik hned po načtení normální), **Vypnuto** (nastavil jsi Kontrolovat každých na 0) nebo **Uspáno** (vypnuto na stránce Odinstalovat). Takto ověříš, že mod žije, aniž bys otevíral log.
+- **Hlídač** - jedno slovo pro to, zda kontrola na pozadí právě běží: **Běží**, **Probouzí se** (na okamžik hned po načtení normální), **Opožděno** (stále běží, ale kontrola dorazila pomaleji než její interval - obvykle příznak vysoké zátěže skriptů), **Vypnuto** (nastavil jsi Kontrolovat každých na 0) nebo **Uspáno** (vypnuto na stránce Odinstalovat). Takto ověříš, že mod žije, aniž bys otevíral log.
 - **Poslední samooprava** - mod čas od času tiše sesynchronizuje svůj vlastní stav, nejčastěji hned po načtení - například znovu sesynchronizuje časovač scény, aby scéna, ve které jsi uvízl přes načtení, přesto byla zachycena. Řádek zde je normální, zdravá údržba (nástroj ti říká, že se sám opravil), ne chyba.
 - **Diagnostický log** - kolik toho mod zapisuje do logu Papyrus, pro řešení potíží nebo hlášení chyby:
   - **Vypnuto** - nic. Výchozí; nech to tak pro běžné hraní.
