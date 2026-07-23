@@ -131,9 +131,7 @@ ESL-flagged, so it costs you no load-order slot. Safe to add mid-playthrough. Sa
 
 ## Languages
 
-The menu ships in English, with machine-translations for Simplified Chinese, Czech, French, German, Italian, Japanese, Polish, Russian, and Spanish. Pick the ones you want in the installer - corrections are always welcome.
-
-One quirk worth knowing: Skyrim loads the menu translation that matches your game's **language setting**. So if your game runs in English but you want the menu in another language, it keeps reading the English file - and the menu stays English even though the translation is installed. Two ways around it: in the installer, **tick that language in the first step, then set it as your default menu language in the second** (it writes the translation over the English file for you, and leaves an English `.bak` you can rename back); or by hand, in the mod's `Interface\Translations\` folder, rename your language's file - `fth_ItJustWorks_<LANGUAGE>.txt` - to `fth_ItJustWorks_ENGLISH.txt`, replacing the English one.
+The menu ships in English, with machine-translations for Simplified Chinese, Czech, French, German, Italian, Japanese, Polish, Russian, and Spanish. Pick the ones you want in the installer - corrections are always welcome. Details and the per-language manuals are in [TRANSLATIONS.md](TRANSLATIONS.md).
 
 ---
 
