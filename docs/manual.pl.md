@@ -1,100 +1,115 @@
 # Korzystanie z It Just Works™
 
-## Co robi i po co
+## Co robi
 
-Skyrim działa na *scenach* - skryptowych momentach, jak rozmowy i przerywniki filmowe, które mają zakończyć się same. Czasem któraś się nie kończy, a zablokowana scena potrafi po cichu wstrzymać te, które mają nastąpić po niej, niepostrzeżenie psując zadanie albo nawet cały zapis, bez żadnego błędu, który by cię ostrzegł. Ten mod obserwuje scenę, w której jesteś, i ostrzega cię, jeśli utknąłeś w jednej zbyt długo, pokazuje ci z menu, w czym jesteś, i pozwala zatrzymać scenę, która się zacięła. Na tym polega cały pomysł: złapać zacięty przełącznik, zanim kosztuje cię zapis.
+Skyrim używa *scen* do rozmów, cutscenek i innych skryptowanych momentów. Czasem scena nigdy się nie kończy. To może po cichu blokować kolejne sceny — zadanie, które nie idzie dalej, bez błędu, bez awarii. Ten mod pilnuje sceny, w której jesteś, ostrzega, jeśli siedzisz w niej za długo, pokazuje, co to jest, i pozwala ją zatrzymać, gdy się zacina.
 
-Wszystkim, co robi mod, sterujesz z jednej strony: **Menu Konfiguracji Modów > It Just Works**. Oto co robi każda część.
+**W skrócie:** zostaw domyślne ustawienia i graj. Gdy dostaniesz alert, otwórz **Menu konfiguracji modów > It Just Works**.
 
-Wersja krótka, jeśli dopiero go zainstalowałeś: zostaw ustawienia domyślne w spokoju, graj dalej i pozwól, by strażnik klepnął cię w ramię, jeśli kiedyś utkniesz w jednej scenie zbyt długo. Wszystko poniżej jest na chwile, gdy zechcesz przyjrzeć się bliżej.
+Wymaga **[SKSE64](https://skse.silverlock.org/)**, **[MCM Helper](https://www.nexusmods.com/skyrimspecialedition/mods/53000)**, **[powerofthree's Papyrus Extender](https://www.nexusmods.com/skyrimspecialedition/mods/22854)** oraz **[powerofthree's Tweaks](https://www.nexusmods.com/skyrimspecialedition/mods/51073)** (z `Load EditorIDs = true`, jeśli chcesz nazwy zamiast numerów ID). Uwagi instalacyjne są na [stronie moda](https://www.nexusmods.com/skyrimspecialedition/mods/185927).
 
-## Wyświetlanie menu po polsku
+Trzy strony w menu: **Scena**, **Diagnostyka**, **Odinstaluj**.
 
-Mod zawiera tłumaczenia menu dla kilku języków - wybierz je w instalatorze. Skyrim wczytuje tłumaczenie zgodne z **ustawieniem języka** twojej gry; więc jeśli gra działa po angielsku, a chcesz menu w innym języku, wciąż czyta plik angielski i menu pozostaje angielskie, mimo że tłumaczenie jest zainstalowane. Dwa rozwiązania: w instalatorze zaznacz ten język w pierwszym kroku, a potem wybierz go jako **domyślny język menu** w drugim (zapisze tłumaczenie na pliku angielskim za ciebie i zachowa angielski plik `.bak`, którego nazwę możesz przywrócić); albo ręcznie zmień nazwę swojego pliku językowego w `Interface\Translations\` - `fth_ItJustWorks_POLISH.txt` - na `fth_ItJustWorks_ENGLISH.txt`, zastępując angielski.
+---
 
-## Bieżąca scena
+## Menu w innym języku
 
-Góra strony to podgląd na żywo sceny, w której właśnie jesteś, albo "None", jeśli w żadnej nie jesteś. Otwarcie strony pobiera świeży odczyt, więc nigdy nie jest nieaktualny.
+Mod dostarcza tłumaczenia menu — wybierz je w instalatorze. Skyrim wczytuje plik pasujący do **ustawienia języka** gry. Angielska gra + inny zainstalowany język nadal czyta angielski plik menu, dopóki go nie nadpiszesz.
 
-- **Scena** - scena, w której jesteś, po nazwie (jej Editor ID), gdy nazwy są dostępne, albo surowy numer ID, gdy nie są (patrz kontrolka poniżej).
-- **Form ID** - surowy numer ID sceny, zawsze widoczny, na wypadek gdybyś potrzebował go do konsoli albo zgłoszenia błędu.
-- **Zadanie nadrzędne** - zadanie, do którego należy scena. Zwykle bardziej przydatna nazwa: mówi ci, *co* cię trzyma.
-- **Czas w scenie** - mniej więcej jak długo jesteś w tej scenie *w tej sesji*. Oznaczone znakiem `~`, bo mod sprawdza według czasomierza. Zegar to czas rzeczywisty tylko bieżącego uruchomienia gry: **wczytanie zeruje go**. Po wczytaniu ciągła gra powyżej progu ostrzeżenia nadal ostrzega; krótkie pętle wczytań poniżej progu nie sumują wcześniejszych sesji.
+**Instalator:** zaznacz język w kroku 1, potem ustaw go jako domyślny język menu w kroku 2 (nadpisuje angielski plik; zachowuje angielski `.bak`).
 
-## Kontrolka "Editor ID wczytane"
+**Ręcznie:** zmień nazwę `Interface\Translations\fth_ItJustWorks_POLISH.txt` na `fth_ItJustWorks_ENGLISH.txt` (zastąp angielski plik).
 
-Kontrolka stanu, nie przełącznik - kliknięcie nie robi nic poza przywróceniem jej do prawdy.
+---
 
-- **Świeci** - dobrze. powerofthree's Tweaks wczytuje Editor ID, więc sceny i zadania pokazują się po nazwie.
-- **Zgaszona** - nazwy są wyłączone; wszystko pokazuje się zamiast tego jako numery ID. Mod działa dokładnie tak samo w obu przypadkach - po prostu trudniej to czytać.
+## Scena
 
-Aby włączyć nazwy: otwórz `po3_Tweaks.ini` (w instalacji powerofthree's Tweaks) i ustaw `Load EditorIDs = true`, a potem uruchom Skyrim ponownie. Kontrolka się zapala i nazwy się pojawiają.
+### W czym jesteś
 
-Mod mówi o tym także raz, sam z siebie, gdy po raz pierwszy zauważy, że nazwy są wyłączone. Ta kontrolka to trwała wersja tego powiadomienia - to, na co wskazać w wątku pomocy, gdy ktoś pyta, czemu jego sceny to same numery.
+Na żywo odczyt bieżącej sceny albo **None**. Otwórz menu, by dostać świeży odczyt.
 
-## Akcje
+- **Czas w scenie** — wiersz, który tu zwykle ma znaczenie: mniej więcej jak długo w niej jesteś w tej sesji (`~` oznacza przybliżenie). To sygnał zacięcia albo jego braku. **Przeładowanie gry zeruje ten timer.** Długa ciągła gra po przeładowaniu wciąż może ostrzec; skakanie przez przeładowania bez dłuższego pozostania w grze — nie.
+- **Scena** — nazwa, gdy nazwy są dostępne; w przeciwnym razie numer ID (zob. Editor ID w Diagnostyce).
+- **Form ID** — surowy ID, zawsze widoczny. Przydatny w konsoli lub zgłoszeniu błędu; nie potrzebujesz go, by zatrzymać scenę — do tego jest przycisk poniżej.
+- **Zadanie nadrzędne** — do którego zadania należy ta scena, gdy chcesz szerszy kontekst.
 
-- **Zatrzymaj scenę** - rozwiązanie. Jeśli naprawdę utknąłeś, to kończy scenę, w której jesteś. Celowo jest dwuetapowe: naciśnij **Zatrzymaj scenę** raz, aby uzbroić (pojawia się wiersz potwierdzający, że zatrzyma się po zamknięciu menu), i naciśnij ponownie, aby anulować. Samo zatrzymanie następuje w chwili zamknięcia menu, bo tylko wtedy gra działa na tyle, by zadziałało. Czyli: uzbrój, zamknij menu, gotowe.
+### Zatrzymaj scenę
 
-  Sięgaj po to tylko, jeśli sądzisz, że scena jest zablokowana. Zatrzymanie sceny, która działa normalnie, może coś zepsuć, a zatrzymanie zablokowanej może wywołać krótki nawał opóźnionych zdarzeń, gdy gra nadrabia zaległości - to normalne, nie nowy błąd.
+Jeśli uważasz, że scena się zacięła, to ją kończy.
 
-- **Odśwież** - pobiera świeży odczyt bieżącej sceny natychmiast, bez zamykania i ponownego otwierania strony.
+1. Naciśnij **Zatrzymaj scenę** raz — wiersz potwierdza, że jest uzbrojona.
+2. Naciśnij ponownie, by anulować, albo **zamknij menu**, by zatrzymać. Zatrzymanie następuje przy zamknięciu menu.
 
-## Ostatnie sceny
+Zatrzymuj tylko scenę, którą uważasz za zaciętą. Zatrzymanie normalnej może coś zepsuć. Zatrzymanie zaciętej może wywołać krótką salwę opóźnionych zdarzeń, gdy gra nadrabia — to oczekiwane, nie nowy problem.
 
-Ostatnie dziesięć scen, przez które przeszedłeś, od najnowszej, każda z przybliżonym czasem trwania. Przydatne przy "zaraz, co to było przed chwilą", zwłaszcza gdy scena mignie za szybko, by ją uchwycić.
+**Odśwież** ponownie odczytuje bieżącą scenę bez zamykania menu. Otwarcie i tak bierze świeży odczyt; użyj tego, gdy menu jest otwarte dłużej i chcesz aktualizacji — zwłaszcza z modami takimi jak [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859), które trzymają grę w ruchu przy otwartych menu.
 
-## Strażnik
+### Ostatnie sceny
 
-Część, która czuwa, żebyś ty nie musiał.
+Ostatnie dziesięć scen, najnowsza pierwsza, z przybliżonym czasem trwania. Ten sam rodzaj przybliżonego czasu co wyżej (przeładowanie nie trzyma stopera z wcześniejszych sesji).
 
-- **Ostrzeż po** - po ilu minutach w jednej scenie mod ma cię ostrzec. Domyślnie 3. Ustaw 0, aby nigdy nie ostrzegać.
-- **Sprawdzaj co** - jak często strażnik zagląda, w sekundach. Domyślnie 30. Ustaw 0, aby całkowicie wyłączyć strażnika. Jest to pomyślane pod przypadek zauważony dużo później, więc nie musi być szybkie: od 10 do 240 sekund w zupełności wystarczy i jest lżejsze dla gry.
+### Strażnik
 
-Gdy strażnik zadziała, to dwie krótkie linijki w rogu - jak długo jesteś w scenie i że blokuje inne, potem nazwa moda. Nie musisz mieć otwartego menu, aby to zobaczyć.
+Na tej samej stronie. Pilnuje, żebyś nie musiał.
 
-## Podglądanie pracy moda (strona Diagnostyka)
+- **Ostrzeż po** — minuty w jednej scenie przed alertem. Domyślnie **3**. **0** = nigdy nie ostrzegaj.
+- **Sprawdzaj co** — sekundy między sprawdzeniami. Domyślnie **30**. **0** = wyłącza strażnika.
 
-- **Strażnik** - jednym słowem, czy sprawdzanie w tle działa właśnie teraz: **Działa**, **Budzi się** (normalne przez chwilę zaraz po wczytaniu zapisu), **Opóźniony** (wciąż działa, ale sprawdzenie nadeszło wolniej niż jego interwał - zwykle oznaka dużego obciążenia skryptami), **Wyłączony** (ustawiłeś Sprawdzaj co na 0) albo **Uśpiony** (wyłączony na stronie Odinstaluj). Tak potwierdzasz, że mod żyje, bez otwierania logu.
-- **Ostatnia samonaprawa** - mod od czasu do czasu po cichu synchronizuje własny stan, najczęściej zaraz po wczytaniu - na przykład timer sceny, by scena zablokowana przez wczytanie mogła jeszcze ostrzec po pełnym progu ciągłej gry *w tej sesji*. Ta resync **restartuje** zegar od wczytania; nie dodaje czasu sprzed wczytania. Linia tutaj to normalna konserwacja, nie błąd.
-- **Log diagnostyczny** - ile mod zapisuje do logu Papyrus, na potrzeby diagnozy albo zgłoszenia błędu:
-  - **Wyłączony** - nic. Ustawienie domyślne; zostaw je do normalnej gry.
-  - **Zdarzenia** - zmiany scen, ostrzeżenia i każda samonaprawa moda. Ustaw to, by zgłosić błąd.
-  - **Każde sprawdzenie** - dodaje wiersz przy każdym sprawdzeniu (puls pętli, rosnący czasomierz). Do ścigania problemu z czasem, potem przywróć poprzednie.
+Alert to dwa wiersze w rogu, na przykład:
 
-Log trafia na dysk tylko wtedy, gdy logowanie Papyrus jest włączone w grze. Dodaj blok `[Papyrus]` do `Skyrim.ini` (albo `SkyrimCustom.ini`) w `Documents\My Games\Skyrim Special Edition\`:
+> scene blocking others ~3m  
+> See? It Just Works!
 
-```
-[Papyrus]
-bEnableLogging=1
-bEnableTrace=1
-```
+Raz na scenę, dopóki jej nie opuścisz albo scena się nie zmieni. Przegapiłeś toast? Otwórz menu — odczyt nadal pokazuje, w czym jesteś i jak długo. Mod nie zatrzymuje sceny za ciebie; do tego jest **Zatrzymaj scenę**.
 
-Uruchom Skyrim ponownie. Plik pojawia się w `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`; przeszukaj go pod kątem `fth_IJW` (`findstr fth_IJW Papyrus.0.log`, albo `grep`). Przy Mod Organizer 2 to twój prawdziwy folder Documents, nie wirtualny folder gry.
+### Hotkey
 
-## Ustawienia
+- **Nazwij bieżącą scenę** — przypisz klawisz; naciśnij, by zobaczyć nazwę bieżącej sceny bez otwierania menu.
+- **Wyczyść klawisz** — usuwa przypisanie. ESC go tu nie czyści (ESC to Pauza w tym menu).
 
-- **Nazwij bieżącą scenę** - przypisz tu klawisz, a jego naciśnięcie wyświetli nazwę sceny, w której właśnie jesteś, w ogóle bez otwierania menu. Najszybsze "w czym ja teraz jestem".
-- **Wyczyść klawisz** - odpina ten klawisz. Nie ma tu czyszczenia przez ESC (w tym menu ESC to Pauza, a gra ostrzega cię o konflikcie), więc to tym przyciskiem zdejmujesz przypisanie, gdy już jakiś ustawiłeś.
+---
 
-## O modzie
+## Diagnostyka
 
-Wersja, żebyś od razu widział, którą kompilację grasz - przydatne, gdy prosisz o pomoc albo sprawdzasz, czy masz aktualną.
+- **Editor ID wczytane** — kontrolka stanu, nie przełącznik (kliknięcie wraca na miejsce).
+  - **Świeci** — nazwy są włączone.
+  - **Zgaszona** — zobaczysz numery ID; mod i tak działa.
 
-## Wyłączanie lub usuwanie
+  Nazwy włączone: w `po3_Tweaks.ini` ustaw `Load EditorIDs = true`, zrestartuj Skyrim. Mod mówi to też raz, gdy po raz pierwszy zauważy, że nazwy są wyłączone.
 
-Nie musisz odinstalowywać moda, żeby przestał działać. Strona **Odinstaluj** ma jeden przełącznik **Włączony**: wyłącz go, a mod przechodzi w uśpienie - strażnik przestaje sprawdzać, a klawisz się wyrejestrowuje - bez czyszczenia czegokolwiek i bez ruszania twojego zapisu. Włącz go z powrotem, kiedy tylko zechcesz, a podejmie działanie dokładnie tam, gdzie skończył. To łagodny sposób, by odłożyć go w trakcie rozgrywki, i łatwy sposób, by sprawdzić, czy to on w ogóle był tym, co ci przeszkadzało.
+- **Strażnik** — czy sprawdzenie w tle działa:
+  - **Działa** — w porządku
+  - **Budzi się** — normalne tuż po przeładowaniu
+  - **Opóźniony** — nadal działa, ale sprawdzenia są wolniejsze niż zwykle (zajęta gra)
+  - **Wyłączony (sprawdzanie wyłączone)** — ustawiłeś Sprawdzaj co na 0
+  - **Uśpiony (wyłączony)** — Włączony jest wyłączony na Odinstaluj
 
-Jeśli jednak chcesz się go pozbyć na dobre, usuń go w tej kolejności:
+- **Ostatnia samonaprawa** — mod czasem poprawia własną księgowość (często po przeładowaniu). Wiersz tutaj jest normalny. To nie usterka i nie trzeba go czyścić.
 
-1. **Wyłącz go** na stronie Odinstaluj.
-2. **Zapisz grę, potem wyjdź** na pulpit.
-3. **Usuń mod** w swoim menedżerze modów (Vortex, MO2 albo ręcznie).
+- **Log diagnostyczny** — ile idzie do logu Papyrus. Zostaw **Wyłączony** przy normalnej grze. Użyj **Zdarzenia** przy zgłaszaniu błędu; **Każde sprawdzenie** tylko gdy tropisz problem z timingiem, potem wróć.
 
-To naprawdę wszystko, czego trzeba. Nic, co robi ten mod, nie zepsuje zapisu przy wyjściu - nie przetrzymuje żadnych obiektów gry, niczego nie blokuje i nic innego od niego nie zależy. To, co po sobie zostawia, zostawia *każdy* skryptowy mod: mały, bezczynny ślad w zapisie, tam gdzie mieszkał jego skrypt. Skyrim go ignoruje. Jeśli chcesz, by zniknął nawet on, możesz wymieść ten ślad narzędziem do czyszczenia zapisów, gdy mod już zostanie usunięty.
+  Logowanie działa tylko, gdy gra zapisuje logi Papyrus. W `Documents\My Games\Skyrim Special Edition\` edytuj `Skyrim.ini` lub `SkyrimCustom.ini`:
 
-### O czyszczeniu zapisów (ReSaver)
+  ```
+  [Papyrus]
+  bEnableLogging=1
+  bEnableTrace=1
+  ```
 
-Przy długim zapisie od czasu do czasu uruchomisz czyszczenie - zwykle jest to **ReSaver** (część FallrimTools) - by usunąć skryptowy osad zostawiony przez *inne* mody, które podmieniłeś albo usunąłeś. Możesz przy tym zostawić It Just Works zainstalowany. Jest zbudowany tak, by przetrwać czyszczenie: bez aliasów, bez stanu świata, samonaprawiający się. Normalne przejście go nie ruszy, a nawet agresywne, które wyczyści jego czasomierz sprawdzania albo klawisz, uzbroi się z powrotem, gdy następnym razem otworzysz menu. Ryzyko dla *tego* moda jest z założenia mniej więcej tak niskie, jak tylko może być u skryptowego moda.
+  Restart. Plik logu: `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`. Szukaj `fth_IJW`.
 
-Zastrzeżenia, które pozostają, dotyczą narzędzia, nie nas: wiedz, co robi ReSaver, zanim wycelujesz nim w zapis, na którym ci zależy, i bierz na cel to, co faktycznie usunąłeś, zamiast ślepego zamiatania.
+- **Wersja** — numer buildu, do wątków pomocy i aktualizacji.
+
+---
+
+## Wyłączenie lub usunięcie
+
+**Odłożyć na bok:** strona Odinstaluj → **Włączony** wyłączony. Strażnik i hotkey się zatrzymują; włącz później i wznawia. Zapis jest w porządku.
+
+**Usunąć na dobre:**
+
+1. Wyłącz **Włączony**.
+2. Zapisz, wyjdź na pulpit.
+3. Usuń moda w menedżerze (lub ręcznie).
+
+Bezpieczne do usunięcia w trakcie przejścia. Skyrim może zostawić w zapisie mały martwy stub skryptu, jak inne skryptowane mody; gra go ignoruje. Opcjonalnie: cleaner zapisu (np. **[ReSaver](https://www.nexusmods.com/skyrimspecialedition/mods/5031)** w FallrimTools) może usunąć stuby po deinstalacji — używaj cleanerów ostrożnie, tylko na to, co chciałeś usunąć. Możesz zostawić ten mod zainstalowany, czyszcząc śmieci z *innych* modów.

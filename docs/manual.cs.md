@@ -1,100 +1,115 @@
-# Používání It Just Works™
+# Jak používat It Just Works™
 
-## Co dělá a proč
+## Co dělá
 
-Skyrim stojí na *scénách* - skriptovaných okamžicích jako rozhovory a filmové sekvence, které mají skončit samy od sebe. Někdy jedna neskončí, a zaseknutá scéna může tiše zablokovat ty, které přijdou po ní, a nenápadně tak rozbít úkol, nebo i celý save, aniž by tě varovala jakákoli chyba. Tento mod hlídá scénu, ve které právě jsi, a upozorní tě, když v jedné uvízneš příliš dlouho, ukáže ti z menu, v čem právě jsi, a nechá tě zastavit scénu, která se zasekla. O to celé jde: zachytit zaseknutý přepínač dřív, než tě to bude stát save.
+Skyrim používá *scény* pro rozhovory, cutscény a další skriptované momenty. Někdy scéna nikdy neskončí. To může tiše zablokovat pozdější scény - quest, který se nehne, bez chyby a bez pádu. Tento mod sleduje scénu, ve které jste, upozorní vás, pokud jste v jedné příliš dlouho, ukáže vám, která to je, a nechá vás ji zastavit, pokud se zasekla.
 
-Vše, co mod dělá, ovládáš z jediné stránky: **Menu konfigurace modů > It Just Works**. Zde je, co která část dělá.
+**Stručně:** nechte výchozí hodnoty zapnuté a hrajte dál. Když přijde upozornění, otevřete **Menu konfigurace modů > It Just Works**.
 
-Krátká verze, pokud jsi ho právě nainstaloval: nech výchozí hodnoty být, hraj dál a nech hlídače, ať tě ťukne do ramene, kdybys někdy uvízl v jedné scéně příliš dlouho. Vše níže je pro chvíle, kdy se chceš podívat blíž.
+Potřebuje **[SKSE64](https://skse.silverlock.org/)**, **[MCM Helper](https://www.nexusmods.com/skyrimspecialedition/mods/53000)**, **[powerofthree's Papyrus Extender](https://www.nexusmods.com/skyrimspecialedition/mods/22854)** a **[powerofthree's Tweaks](https://www.nexusmods.com/skyrimspecialedition/mods/51073)** (s `Load EditorIDs = true`, pokud chcete jména místo čísel ID). Poznámky k instalaci jsou na [stránce modu](https://www.nexusmods.com/skyrimspecialedition/mods/185927).
 
-## Zobrazení menu v češtině
+Tři stránky v menu: **Scéna**, **Diagnostika**, **Odinstalovat**.
 
-Mod obsahuje překlady menu pro několik jazyků - vyber si je v instalátoru. Skyrim načítá překlad odpovídající **nastavení jazyka** tvé hry; takže pokud hra běží v angličtině, ale chceš menu v jiném jazyce, dál čte anglický soubor a menu zůstává anglické, přestože je překlad nainstalovaný. Dvě řešení: v instalátoru zaškrtni ten jazyk v prvním kroku a pak si ho ve druhém zvol jako svůj **výchozí jazyk menu** (zapíše překlad přes anglický soubor za tebe a ponechá anglický `.bak`, který můžeš přejmenovat zpátky); nebo ručně přejmenuj svůj jazykový soubor v `Interface\Translations\` - `fth_ItJustWorks_CZECH.txt` - na `fth_ItJustWorks_ENGLISH.txt` a nahraď tím anglický.
+---
 
-## Aktuální scéna
+## Menu v jiném jazyce
 
-Horní část stránky je živý výpis scény, ve které právě jsi, nebo "None", pokud v žádné nejsi. Otevření stránky provede čerstvé načtení, takže nikdy není zastaralá.
+Mod dodává překlady menu - vyberte je v instalátoru. Skyrim načte soubor, který odpovídá **nastavení jazyka** hry. Anglická hra + jiný nainstalovaný jazyk dál čte anglický soubor menu, dokud to nepřepíšete.
 
-- **Scéna** - scéna, ve které jsi, podle názvu (její Editor ID), když jsou názvy dostupné, jinak holé číslo ID (viz kontrolka níže).
-- **Form ID** - holé číslo ID scény, vždy zobrazené, pro případ, že bys ho potřeboval do konzole nebo do hlášení chyby.
-- **Nadřazený úkol** - úkol, kterému scéna patří. Obvykle užitečnější název: řekne ti, *co* tě drží.
-- **Čas ve scéně** - přibližně jak dlouho jsi v této scéně *v této relaci*. Označeno znakem `~`, protože mod kontroluje podle časovače (přesnost na jednu kontrolu). Hodiny jsou reálný čas jen pro aktuální spuštění hry: **načtení je vynuluje**. Po načtení souvislá hra nad prahem varování stále spustí upozornění; krátké smyčky načítání pod prahem nesčítají čas z dřívějších relací.
+**Instalátor:** zaškrtněte jazyk v kroku 1, pak ho nastavte jako výchozí jazyk menu v kroku 2 (zapíše přes anglický soubor; ponechá anglický `.bak`).
 
-## Kontrolka "Editor ID načteny"
+**Ručně:** přejmenujte `Interface\Translations\fth_ItJustWorks_CZECH.txt` na `fth_ItJustWorks_ENGLISH.txt` (nahraďte anglický soubor).
 
-Stavová kontrolka, ne přepínač - kliknutí na ni neudělá nic, jen ji vrátí k pravdě.
+---
 
-- **Svítí** - dobře. powerofthree's Tweaks načítá Editor ID, takže scény a úkoly se zobrazují podle názvu.
-- **Zhasnuto** - názvy jsou vypnuté; vše se místo toho zobrazuje jako čísla ID. Mod funguje úplně stejně tak či tak - jen se to hůř čte.
+## Scéna
 
-Jak zapnout názvy: otevři `po3_Tweaks.ini` (v instalaci powerofthree's Tweaks) a nastav `Load EditorIDs = true`, poté restartuj Skyrim. Kontrolka se rozsvítí a názvy se objeví.
+### V čem jste
 
-Mod to také jednou sám oznámí, když poprvé zjistí, že názvy jsou vypnuté. Tato kontrolka je trvalá podoba onoho oznámení - to, na co ukázat ve vlákně pomoci, když se někdo ptá, proč jsou jeho scény samá čísla.
+Živý výpis aktuální scény, nebo **None**. Otevřete menu pro čerstvé čtení.
 
-## Akce
+- **Čas ve scéně** - řádek, na kterém tady většinou záleží: zhruba jak dlouho jste v ní v této relaci (`~` znamená přibližně). To je signál zaseknutí. **Načtení hry tento časovač vynuluje.** Dlouhý nepřetržitý běh po načtení vás stále může varovat; krátké smyčky načítání bez dostatečně dlouhého pobytu ve hře ne.
+- **Scéna** - jméno, když jsou jména k dispozici; jinak číslo ID (viz Editor ID na Diagnostice).
+- **Form ID** - surové ID, vždy zobrazené. Hodí se pro konzoli nebo hlášení chyby; k zastavení scény ho nepotřebujete - na to je tlačítko níže.
+- **Nadřazený úkol** - ke kterému questu scéna patří, když chcete širší kontext.
 
-- **Zastavit scénu** - náprava. Pokud jsi opravdu zaseknutý, tohle ukončí scénu, ve které jsi. Je to záměrně na dva kroky: stiskni **Zastavit scénu** jednou pro připravení (objeví se řádek potvrzující, že se zastaví při zavření menu), a stiskni znovu pro zrušení. Samotné zastavení nastane ve chvíli, kdy zavřeš menu, protože jen tehdy hra běží dost na to, aby se projevilo. Takže: připrav, zavři menu, hotovo.
+### Zastavit scénu
 
-  Sáhni po tom jen, pokud věříš, že je scéna zaseknutá. Zastavení scény, která normálně funguje, může něco rozbít, a zastavení zaseknuté může spustit krátký nával odložených událostí, jak hra dohání skluz - to se očekává, není to nová chyba.
+Pokud věříte, že scéna je zaseknutá, tím ji ukončíte.
 
-- **Obnovit** - provede čerstvé načtení aktuální scény hned teď, bez zavírání a znovuotevírání stránky.
+1. Stiskněte **Zastavit scénu** jednou - řádek potvrdí, že je nabitá.
+2. Stiskněte znovu pro zrušení, nebo **zavřete menu** pro zastavení. Zastavení proběhne, když se menu zavře.
 
-## Nedávné scény
+Zastavujte jen scénu, kterou považujete za zaseknutou. Zastavení normální může něco rozbít. Zastavení zaseknuté může spustit krátkou vlnu zpožděných událostí, než hra dožene - očekávané, ne nový problém.
 
-Posledních deset scén, kterými jsi prošel, nejnovější první, každá s přibližnou dobou trvání. Užitečné pro "počkat, co to bylo před chvílí", zvlášť když scéna proletí příliš rychle, než abys ji zachytil.
+**Obnovit** znovu načte aktuální scénu bez zavírání menu. Otevření už bere čerstvé čtení; použijte to, když máte menu déle otevřené a chcete aktualizaci - zvlášť s mody jako [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859), které nechávají hru běžet, i když je menu otevřené.
 
-## Hlídač
+### Nedávné scény
 
-Ta část, která hlídá, abys nemusel ty.
+Posledních deset scén, nejnovější první, s hrubou délkou. Stejný druh přibližného času jako výše (načtení nevede stopky dřívějších relací).
 
-- **Upozornit po** - po kolika minutách v jedné scéně tě mod upozorní. Výchozí je 3. Nastav 0, aby neupozorňoval nikdy.
-- **Kontrolovat každých** - jak často se hlídač dívá, v sekundách. Výchozí je 30. Nastav 0, aby ses hlídače úplně zbavil. Je to určeno pro případ, který si všimneš až mnohem později, takže nemusí být rychlé: cokoli mezi 10 a 240 sekundami bohatě stačí a je to šetrnější k tvé hře.
+### Hlídač
 
-Když hlídač spustí, jsou to dva krátké řádky v rohu - jak dlouho jsi ve scéně a že blokuje ostatní, pak název modu. Nemusíš mít otevřené menu, abys to viděl.
+Na stejné stránce. Hlídá, abyste nemuseli.
 
-## Sledování při práci (stránka Diagnostika)
+- **Upozornit po** - minuty v jedné scéně před upozorněním. Výchozí **3**. **0** = nikdy neupozorňovat.
+- **Kontrolovat každých** - sekundy mezi kontrolami. Výchozí **30**. **0** = hlídač vypnout.
 
-- **Hlídač** - jedno slovo pro to, zda kontrola na pozadí právě běží: **Běží**, **Probouzí se** (na okamžik hned po načtení normální), **Opožděno** (stále běží, ale kontrola dorazila pomaleji než její interval - obvykle příznak vysoké zátěže skriptů), **Vypnuto** (nastavil jsi Kontrolovat každých na 0) nebo **Uspáno** (vypnuto na stránce Odinstalovat). Takto ověříš, že mod žije, aniž bys otevíral log.
-- **Poslední samooprava** - mod čas od času tiše sesynchronizuje svůj vlastní stav, nejčastěji hned po načtení - například znovu sesynchronizuje časovač scény, aby scéna zaseklá přes načtení mohla ještě varovat po plném prahu souvislé hry *v této relaci*. Ta resync **restartuje** stuck-hodiny od načtení; čas před nahrávkou se nepřičítá. Řádek zde je normální údržba, ne porucha.
-- **Diagnostický log** - kolik toho mod zapisuje do logu Papyrus, pro řešení potíží nebo hlášení chyby:
-  - **Vypnuto** - nic. Výchozí; nech to tak pro běžné hraní.
-  - **Události** - změny scén, upozornění a pokaždé, když se mod sám opraví. Nastav pro vyplnění hlášení chyby.
-  - **Každá kontrola** - přidá řádek při každém dotazu (tep smyčky, stoupající časovač). Pro dohledání problému s časováním, pak vrať zpět.
+Upozornění jsou dva řádky v rohu, například:
 
-Log se dostane na disk, jen pokud je v hře zapnuté logování Papyrus. Přidej blok `[Papyrus]` do `Skyrim.ini` (nebo `SkyrimCustom.ini`) v `Documents\My Games\Skyrim Special Edition\`:
+> scene blocking others ~3m  
+> See? It Just Works!
 
-```
-[Papyrus]
-bEnableLogging=1
-bEnableTrace=1
-```
+Jednou na scénu, dokud ji neopustíte nebo se scéna nezmění. Minuli jste toast? Otevřete menu - výpis pořád ukazuje, v čem jste a jak dlouho. Mod scénu sám nezastaví; na to je **Zastavit scénu**.
 
-Restartuj Skyrim. Soubor přistane v `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`; hledej v něm `fth_IJW` (`findstr fth_IJW Papyrus.0.log`, nebo `grep`). S Mod Organizer 2 je to tvá skutečná složka Documents, ne virtuální herní složka.
+### Klávesová zkratka
 
-## Nastavení
+- **Pojmenovat aktuální scénu** - přiřaďte klávesu; stiskněte ji a uvidíte jméno aktuální scény bez otevírání menu.
+- **Zrušit klávesu** - odstraní vazbu. ESC ji tady nevymaže (ESC je v tomto menu Pauza).
 
-- **Pojmenovat aktuální scénu** - přiřaď zde klávesu, a její stisk zobrazí název scény, ve které právě jsi, aniž bys menu vůbec otevíral. Nejrychlejší "v čem to zrovna jsem".
-- **Zrušit klávesu** - odebere přiřazenou klávesu. Není zde žádné rušení přes ESC (v tomto menu je ESC Pauza a hra tě na ten konflikt upozorní), takže jakmile jednou klávesu přiřadíš, tímto tlačítkem přiřazení zase sundáš.
+---
 
-## O modu
+## Diagnostika
 
-Verze, ať na první pohled vidíš, který build hraješ - hodí se, když žádáš o pomoc nebo kontroluješ, jestli jsi aktuální.
+- **Editor ID načteny** - stavová kontrolka, ne spínač (klik ji jen vrátí zpět).
+  - **Svítí** - jména jsou zapnutá.
+  - **Zhasnutá** - uvidíte čísla ID; mod pořád funguje.
+
+  Jména zapnout: v `po3_Tweaks.ini` nastavte `Load EditorIDs = true`, restartujte Skyrim. Mod to také jednou řekne, když poprvé zjistí, že jména jsou vypnutá.
+
+- **Hlídač** - zda běží kontrola na pozadí:
+  - **Běží** - v pořádku
+  - **Probouzí se** - normální hned po načtení
+  - **Opožděno** - stále pracuje, ale kontroly jdou pomaleji než obvykle (vytížená hra)
+  - **Vypnuto (kontroly zakázány)** - nastavili jste Kontrolovat každých na 0
+  - **Uspáno (vypnuto)** - **Zapnuto** je vypnuté na stránce Odinstalovat
+
+- **Poslední samooprava** - mod občas opraví vlastní účetnictví (často po načtení). Řádek tady je normální. Není to závada ani něco, co byste měli mazat.
+
+- **Diagnostický log** - kolik jde do Papyrus logu. Pro běžné hraní nechte **Vypnuto**. **Události** při hlášení chyby; **Každá kontrola** jen když stíháte timing problém, pak vraťte zpět.
+
+  Logování funguje jen tehdy, když hra zapisuje Papyrus logy. V `Documents\My Games\Skyrim Special Edition\` upravte `Skyrim.ini` nebo `SkyrimCustom.ini`:
+
+  ```
+  [Papyrus]
+  bEnableLogging=1
+  bEnableTrace=1
+  ```
+
+  Restartujte. Soubor logu: `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`. Hledejte `fth_IJW`.
+
+- **Verze** - číslo sestavení, pro vlákna o pomoc a aktualizace.
+
+---
 
 ## Vypnutí nebo odstranění
 
-Nemusíš mod odinstalovávat, aby přestal fungovat. Stránka **Odinstalovat** má jediný přepínač **Zapnuto**: vypni ho a mod usne - hlídač přestane kontrolovat a klávesa se odregistruje - aniž by se cokoli vyčistilo nebo se sáhlo na tvůj save. Kdykoli ho zase zapni a naváže přesně tam, kde skončil. To je šetrný způsob, jak ho odložit uprostřed hraní, a snadný způsob, jak ověřit, jestli to náhodou nebyl on, co ti dělal potíže.
+**Odložit:** stránka Odinstalovat → **Zapnuto** vypnout. Hlídač a zkratka se zastaví; později znovu zapněte a pokračuje. Váš save je v pořádku.
 
-Pokud ho chceš mít pryč nadobro, odstraň ho v tomto pořadí:
+**Odstranit natrvalo:**
 
-1. **Vypni ho** na stránce Odinstalovat.
-2. **Ulož hru, pak ji ukonči** na plochu.
-3. **Odeber mod** ve svém správci modů (Vortex, MO2, nebo ručně).
+1. Vypněte **Zapnuto**.
+2. Uložte, ukončete na plochu.
+3. Odstraňte mod ve správci (nebo ručně).
 
-To je opravdu všechno, co je potřeba. Nic z toho, co tento mod dělá, ti při odchodu nerozbije save - nedrží žádné herní objekty jako rukojmí, nic neblokuje a nic jiného na něm nezávisí. Co po sobě zanechá, je to, co po sobě zanechá *každý* skriptovaný mod: malý, netečný pahýl v savu na místě, kde dřív žil jeho skript. Skyrim si ho nevšímá. Pokud chceš pryč i ten, můžeš pahýl vymést čističem savů, jakmile je mod odebraný.
-
-### O čističích savů (ReSaver)
-
-U dlouhého savu občas spustíš čistič - **ReSaver** (součást FallrimTools) je ten obvyklý - abys pročistil skriptové zbytky po *jiných* modech, které jsi vyměnil nebo odebral. It Just Works můžeš přitom nechat nainstalovaný. Je stavěný tak, aby čištění přežil: bez aliasů, bez stavu světa, samoopravný. Běžný průchod se ho nedotkne, a i ten agresivní, co mu vymaže časovač kontroly nebo klávesu, se znovu nastartuje, jakmile příště otevřeš menu. Riziko pro *tento* mod je tak nízké, jak u skriptovaného modu jen může být, záměrně.
-
-Varování, která zůstávají, se týkají toho nástroje, ne nás: věz, co ReSaver dělá, než ho namíříš na save, který máš rád, a miř na to, co jsi opravdu odebral, místo slepého vymetání.
+Bezpečné odstranit uprostřed průchodu. Skyrim může v save nechat malý inertní stub skriptu, jako jiné skriptované mody; hra ho ignoruje. Volitelně: cleaner save (např. **[ReSaver](https://www.nexusmods.com/skyrimspecialedition/mods/5031)** ve FallrimTools) může stuby po odstranění vyčistit - cleanery používejte opatrně a jen na to, co jste opravdu chtěli odstranit. Tento mod můžete nechat nainstalovaný, zatímco čistíte odpad z *jiných* modů.
