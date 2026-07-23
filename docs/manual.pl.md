@@ -28,25 +28,25 @@ Mod dostarcza tłumaczenia menu — wybierz je w instalatorze. Skyrim wczytuje p
 
 Na żywo odczyt bieżącej sceny albo **None**. Otwórz menu, by dostać świeży odczyt.
 
-- **Czas w scenie** — wiersz, który tu zwykle ma znaczenie: mniej więcej jak długo w niej jesteś w tej sesji (`~` oznacza przybliżenie). To sygnał zacięcia albo jego braku. **Przeładowanie gry zeruje ten timer.** Długa ciągła gra po przeładowaniu wciąż może ostrzec; skakanie przez przeładowania bez dłuższego pozostania w grze — nie.
-- **Scena** — nazwa, gdy nazwy są dostępne; w przeciwnym razie numer ID (zob. Editor ID w Diagnostyce).
-- **Form ID** — surowy ID, zawsze widoczny. Przydatny w konsoli lub zgłoszeniu błędu; nie potrzebujesz go, by zatrzymać scenę — do tego jest przycisk poniżej.
-- **Zadanie nadrzędne** — do którego zadania należy ta scena, gdy chcesz szerszy kontekst.
+- **Czas w scenie** — mniej więcej jak długo jesteś w tej scenie; przeładowanie gry to zeruje. To sygnał zacięcia albo jego braku.
+- **Scena** — nazwa, gdy nazwy są dostępne; w przeciwnym razie numer ID.
+- **Form ID** — surowy ID, zawsze widoczny. Przydatny w konsoli lub zgłoszeniu błędu.
+- **Zadanie nadrzędne** — do którego zadania należy ta scena.
 
 ### Zatrzymaj scenę
 
 Jeśli uważasz, że scena się zacięła, to ją kończy.
 
 1. Naciśnij **Zatrzymaj scenę** raz — wiersz potwierdza, że jest uzbrojona.
-2. Naciśnij ponownie, by anulować, albo **zamknij menu**, by zatrzymać. Zatrzymanie następuje przy zamknięciu menu.
+2. Naciśnij ponownie, by anulować, albo **zamknij menu**, by zatrzymać.
 
-Zatrzymuj tylko scenę, którą uważasz za zaciętą. Zatrzymanie normalnej może coś zepsuć. Zatrzymanie zaciętej może wywołać krótką salwę opóźnionych zdarzeń, gdy gra nadrabia — to oczekiwane, nie nowy problem.
+Zatrzymuj tylko scenę, którą uważasz za zaciętą. Zatrzymanie normalnej może coś zepsuć. Zatrzymanie zaciętej może (rzadko) wywołać krótką salwę opóźnionych zdarzeń, gdy gra nadrabia.
 
-**Odśwież** ponownie odczytuje bieżącą scenę bez zamykania menu. Otwarcie i tak bierze świeży odczyt; użyj tego, gdy menu jest otwarte dłużej i chcesz aktualizacji — zwłaszcza z modami takimi jak [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859), które trzymają grę w ruchu przy otwartych menu.
+**Odśwież** ponownie odczytuje bieżącą scenę bez zamykania menu. W podstawowym Skyrimie gra jest zwykle wstrzymana w menu, więc **Odśwież** raczej się nie przyda. Jeśli używasz moda znoszącego pauzę, takiego jak [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859), pozwala to odświeżyć menu bez ponownego otwierania.
 
 ### Ostatnie sceny
 
-Ostatnie dziesięć scen, najnowsza pierwsza, z przybliżonym czasem trwania. Ten sam rodzaj przybliżonego czasu co wyżej (przeładowanie nie trzyma stopera z wcześniejszych sesji).
+Ostatnie dziesięć scen, najnowsza pierwsza, z przybliżonym czasem trwania. Ten sam rodzaj przybliżonego czasu co wyżej.
 
 ---
 
@@ -68,10 +68,10 @@ Raz na scenę, dopóki jej nie opuścisz albo scena się nie zmieni. Przegapiłe
 
 ## Ustawienia
 
-- **Włączony** — domyślnie włączony. Wyłącz, by odłożyć mod na bok bez odinstalowania. Strażnik i hotkey się zatrzymują; włącz z powrotem później i wznawia. Zapis jest w porządku.
+- **Włączony** — domyślnie włączony. Wyłącz, by odłożyć mod na bok bez odinstalowania.
 - **Nazwij bieżącą scenę** — przypisz klawisz; naciśnij, by zobaczyć nazwę bieżącej sceny bez otwierania menu.
-- **Wyczyść klawisz** — usuwa przypisanie. ESC go tu nie czyści (ESC to Pauza w tym menu).
-- **Log diagnostyczny** — ile idzie do logu Papyrus. Zostaw **Wyłączony** przy normalnej grze. Użyj **Zdarzenia** przy zgłaszaniu błędu; **Każde sprawdzenie** tylko gdy tropisz problem z timingiem, potem wróć.
+- **Wyczyść klawisz** — usuwa przypisanie.
+- **Log diagnostyczny** — ile idzie do logu Papyrus. Zostaw **Wyłączony** przy normalnej grze. Użyj **Zdarzenia** przy zgłaszaniu błędu; **Każde sprawdzenie** tylko gdy tropisz problem z timingiem, potem wyłącz z powrotem. Może wpływać na wydajność, zwłaszcza przy **Każde sprawdzenie**.
 
   Logowanie działa tylko, gdy gra zapisuje logi Papyrus. W `Documents\My Games\Skyrim Special Edition\` edytuj `Skyrim.ini` lub `SkyrimCustom.ini`:
 
@@ -87,22 +87,20 @@ Raz na scenę, dopóki jej nie opuścisz albo scena się nie zmieni. Przegapiłe
 
 ## Diagnostyka
 
-- **Editor ID wczytane** — kontrolka stanu, nie przełącznik (kliknięcie wraca na miejsce).
-  - **Świeci** — nazwy są włączone.
-  - **Zgaszona** — zobaczysz numery ID; mod i tak działa.
+- **Editor ID wczytane** — wskaźnik. Gdy świeci, nazwy na **Scenie** i zadaniu nadrzędnym; gdy zgaszona, numery ID. **Form ID** i tak zawsze pozostaje surowym `0x…`.
 
-  Nazwy włączone: w `po3_Tweaks.ini` ustaw `Load EditorIDs = true`, zrestartuj Skyrim. Mod mówi to też raz, gdy po raz pierwszy zauważy, że nazwy są wyłączone.
+  Nazwy włączone: w `po3_Tweaks.ini` ustaw `Load EditorIDs = true`, zrestartuj Skyrim. Mod mówi to też raz, gdy po raz pierwszy zauważy, że nazwy są wyłączone. Menadżery modów mogą nadpisać ten plik przy wdrażaniu lub aktualizacji — edytuj kopię *wewnątrz* moda Tweaks (albo mały mod override, który wygrywa), a nie tylko luźny plik w `Data`. **MO2:** folder moda w lewym panelu albo Overwrite / mod o wyższym priorytecie. **Vortex:** folder staging Tweaks albo mod override; sprawdź ponownie po aktualizacjach.
 
 - **Strażnik** — czy sprawdzenie w tle działa:
   - **Działa** — w porządku
   - **Budzi się** — normalne tuż po przeładowaniu
   - **Opóźniony** — nadal działa, ale sprawdzenia są wolniejsze niż zwykle (zajęta gra)
-  - **Wyłączony (sprawdzanie wyłączone)** — ustawiłeś Sprawdzaj co na 0
-  - **Uśpiony (wyłączony)** — Włączony jest wyłączony na stronie Ustawienia
+  - **Wyłączony (sprawdzanie wyłączone)** — ustawiłeś **Sprawdzaj co** na 0
+  - **Uśpiony (wyłączony)** — **Włączony** jest wyłączony na stronie **Ustawienia**
 
-- **Ostatnia samonaprawa** — mod czasem poprawia własną księgowość (często po przeładowaniu). Wiersz tutaj jest normalny. To nie usterka i nie trzeba go czyścić.
+- **Ostatnia samonaprawa** — mod czasem poprawia własną księgowość (często po przeładowaniu). Wiersz tutaj jest normalny.
 
-- **Wersja** — numer buildu, do wątków pomocy i aktualizacji.
+- **Wersja**
 
 ---
 

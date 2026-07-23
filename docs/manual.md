@@ -18,25 +18,25 @@ Five pages: **Scene**, **Watchdog**, **Settings**, **Diagnostics**, **Uninstall*
 
 Live readout of the current scene, or **None**. Open the menu for a fresh reading.
 
-- **Time in scene** - the line that usually matters here: roughly how long you've been in it this session (`~` means approximate). That's the stuck-or-not signal. **Reloading the game resets this timer.** A long stretch of continuous play after a reload can still warn you; bouncing through reloads without staying in-game long enough will not.
-- **Scene** - name when names are available; otherwise an ID number (see Editor IDs on Diagnostics).
-- **Form ID** - the raw ID, always shown. Handy for the console or a bug report; you don't need it to stop the scene - that's the button below.
-- **Owning quest** - which quest that scene belongs to, when you want the wider context.
+- **Time in scene** - roughly how long you've been in this scene; a game reload resets it. It's the stuck-or-not signal.
+- **Scene** - name when names are available; otherwise an ID number.
+- **Form ID** - the raw ID, always shown. Handy for the console or a bug report.
+- **Owning quest** - which quest that scene belongs to.
 
 ### Stop Scene
 
 If you believe the scene is stuck, this ends it.
 
 1. Press **Stop Scene** once - a line confirms it's armed.
-2. Press again to cancel, or **close the menu** to stop. The stop runs when the menu closes.
+2. Press again to cancel, or **close the menu** to stop.
 
-Only stop a scene you think is stuck. Stopping a normal one can break things. Stopping a stuck one can fire a short burst of delayed events as the game catches up - expected, not a new problem.
+Only stop a scene you think is stuck. Stopping a normal one can break things. Stopping a stuck one can (rarely) fire a short burst of delayed events as the game catches up.
 
-**Refresh** re-reads the current scene without closing the menu. Opening already takes a fresh reading; use this if you've had the menu open a while and want an update - especially with mods like [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859) that keep the game running while menus are open.
+**Refresh** re-reads the current scene without closing the menu. In vanilla Skyrim, the game is normally paused in menus, so **Refresh** is unlikely to be useful. If you are running an unpause mod like [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859), this allows you to refresh the menu without re-opening it.
 
 ### Recent scenes
 
-Last ten scenes, newest first, with rough duration. Same kind of approximate time as above (reload doesn't keep a stopwatch of earlier sessions).
+Last ten scenes, newest first, with rough duration. Same kind of approximate time as above.
 
 ---
 
@@ -58,10 +58,10 @@ Once per scene until you leave it or the scene changes. Missed the toast? Open t
 
 ## Settings
 
-- **Enabled** - on by default. Turn it off to shelve the mod without uninstalling. The watchdog and hotkey stop; turn it back on later and it resumes. Your save is fine.
+- **Enabled** - on by default. Turn it off to shelve the mod without uninstalling.
 - **Name current scene** - bind a key; press it to see the current scene name without opening the menu.
-- **Clear hotkey** - removes the binding. ESC won't clear it here (ESC is Pause in this menu).
-- **Diagnostics log** - how much goes to the Papyrus log. Leave **Off** for normal play. Use **Events** when filing a bug; **Every check** only if you're chasing a timing issue, then turn it back.
+- **Clear hotkey** - removes the binding.
+- **Diagnostics log** - how much goes to the Papyrus log. Leave **Off** for normal play. Use **Events** when filing a bug; **Every check** only if you're chasing a timing issue, then turn it back off. Can impact performance, especially at **Every check**.
 
   Logging only works if the game is writing Papyrus logs. In `Documents\My Games\Skyrim Special Edition\`, edit `Skyrim.ini` or `SkyrimCustom.ini`:
 
@@ -77,22 +77,20 @@ Once per scene until you leave it or the scene changes. Missed the toast? Open t
 
 ## Diagnostics
 
-- **Editor IDs loaded** - status light, not a switch (clicking it snaps back).
-  - **Lit** - names are on.
-  - **Dark** - you'll see ID numbers; the mod still works.
+- **Editor IDs loaded** - an indicator. Names on **Scene** and owning quest when lit; ID numbers when dark. **Form ID** is still the raw `0x…` either way.
 
-  Names on: in `po3_Tweaks.ini`, set `Load EditorIDs = true`, restart Skyrim. The mod also says this once the first time it notices names are off.
+  Names on: in `po3_Tweaks.ini`, set `Load EditorIDs = true`, restart Skyrim. The mod also says this once the first time it notices names are off. Mod managers can overwrite that file on deploy or update, so edit the copy *inside* the Tweaks mod (or a small override mod that wins), not only a loose file in `Data`. **MO2:** left-pane mod folder, or Overwrite / higher-priority mod. **Vortex:** Tweaks staging folder, or an override mod; re-check after updates.
 
 - **Watchdog** - whether the background check is up:
   - **Running** - fine
   - **Waking up** - normal right after a reload
   - **Late** - still working, but checks are slower than usual (busy game)
-  - **Off** - you set Check every to 0
-  - **Dormant** - Enabled is off on Settings
+  - **Off** - you set **Check every** to 0
+  - **Dormant** - **Enabled** is off on **Settings**
 
-- **Last self-repair** - the mod sometimes fixes its own bookkeeping (often after a reload). A line here is normal. Not a fault, not something you need to clear.
+- **Last self-repair** - the mod sometimes fixes its own bookkeeping (often after a reload). A line here is normal.
 
-- **Version** - build number, for help threads and updates.
+- **Version**
 
 ---
 

@@ -5,6 +5,18 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.3.6
+
+- **Uninstall page points the right way.** After 0.3.5 moved the on/off switch to Settings, the
+  Uninstall page's first step still read "turn it off, above" - pointing at a control that was no
+  longer on that page. It now sends you to turn the mod off on the **Settings** page, and the page
+  header ("Remove the mod cleanly") names what "it" is.
+- **Manual clarity pass, all ten languages.** Tighter wording throughout - the current-scene
+  fields, the Watchdog and Settings pages, the Uninstall steps - saying only what a player needs
+  mid-crisis. **Refresh** now explains it rarely matters in vanilla Skyrim (menus pause the game)
+  and mainly helps with unpause mods. New guidance for keeping Editor ID names on when a mod
+  manager overwrites `po3_Tweaks.ini` on deploy or update (MO2 and Vortex).
+
 ## 0.3.5
 
 - **Menu pages by job, not one junk drawer.** The crowded Scene page is split so each page does one

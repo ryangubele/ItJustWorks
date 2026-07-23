@@ -28,25 +28,25 @@ Der Mod liefert Menü-Übersetzungen - wähle sie im Installer. Skyrim lädt die
 
 Live-Anzeige der aktuellen Szene, oder **None**. Menü öffnen für eine frische Messung.
 
-- **Zeit in der Szene** - die Zeile, die hier meist zählt: ungefähr wie lange du in dieser Sitzung drin bist (`~` = ungefähr). Das ist das Signal für feststecken oder nicht. **Ein Neuladen setzt diesen Timer zurück.** Durchgehendes Spielen nach dem Neuladen kann weiterhin warnen; kurze Neulade-Schleifen ohne langes Im-Spiel-Bleiben nicht.
-- **Szene** - Name, wenn Namen verfügbar sind; sonst eine ID-Nummer (siehe Editor IDs unter Diagnose).
-- **Form ID** - die rohe ID, immer sichtbar. Nützlich für Konsole oder Fehlerbericht; zum Stoppen brauchst du sie nicht - dafür ist der Knopf unten.
-- **Zugehörige Quest** - zu welcher Quest die Szene gehört, wenn du den weiteren Kontext willst.
+- **Zeit in der Szene** - ungefähr wie lange du schon in dieser Szene bist; ein Neuladen des Spiels setzt sie zurück. Das ist das Signal für feststecken oder nicht.
+- **Szene** - Name, wenn Namen verfügbar sind; sonst eine ID-Nummer.
+- **Form ID** - die rohe ID, immer sichtbar. Nützlich für Konsole oder Fehlerbericht.
+- **Zugehörige Quest** - zu welcher Quest die Szene gehört.
 
 ### Szene stoppen
 
 Wenn du glaubst, die Szene steckt fest, beendet das sie.
 
 1. Drücke **Szene stoppen** einmal - eine Zeile bestätigt, dass sie scharf ist.
-2. Erneut drücken zum Abbrechen, oder **Menü schließen** zum Stoppen. Der Stopp läuft, wenn das Menü schließt.
+2. Erneut drücken zum Abbrechen, oder **Menü schließen** zum Stoppen.
 
-Stoppe nur eine Szene, die du für feststeckend hältst. Eine normale zu stoppen kann etwas kaputt machen. Eine feststeckende zu stoppen kann einen kurzen Schwall verzögerter Ereignisse auslösen - erwartet, kein neues Problem.
+Stoppe nur eine Szene, die du für feststeckend hältst. Eine normale zu stoppen kann etwas kaputt machen. Eine feststeckende zu stoppen kann (selten) einen kurzen Schwall verzögerter Ereignisse auslösen, während das Spiel aufholt.
 
-**Aktualisieren** liest die aktuelle Szene neu, ohne das Menü zu schließen. Öffnen misst schon frisch; nutze das, wenn das Menü länger offen war und du ein Update willst - besonders bei Mods wie [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859), die das Spiel unter Menüs weiterlaufen lassen.
+**Aktualisieren** liest die aktuelle Szene neu, ohne das Menü zu schließen. Im unveränderten Skyrim ist das Spiel in Menüs normalerweise pausiert, daher ist **Aktualisieren** vermutlich nicht nützlich. Wenn du einen Mod wie [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859) verwendest, der das Spiel nicht pausiert, kannst du damit das Menü aktualisieren, ohne es neu zu öffnen.
 
 ### Letzte Szenen
 
-Die letzten zehn Szenen, neueste zuerst, mit grober Dauer. Dieselbe Art ungefährer Zeit wie oben (Neuladen führt keine Stoppuhr über Sitzungen).
+Die letzten zehn Szenen, neueste zuerst, mit grober Dauer. Dieselbe Art ungefährer Zeit wie oben.
 
 ---
 
@@ -68,10 +68,10 @@ Einmal pro Szene, bis du sie verlässt oder die Szene wechselt. Toast verpasst? 
 
 ## Einstellungen
 
-- **Aktiviert** - standardmäßig an. Ausschalten legt den Mod zur Seite, ohne ihn zu deinstallieren. Wächter und Hotkey stoppen; später wieder an, und er macht weiter. Dein Spielstand ist in Ordnung.
+- **Aktiviert** - standardmäßig an. Ausschalten legt den Mod zur Seite, ohne ihn zu deinstallieren.
 - **Aktuelle Szene benennen** - Taste belegen; drücken zeigt den aktuellen Szenennamen ohne Menü.
-- **Belegung löschen** - entfernt die Belegung. ESC löscht sie hier nicht (ESC ist Pause in diesem Menü).
-- **Diagnoseprotokoll** - wie viel ins Papyrus-Log geht. Für normales Spielen **Aus**. **Ereignisse** beim Melden eines Fehlers; **Jede Prüfung** nur bei Timing-Problemen, dann zurück.
+- **Belegung löschen** - entfernt die Belegung.
+- **Diagnoseprotokoll** - wie viel ins Papyrus-Log geht. Für normales Spielen **Aus**. **Ereignisse** beim Melden eines Fehlers; **Jede Prüfung** nur bei Timing-Problemen, dann wieder ausschalten. Kann die Leistung beeinträchtigen, besonders bei **Jede Prüfung**.
 
   Logging funktioniert nur, wenn das Spiel Papyrus-Logs schreibt. Unter `Documents\My Games\Skyrim Special Edition\` in `Skyrim.ini` oder `SkyrimCustom.ini`:
 
@@ -87,22 +87,20 @@ Einmal pro Szene, bis du sie verlässt oder die Szene wechselt. Toast verpasst? 
 
 ## Diagnose
 
-- **Editor IDs geladen** - Statusanzeige, kein Schalter (Klick springt zurück).
-  - **Leuchtet** - Namen sind an.
-  - **Dunkel** - du siehst ID-Nummern; der Mod funktioniert trotzdem.
+- **Editor IDs geladen** - eine Anzeige. Namen auf **Szene** und zugehöriger Quest, wenn sie leuchtet; ID-Nummern, wenn sie dunkel ist. **Form ID** ist so oder so weiterhin die rohe `0x…`.
 
-  Namen an: in `po3_Tweaks.ini` `Load EditorIDs = true` setzen, Skyrim neu starten. Der Mod sagt das auch einmal, wenn er merkt, dass Namen aus sind.
+  Namen an: in `po3_Tweaks.ini` `Load EditorIDs = true` setzen, Skyrim neu starten. Der Mod sagt das auch einmal, wenn er merkt, dass Namen aus sind. Mod-Manager können diese Datei beim Deploy oder Update überschreiben — also die Kopie *innerhalb* des Tweaks-Mods bearbeiten (oder einen kleinen Override-Mod, der gewinnt), nicht nur eine lose Datei in `Data`. **MO2:** Linker-Mod-Ordner, oder Overwrite / höher priorisierter Mod. **Vortex:** Tweaks-Staging-Ordner, oder ein Override-Mod; nach Updates erneut prüfen.
 
 - **Wächter** - ob die Hintergrundprüfung läuft:
   - **Läuft** - in Ordnung
   - **Wacht auf** - normal kurz nach einem Neuladen
   - **Verspätet** - noch aktiv, aber Prüfungen kommen langsamer (viel Script-Last)
-  - **Aus (Prüfungen deaktiviert)** - du hast Prüfen alle auf 0 gesetzt
-  - **Ruht (abgeschaltet)** - Aktiviert ist unter Einstellungen aus
+  - **Aus (Prüfungen deaktiviert)** - du hast **Prüfen alle** auf 0 gesetzt
+  - **Ruht (abgeschaltet)** - **Aktiviert** ist unter **Einstellungen** aus
 
-- **Letzte Selbstreparatur** - der Mod korrigiert manchmal seine eigene Buchhaltung (oft nach einem Neuladen). Eine Zeile hier ist normal. Kein Fehler, nichts zum Löschen.
+- **Letzte Selbstreparatur** - der Mod korrigiert manchmal seine eigene Buchhaltung (oft nach einem Neuladen). Eine Zeile hier ist normal.
 
-- **Version** - Build-Nummer, für Hilfethreads und Updates.
+- **Version**
 
 ---
 

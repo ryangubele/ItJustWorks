@@ -28,25 +28,25 @@ Le mod livre des traductions de menu - choisissez-les dans l'installateur. Skyri
 
 Affichage en direct de la scène actuelle, ou **None**. Ouvrez le menu pour une lecture fraîche.
 
-- **Temps dans la scène** - la ligne qui compte le plus ici : à peu près combien de temps vous y êtes resté cette session (`~` signifie approximatif). C'est le signal coincé-ou-pas. **Recharger le jeu remet ce minuteur à zéro.** Une longue session continue après un rechargement peut encore vous avertir ; enchaîner des rechargements sans rester assez longtemps en jeu, non.
-- **Scène** - le nom quand les noms sont disponibles ; sinon un numéro d'ID (voir Editor ID sur Diagnostic).
-- **Form ID** - l'ID brut, toujours affiché. Utile pour la console ou un rapport de bug ; vous n'en avez pas besoin pour arrêter la scène - c'est le bouton ci-dessous.
-- **Quête associée** - à quelle quête appartient cette scène, quand vous voulez le contexte plus large.
+- **Temps dans la scène** - à peu près combien de temps vous êtes resté dans cette scène ; un rechargement du jeu le remet à zéro. C'est le signal coincé-ou-pas.
+- **Scène** - le nom quand les noms sont disponibles ; sinon un numéro d'ID.
+- **Form ID** - l'ID brut, toujours affiché. Utile pour la console ou un rapport de bug.
+- **Quête associée** - à quelle quête appartient cette scène.
 
 ### Arrêter la scène
 
 Si vous croyez que la scène est coincée, cela la termine.
 
 1. Appuyez une fois sur **Arrêter la scène** - une ligne confirme qu'elle est armée.
-2. Appuyez de nouveau pour annuler, ou **fermez le menu** pour arrêter. L'arrêt s'exécute à la fermeture du menu.
+2. Appuyez de nouveau pour annuler, ou **fermez le menu** pour arrêter.
 
-N'arrêtez qu'une scène que vous croyez coincée. Arrêter une scène normale peut casser des choses. Arrêter une scène coincée peut déclencher une courte salve d'événements retardés pendant que le jeu rattrape - attendu, pas un nouveau problème.
+N'arrêtez qu'une scène que vous croyez coincée. Arrêter une scène normale peut casser des choses. Arrêter une scène coincée peut (rarement) déclencher une courte salve d'événements retardés pendant que le jeu rattrape.
 
-**Actualiser** relit la scène actuelle sans fermer le menu. Ouvrir prend déjà une lecture fraîche ; utilisez ceci si le menu est resté ouvert un moment et que vous voulez une mise à jour - surtout avec des mods comme [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859) qui laissent le jeu tourner pendant que les menus sont ouverts.
+**Actualiser** relit la scène actuelle sans fermer le menu. Dans un Skyrim vanilla, le jeu est normalement en pause dans les menus, donc **Actualiser** a peu de chances d'être utile. Si vous utilisez un mod qui empêche la pause comme [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859), cela vous permet d'actualiser le menu sans le rouvrir.
 
 ### Scènes récentes
 
-Les dix dernières scènes, la plus récente en premier, avec une durée approximative. Le même genre de temps approximatif que ci-dessus (un rechargement ne conserve pas de chronomètre des sessions précédentes).
+Les dix dernières scènes, la plus récente en premier, avec une durée approximative. Le même genre de temps approximatif que ci-dessus.
 
 ---
 
@@ -68,10 +68,10 @@ Une fois par scène jusqu'à ce que vous la quittiez ou que la scène change. To
 
 ## Paramètres
 
-- **Activé** - activé par défaut. Désactivez-le pour mettre le mod en veille sans le désinstaller. La surveillance et la touche s'arrêtent ; réactivez-le plus tard et il reprend. Votre sauvegarde est saine.
+- **Activé** - activé par défaut. Désactivez-le pour mettre le mod en veille sans le désinstaller.
 - **Nommer la scène actuelle** - liez une touche ; appuyez pour voir le nom de la scène actuelle sans ouvrir le menu.
-- **Effacer la touche** - retire la liaison. ESC ne l'efface pas ici (ESC est Pause dans ce menu).
-- **Journal de diagnostic** - combien part dans le journal Papyrus. Laissez **Désactivé** pour le jeu normal. Utilisez **Événements** pour signaler un bug ; **Chaque vérification** seulement si vous traquez un problème de timing, puis remettez-le.
+- **Effacer la touche** - retire la liaison.
+- **Journal de diagnostic** - combien part dans le journal Papyrus. Laissez **Désactivé** pour le jeu normal. Utilisez **Événements** pour signaler un bug ; **Chaque vérification** seulement si vous traquez un problème de timing, puis remettez-le sur Désactivé. Peut affecter les performances, surtout à **Chaque vérification**.
 
   La journalisation ne fonctionne que si le jeu écrit des journaux Papyrus. Dans `Documents\My Games\Skyrim Special Edition\`, éditez `Skyrim.ini` ou `SkyrimCustom.ini` :
 
@@ -87,22 +87,20 @@ Une fois par scène jusqu'à ce que vous la quittiez ou que la scène change. To
 
 ## Diagnostic
 
-- **Editor ID chargés** - voyant d'état, pas un interrupteur (cliquer le ramène en place).
-  - **Allumé** - les noms sont actifs.
-  - **Éteint** - vous verrez des numéros d'ID ; le mod fonctionne quand même.
+- **Editor ID chargés** - un voyant. Les noms sur **Scène** et la quête associée quand il est allumé ; des numéros d'ID quand il est éteint. Le **Form ID** reste le `0x…` brut dans tous les cas.
 
-  Pour activer les noms : dans `po3_Tweaks.ini`, mettez `Load EditorIDs = true`, redémarrez Skyrim. Le mod le dit aussi une fois la première fois qu'il remarque que les noms sont désactivés.
+  Pour activer les noms : dans `po3_Tweaks.ini`, mettez `Load EditorIDs = true`, redémarrez Skyrim. Le mod le dit aussi une fois la première fois qu'il remarque que les noms sont désactivés. Les gestionnaires de mods peuvent écraser ce fichier au déploiement ou à la mise à jour : éditez la copie *dans* le mod Tweaks (ou un petit mod d'override qui gagne), pas seulement un fichier lâche dans `Data`. **MO2 :** dossier du mod dans le volet gauche, ou Overwrite / mod de priorité supérieure. **Vortex :** dossier de staging de Tweaks, ou un mod d'override ; revérifiez après les mises à jour.
 
 - **Surveillance** - si le contrôle en arrière-plan tourne :
   - **En marche** - tout va bien
   - **Réveil en cours** - normal juste après un rechargement
   - **En retard** - toujours actif, mais les vérifications sont plus lentes que d'habitude (jeu chargé)
-  - **Désactivée (vérifications coupées)** - vous avez mis Vérifier toutes les à 0
-  - **En veille (désactivé)** - Activé est désactivé sur **Paramètres**
+  - **Désactivée (vérifications coupées)** - vous avez mis **Vérifier toutes les** à 0
+  - **En veille (désactivé)** - **Activé** est désactivé sur **Paramètres**
 
-- **Dernière auto-réparation** - le mod corrige parfois sa propre comptabilité (souvent après un rechargement). Une ligne ici est normale. Pas une panne, rien à effacer.
+- **Dernière auto-réparation** - le mod corrige parfois sa propre comptabilité (souvent après un rechargement). Une ligne ici est normale.
 
-- **Version** - numéro de build, pour les fils d'aide et les mises à jour.
+- **Version**
 
 ---
 

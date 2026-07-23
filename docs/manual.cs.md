@@ -28,25 +28,25 @@ Mod dodává překlady menu - vyberte je v instalátoru. Skyrim načte soubor, k
 
 Živý výpis aktuální scény, nebo **None**. Otevřete menu pro čerstvé čtení.
 
-- **Čas ve scéně** - řádek, na kterém tady většinou záleží: zhruba jak dlouho jste v ní v této relaci (`~` znamená přibližně). To je signál zaseknutí. **Načtení hry tento časovač vynuluje.** Dlouhý nepřetržitý běh po načtení vás stále může varovat; krátké smyčky načítání bez dostatečně dlouhého pobytu ve hře ne.
-- **Scéna** - jméno, když jsou jména k dispozici; jinak číslo ID (viz Editor ID na Diagnostice).
-- **Form ID** - surové ID, vždy zobrazené. Hodí se pro konzoli nebo hlášení chyby; k zastavení scény ho nepotřebujete - na to je tlačítko níže.
-- **Nadřazený úkol** - ke kterému questu scéna patří, když chcete širší kontext.
+- **Čas ve scéně** - zhruba jak dlouho jste v této scéně; načtení hry ho vynuluje. To je signál zaseknutí.
+- **Scéna** - jméno, když jsou jména k dispozici; jinak číslo ID.
+- **Form ID** - surové ID, vždy zobrazené. Hodí se pro konzoli nebo hlášení chyby.
+- **Nadřazený úkol** - ke kterému questu scéna patří.
 
 ### Zastavit scénu
 
 Pokud věříte, že scéna je zaseknutá, tím ji ukončíte.
 
 1. Stiskněte **Zastavit scénu** jednou - řádek potvrdí, že je nabitá.
-2. Stiskněte znovu pro zrušení, nebo **zavřete menu** pro zastavení. Zastavení proběhne, když se menu zavře.
+2. Stiskněte znovu pro zrušení, nebo **zavřete menu** pro zastavení.
 
-Zastavujte jen scénu, kterou považujete za zaseknutou. Zastavení normální může něco rozbít. Zastavení zaseknuté může spustit krátkou vlnu zpožděných událostí, než hra dožene - očekávané, ne nový problém.
+Zastavujte jen scénu, kterou považujete za zaseknutou. Zastavení normální může něco rozbít. Zastavení zaseknuté může (vzácně) spustit krátkou vlnu zpožděných událostí, než hra dožene.
 
-**Obnovit** znovu načte aktuální scénu bez zavírání menu. Otevření už bere čerstvé čtení; použijte to, když máte menu déle otevřené a chcete aktualizaci - zvlášť s mody jako [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859), které nechávají hru běžet, i když je menu otevřené.
+**Obnovit** znovu načte aktuální scénu bez zavírání menu. Ve vanilla Skyrimu je hra v menu obvykle pozastavená, takže **Obnovit** pravděpodobně nebude užitečné. Pokud používáte mod pro zrušení pauzy jako [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859), umožňuje vám to obnovit menu bez jeho opětovného otevření.
 
 ### Nedávné scény
 
-Posledních deset scén, nejnovější první, s hrubou délkou. Stejný druh přibližného času jako výše (načtení nevede stopky dřívějších relací).
+Posledních deset scén, nejnovější první, s hrubou délkou. Stejný druh přibližného času jako výše.
 
 ---
 
@@ -68,10 +68,10 @@ Jednou na scénu, dokud ji neopustíte nebo se scéna nezmění. Minuli jste toa
 
 ## Nastavení
 
-- **Zapnuto** - ve výchozím stavu zapnuto. Vypnutím mod odložíte bez odinstalace. Hlídač a zkratka se zastaví; později ho znovu zapněte a pokračuje. Váš save je v pořádku.
+- **Zapnuto** - ve výchozím stavu zapnuto. Vypnutím mod odložíte bez odinstalace.
 - **Pojmenovat aktuální scénu** - přiřaďte klávesu; stiskněte ji a uvidíte jméno aktuální scény bez otevírání menu.
-- **Zrušit klávesu** - odstraní vazbu. ESC ji tady nevymaže (ESC je v tomto menu Pauza).
-- **Diagnostický log** - kolik jde do Papyrus logu. Pro běžné hraní nechte **Vypnuto**. **Události** při hlášení chyby; **Každá kontrola** jen když stíháte timing problém, pak vraťte zpět.
+- **Zrušit klávesu** - odstraní vazbu.
+- **Diagnostický log** - kolik jde do Papyrus logu. Pro běžné hraní nechte **Vypnuto**. **Události** při hlášení chyby; **Každá kontrola** jen když stíháte timing problém, pak ho zase vypněte. Může ovlivnit výkon, zvlášť při **Každá kontrola**.
 
   Logování funguje jen tehdy, když hra zapisuje Papyrus logy. V `Documents\My Games\Skyrim Special Edition\` upravte `Skyrim.ini` nebo `SkyrimCustom.ini`:
 
@@ -87,22 +87,20 @@ Jednou na scénu, dokud ji neopustíte nebo se scéna nezmění. Minuli jste toa
 
 ## Diagnostika
 
-- **Editor ID načteny** - stavová kontrolka, ne spínač (klik ji jen vrátí zpět).
-  - **Svítí** - jména jsou zapnutá.
-  - **Zhasnutá** - uvidíte čísla ID; mod pořád funguje.
+- **Editor ID načteny** - indikátor. Jména na **Scéna** a nadřazeném úkolu, když svítí; čísla ID, když je zhasnutá. **Form ID** je stále surové `0x…` v obou případech.
 
-  Jména zapnout: v `po3_Tweaks.ini` nastavte `Load EditorIDs = true`, restartujte Skyrim. Mod to také jednou řekne, když poprvé zjistí, že jména jsou vypnutá.
+  Jména zapnout: v `po3_Tweaks.ini` nastavte `Load EditorIDs = true`, restartujte Skyrim. Mod to také jednou řekne, když poprvé zjistí, že jména jsou vypnutá. Správci modů mohou tento soubor při nasazení nebo aktualizaci přepsat — upravte kopii *uvnitř* modu Tweaks (nebo malý override mod, který vyhraje), ne jen volný soubor v `Data`. **MO2:** složka modu v levém panelu, nebo Overwrite / mod s vyšší prioritou. **Vortex:** staging složka Tweaks, nebo override mod; po aktualizacích znovu zkontrolujte.
 
 - **Hlídač** - zda běží kontrola na pozadí:
   - **Běží** - v pořádku
   - **Probouzí se** - normální hned po načtení
   - **Opožděno** - stále pracuje, ale kontroly jdou pomaleji než obvykle (vytížená hra)
-  - **Vypnuto (kontroly zakázány)** - nastavili jste Kontrolovat každých na 0
+  - **Vypnuto (kontroly zakázány)** - nastavili jste **Kontrolovat každých** na 0
   - **Uspáno (vypnuto)** - **Zapnuto** je vypnuté na stránce **Nastavení**
 
-- **Poslední samooprava** - mod občas opraví vlastní účetnictví (často po načtení). Řádek tady je normální. Není to závada ani něco, co byste měli mazat.
+- **Poslední samooprava** - mod občas opraví vlastní účetnictví (často po načtení). Řádek tady je normální.
 
-- **Verze** - číslo sestavení, pro vlákna o pomoc a aktualizace.
+- **Verze**
 
 ---
 

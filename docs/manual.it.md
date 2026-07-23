@@ -28,25 +28,25 @@ Il mod include traduzioni del menu: sceglile nell'installer. Skyrim carica il fi
 
 Lettura in tempo reale della scena attuale, oppure **None**. Apri il menu per una lettura aggiornata.
 
-- **Tempo nella scena** - la riga che di solito conta qui: circa quanto tempo ci sei rimasto in questa sessione (`~` significa approssimativo). È il segnale bloccato-o-no. **Ricaricare il gioco azzera questo timer.** Un tratto lungo di gioco continuo dopo un ricaricamento può ancora avvisarti; passare da un ricaricamento all'altro senza restare abbastanza in gioco, no.
-- **Scena** - il nome quando i nomi sono disponibili; altrimenti un numero di ID (vedi Editor ID in Diagnostica).
-- **Form ID** - l'ID grezzo, sempre mostrato. Utile per la console o una segnalazione di bug; non ti serve per fermare la scena: a quello serve il pulsante sotto.
-- **Missione proprietaria** - a quale missione appartiene quella scena, quando vuoi il contesto più ampio.
+- **Tempo nella scena** - all'incirca da quanto tempo sei in questa scena; ricaricare il gioco lo azzera. È il segnale bloccato-o-no.
+- **Scena** - il nome quando i nomi sono disponibili; altrimenti un numero di ID.
+- **Form ID** - l'ID grezzo, sempre mostrato. Utile per la console o una segnalazione di bug.
+- **Missione proprietaria** - a quale missione appartiene quella scena.
 
 ### Ferma scena
 
 Se credi che la scena sia bloccata, questo la termina.
 
 1. Premi **Ferma scena** una volta: una riga conferma che è armata.
-2. Premi di nuovo per annullare, oppure **chiudi il menu** per fermare. L'arresto avviene alla chiusura del menu.
+2. Premi di nuovo per annullare, oppure **chiudi il menu** per fermare.
 
-Ferma solo una scena che ritieni bloccata. Fermarne una normale può rompere qualcosa. Fermarne una bloccata può scatenare una breve raffica di eventi ritardati mentre il gioco recupera: atteso, non un problema nuovo.
+Ferma solo una scena che ritieni bloccata. Fermarne una normale può rompere qualcosa. Fermarne una bloccata può (raramente) scatenare una breve raffica di eventi ritardati mentre il gioco recupera.
 
-**Aggiorna** rilegge la scena attuale senza chiudere il menu. Aprire già prende una lettura fresca; usalo se hai tenuto il menu aperto a lungo e vuoi un aggiornamento, soprattutto con mod come [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859) che tengono il gioco in esecuzione mentre i menu sono aperti.
+**Aggiorna** rilegge la scena attuale senza chiudere il menu. In Skyrim vanilla, il gioco è normalmente in pausa nei menu, quindi **Aggiorna** difficilmente sarà utile. Se usi un mod che toglie la pausa come [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859), questo ti permette di aggiornare il menu senza riaprirlo.
 
 ### Scene recenti
 
-Le ultime dieci scene, la più recente per prima, con durata approssimativa. Lo stesso tipo di tempo approssimativo di cui sopra (un ricaricamento non conserva un cronometro delle sessioni precedenti).
+Le ultime dieci scene, la più recente per prima, con durata approssimativa. Lo stesso tipo di tempo approssimativo di cui sopra.
 
 ---
 
@@ -68,10 +68,10 @@ Una volta per scena finché non la lasci o la scena non cambia. Toast perso? Apr
 
 ## Impostazioni
 
-- **Abilitata** - accesa in modo predefinito. Spegnila per mettere il mod da parte senza disinstallarlo. La sentinella e l'hotkey si fermano; riaccendila più tardi e riprende. Il salvataggio è a posto.
+- **Abilitata** - accesa in modo predefinito. Spegnila per mettere il mod da parte senza disinstallarlo.
 - **Mostra la scena attuale** - assegna un tasto; premilo per vedere il nome della scena attuale senza aprire il menu.
-- **Cancella tasto** - rimuove l'assegnazione. ESC non la cancella qui (ESC è Pausa in questo menu).
-- **Log diagnostico** - quanto va nel log Papyrus. Lascia **Spento** per il gioco normale. Usa **Eventi** quando segnali un bug; **Ogni controllo** solo se rincorri un problema di timing, poi rimettilo.
+- **Cancella tasto** - rimuove l'assegnazione.
+- **Log diagnostico** - quanto va nel log Papyrus. Lascia **Spento** per il gioco normale. Usa **Eventi** quando segnali un bug; **Ogni controllo** solo se rincorri un problema di timing, poi rispegnilo. Può influire sulle prestazioni, soprattutto a **Ogni controllo**.
 
   La registrazione funziona solo se il gioco scrive i log Papyrus. In `Documents\My Games\Skyrim Special Edition\`, modifica `Skyrim.ini` o `SkyrimCustom.ini`:
 
@@ -87,22 +87,20 @@ Una volta per scena finché non la lasci o la scena non cambia. Toast perso? Apr
 
 ## Diagnostica
 
-- **Editor ID caricati** - spia di stato, non un interruttore (cliccandola torna al posto).
-  - **Accesa** - i nomi sono attivi.
-  - **Spenta** - vedrai numeri di ID; il mod funziona comunque.
+- **Editor ID caricati** - un indicatore. Nomi su **Scena** e missione proprietaria quando accesa; numeri di ID quando spenta. **Form ID** resta l'`0x…` grezzo in ogni caso.
 
-  Per attivare i nomi: in `po3_Tweaks.ini`, imposta `Load EditorIDs = true`, riavvia Skyrim. Il mod lo dice anche una volta la prima volta che nota che i nomi sono disattivati.
+  Per attivare i nomi: in `po3_Tweaks.ini`, imposta `Load EditorIDs = true`, riavvia Skyrim. Il mod lo dice anche una volta la prima volta che nota che i nomi sono disattivati. I gestori di mod possono sovrascrivere quel file al deploy o all'aggiornamento: modifica la copia *dentro* del mod Tweaks (o un piccolo mod di override che vince), non solo un file sparso in `Data`. **MO2:** cartella del mod nel riquadro sinistro, oppure Overwrite / mod a priorità più alta. **Vortex:** cartella di staging di Tweaks, o un mod di override; ricontrolla dopo gli aggiornamenti.
 
 - **Sentinella** - se il controllo in background è attivo:
   - **Attivo** - tutto a posto
   - **In avvio** - normale subito dopo un ricaricamento
   - **In ritardo** - ancora in funzione, ma i controlli sono più lenti del solito (gioco impegnato)
-  - **Spento (controlli disattivati)** - hai messo Controlla ogni a 0
-  - **Inattivo (spenta)** - Abilitata è disattivata in Impostazioni
+  - **Spento (controlli disattivati)** - hai messo **Controlla ogni** a 0
+  - **Inattivo (spenta)** - **Abilitata** è disattivata in **Impostazioni**
 
-- **Ultima auto-riparazione** - il mod a volte corregge la propria contabilità (spesso dopo un ricaricamento). Una riga qui è normale. Non è un guasto e non c'è nulla da cancellare.
+- **Ultima auto-riparazione** - il mod a volte corregge la propria contabilità (spesso dopo un ricaricamento). Una riga qui è normale.
 
-- **Versione** - numero di build, per thread di aiuto e aggiornamenti.
+- **Versione**
 
 ---
 
