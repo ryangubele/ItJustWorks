@@ -2,6 +2,14 @@
   "modName": "fth_ItJustWorks",
   "displayName": "It Just Works",
   "cursorFillMode": "topToBottom",
+  "content": [
+    { "id": "sElapsed:Current", "text": "$fth_IJW_Elapsed", "type": "text", "help": "$fth_IJW_Elapsed_Help", "valueOptions": { "sourceType": "ModSettingString" } },
+    { "id": "sScene:Current", "text": "$fth_IJW_Scene", "type": "text", "help": "$fth_IJW_Scene_Help", "valueOptions": { "sourceType": "ModSettingString" } },
+    { "id": "sFormID:Current", "text": "$fth_IJW_FormID", "type": "text", "valueOptions": { "sourceType": "ModSettingString" } },
+    { "id": "sQuest:Current", "text": "$fth_IJW_Quest", "type": "text", "help": "$fth_IJW_Quest_Help", "valueOptions": { "sourceType": "ModSettingString" } },
+    { "text": "$fth_IJW_StopScene", "type": "text", "help": "$fth_IJW_StopScene_Help", "action": { "type": "CallFunction", "function": "StopScene" } },
+    { "id": "sStopHint:Actions", "text": " ", "type": "text", "valueOptions": { "sourceType": "ModSettingString" } }
+  ],
   "pages": [
     {
       "pageDisplayName": "$fth_IJW_Scene",

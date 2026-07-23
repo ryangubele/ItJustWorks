@@ -5,6 +5,14 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.3.4
+
+- **Opens on the answer, not a blank page.** Pick It Just Works in the MCM and
+  you land on a thin status panel: how long you've been in the current scene,
+  what it is, its owning quest, and **Stop Scene**. The full toolkit (recent
+  scenes, the watchdog dials, the hotkey) is one click away on the **Scene**
+  tab, unchanged.
+
 ## 0.3.3
 
 - **Russian Watchdog help.** The Diagnostics help text now uses the same «Пробуждение»
