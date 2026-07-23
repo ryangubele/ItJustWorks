@@ -8,7 +8,7 @@ Skyrim usa *escenas* para conversaciones, cinemáticas y otros momentos con scri
 
 Necesita **[SKSE64](https://skse.silverlock.org/)**, **[MCM Helper](https://www.nexusmods.com/skyrimspecialedition/mods/53000)**, **[powerofthree's Papyrus Extender](https://www.nexusmods.com/skyrimspecialedition/mods/22854)** y **[powerofthree's Tweaks](https://www.nexusmods.com/skyrimspecialedition/mods/51073)** (con `Load EditorIDs = true` si quieres nombres en lugar de números de ID). Las notas de instalación están en la [página del mod](https://www.nexusmods.com/skyrimspecialedition/mods/185927).
 
-Tres páginas en el menú: **Escena**, **Diagnóstico**, **Desinstalar**.
+Cinco páginas: **Escena**, **Vigilante**, **Ajustes**, **Diagnóstico**, **Desinstalar**.
 
 ---
 
@@ -48,9 +48,11 @@ Solo detén una escena que creas atascada. Detener una normal puede romper cosas
 
 Las últimas diez escenas, la más reciente primero, con duración aproximada. El mismo tipo de tiempo aproximado que arriba (una recarga no guarda un cronómetro de sesiones anteriores).
 
-### Vigilante
+---
 
-En la misma página. Vigila para que no tengas que hacerlo tú.
+## Vigilante
+
+Vigila para que no tengas que hacerlo tú.
 
 - **Avisarme tras** - minutos en una escena antes de una alerta. Por defecto **3**. **0** = no avisar nunca.
 - **Comprobar cada** - segundos entre comprobaciones. Por defecto **30**. **0** = apagar el vigilante.
@@ -62,10 +64,24 @@ La alerta son dos líneas en la esquina, por ejemplo:
 
 Una vez por escena hasta que la dejes o la escena cambie. ¿Perdiste el toast? Abre el menú: la lectura sigue mostrando en qué estás y durante cuánto tiempo. El mod no detiene la escena por ti; eso es **Detener escena**.
 
-### Hotkey
+---
 
+## Ajustes
+
+- **Activado** - activado por defecto. Apágalo para dejar el mod inactivo sin desinstalarlo. El vigilante y el hotkey se detienen; actívalo de nuevo más tarde y reanuda. Tu partida está bien.
 - **Nombrar la escena actual** - vincula una tecla; púlsala para ver el nombre de la escena actual sin abrir el menú.
 - **Borrar tecla** - quita la vinculación. ESC no la borra aquí (ESC es Pausa en este menú).
+- **Registro de diagnóstico** - cuánto va al registro de Papyrus. Deja **Apagado** para el juego normal. Usa **Eventos** al reportar un error; **Cada comprobación** solo si persigues un problema de temporización, y luego vuélvelo a poner.
+
+  El registro solo funciona si el juego está escribiendo registros de Papyrus. En `Documents\My Games\Skyrim Special Edition\`, edita `Skyrim.ini` o `SkyrimCustom.ini`:
+
+  ```
+  [Papyrus]
+  bEnableLogging=1
+  bEnableTrace=1
+  ```
+
+  Reinicia. Archivo de registro: `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`. Busca `fth_IJW`.
 
 ---
 
@@ -82,33 +98,19 @@ Una vez por escena hasta que la dejes o la escena cambie. ¿Perdiste el toast? A
   - **Despertando** - normal justo después de una recarga
   - **Con retraso** - sigue funcionando, pero las comprobaciones son más lentas de lo habitual (juego ocupado)
   - **Apagado (comprobaciones desactivadas)** - pusiste Comprobar cada en 0
-  - **Inactivo (apagado)** - Activado está desactivado en Desinstalar
+  - **Inactivo (apagado)** - Activado está desactivado en Ajustes
 
 - **Última autorreparación** - el mod a veces corrige su propia contabilidad (a menudo tras una recarga). Una línea aquí es normal. No es un fallo ni algo que debas borrar.
-
-- **Registro de diagnóstico** - cuánto va al registro de Papyrus. Deja **Apagado** para el juego normal. Usa **Eventos** al reportar un error; **Cada comprobación** solo si persigues un problema de temporización, y luego vuélvelo a poner.
-
-  El registro solo funciona si el juego está escribiendo registros de Papyrus. En `Documents\My Games\Skyrim Special Edition\`, edita `Skyrim.ini` o `SkyrimCustom.ini`:
-
-  ```
-  [Papyrus]
-  bEnableLogging=1
-  bEnableTrace=1
-  ```
-
-  Reinicia. Archivo de registro: `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`. Busca `fth_IJW`.
 
 - **Versión** - número de build, para hilos de ayuda y actualizaciones.
 
 ---
 
-## Apagarlo o quitarlo
-
-**Aparcarlo:** página Desinstalar → **Activado** desactivado. El vigilante y el hotkey se detienen; actívalo de nuevo más tarde y reanuda. Tu partida está bien.
+## Desinstalar
 
 **Quitarlo de forma definitiva:**
 
-1. Desactiva **Activado**.
+1. En la página **Ajustes**, desactiva **Activado**.
 2. Guarda y sal al escritorio.
 3. Quita el mod en tu gestor (o a mano).
 

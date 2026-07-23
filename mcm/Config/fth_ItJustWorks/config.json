@@ -34,8 +34,13 @@
         { "id": "sRecent6:History", "text": "$fth_IJW_RecentRow", "type": "text", "valueOptions": { "sourceType": "ModSettingString" } },
         { "id": "sRecent7:History", "text": "$fth_IJW_RecentRow", "type": "text", "valueOptions": { "sourceType": "ModSettingString" } },
         { "id": "sRecent8:History", "text": "$fth_IJW_RecentRow", "type": "text", "valueOptions": { "sourceType": "ModSettingString" } },
-        { "id": "sRecent9:History", "text": "$fth_IJW_RecentRow", "type": "text", "valueOptions": { "sourceType": "ModSettingString" } },
-        { "text": "$fth_IJW_Header_Watchdog", "type": "header" },
+        { "id": "sRecent9:History", "text": "$fth_IJW_RecentRow", "type": "text", "valueOptions": { "sourceType": "ModSettingString" } }
+      ]
+    },
+    {
+      "pageDisplayName": "$fth_IJW_Header_Watchdog",
+      "cursorFillMode": "topToBottom",
+      "content": [
         {
           "id": "iWarnMinutes:Watchdog",
           "text": "$fth_IJW_Warn",
@@ -49,10 +54,23 @@
           "type": "slider",
           "help": "$fth_IJW_Poll_Help",
           "valueOptions": { "min": 0, "max": 240, "step": 10, "formatString": "{0}s", "sourceType": "ModSettingInt" }
-        },
-        { "text": "$fth_IJW_Header_Settings", "type": "header" },
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "$fth_IJW_Header_Settings",
+      "cursorFillMode": "topToBottom",
+      "content": [
+        { "id": "bEnabled:Control", "text": "$fth_IJW_Enabled", "type": "toggle", "help": "$fth_IJW_Enabled_Help", "valueOptions": { "sourceType": "ModSettingBool" } },
         { "id": "iHotkey:Control", "text": "$fth_IJW_Hotkey", "type": "keymap", "help": "$fth_IJW_Hotkey_Help", "valueOptions": { "sourceType": "ModSettingInt" } },
-        { "text": "$fth_IJW_HotkeyClear", "type": "text", "help": "$fth_IJW_HotkeyClear_Help", "action": { "type": "CallFunction", "function": "ClearHotkey" } }
+        { "text": "$fth_IJW_HotkeyClear", "type": "text", "help": "$fth_IJW_HotkeyClear_Help", "action": { "type": "CallFunction", "function": "ClearHotkey" } },
+        {
+          "id": "iLogLevel:Diagnostics",
+          "text": "$fth_IJW_LogLevel",
+          "type": "enum",
+          "help": "$fth_IJW_LogLevel_Help",
+          "valueOptions": { "sourceType": "ModSettingInt", "options": ["$fth_IJW_Log_Off", "$fth_IJW_Log_Events", "$fth_IJW_Log_Verbose"] }
+        }
       ]
     },
     {
@@ -68,13 +86,6 @@
         },
         { "id": "sLoopStatus:Diagnostics", "text": "$fth_IJW_LoopStatus", "type": "text", "help": "$fth_IJW_LoopStatus_Help", "valueOptions": { "sourceType": "ModSettingString" } },
         { "id": "sLastFix:Diagnostics", "text": "$fth_IJW_LastFix", "type": "text", "help": "$fth_IJW_LastFix_Help", "valueOptions": { "sourceType": "ModSettingString" } },
-        {
-          "id": "iLogLevel:Diagnostics",
-          "text": "$fth_IJW_LogLevel",
-          "type": "enum",
-          "help": "$fth_IJW_LogLevel_Help",
-          "valueOptions": { "sourceType": "ModSettingInt", "options": ["$fth_IJW_Log_Off", "$fth_IJW_Log_Events", "$fth_IJW_Log_Verbose"] }
-        },
         { "text": "$fth_IJW_Header_About", "type": "header" },
         { "text": "Version 0.0.0", "type": "text" }
       ]
@@ -83,8 +94,6 @@
       "pageDisplayName": "$fth_IJW_Page_Uninstall",
       "cursorFillMode": "topToBottom",
       "content": [
-        { "text": "$fth_IJW_Header_Enable", "type": "header" },
-        { "id": "bEnabled:Control", "text": "$fth_IJW_Enabled", "type": "toggle", "help": "$fth_IJW_Enabled_Help", "valueOptions": { "sourceType": "ModSettingBool" } },
         { "text": "$fth_IJW_Header_Remove", "type": "header" },
         { "text": "$fth_IJW_RemoveStep1", "type": "text" },
         { "text": "$fth_IJW_RemoveStep2", "type": "text" },

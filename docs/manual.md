@@ -8,7 +8,7 @@ Skyrim uses *scenes* for conversations, cutscenes, and other scripted moments. S
 
 Needs **[SKSE64](https://skse.silverlock.org/)**, **[MCM Helper](https://www.nexusmods.com/skyrimspecialedition/mods/53000)**, **[powerofthree's Papyrus Extender](https://www.nexusmods.com/skyrimspecialedition/mods/22854)**, and **[powerofthree's Tweaks](https://www.nexusmods.com/skyrimspecialedition/mods/51073)** (with `Load EditorIDs = true` if you want names instead of ID numbers). Install notes are on the [mod page](https://www.nexusmods.com/skyrimspecialedition/mods/185927).
 
-Three pages in the menu: **Scene**, **Diagnostics**, **Uninstall**.
+Five pages: **Scene**, **Watchdog**, **Settings**, **Diagnostics**, **Uninstall**.
 
 ---
 
@@ -38,9 +38,11 @@ Only stop a scene you think is stuck. Stopping a normal one can break things. St
 
 Last ten scenes, newest first, with rough duration. Same kind of approximate time as above (reload doesn't keep a stopwatch of earlier sessions).
 
-### Watchdog
+---
 
-On the same page. Watches so you don't have to.
+## Watchdog
+
+Watches so you don't have to.
 
 - **Warn me after** - minutes in one scene before an alert. Default **3**. **0** = never warn.
 - **Check every** - seconds between checks. Default **30**. **0** = turn the watchdog off.
@@ -52,10 +54,24 @@ Alert is two lines in the corner, for example:
 
 Once per scene until you leave it or the scene changes. Missed the toast? Open the menu - the readout still shows what you're in and for how long. The mod does not stop the scene for you; that's **Stop Scene**.
 
-### Hotkey
+---
 
+## Settings
+
+- **Enabled** - on by default. Turn it off to shelve the mod without uninstalling. The watchdog and hotkey stop; turn it back on later and it resumes. Your save is fine.
 - **Name current scene** - bind a key; press it to see the current scene name without opening the menu.
 - **Clear hotkey** - removes the binding. ESC won't clear it here (ESC is Pause in this menu).
+- **Diagnostics log** - how much goes to the Papyrus log. Leave **Off** for normal play. Use **Events** when filing a bug; **Every check** only if you're chasing a timing issue, then turn it back.
+
+  Logging only works if the game is writing Papyrus logs. In `Documents\My Games\Skyrim Special Edition\`, edit `Skyrim.ini` or `SkyrimCustom.ini`:
+
+  ```
+  [Papyrus]
+  bEnableLogging=1
+  bEnableTrace=1
+  ```
+
+  Restart. Log file: `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`. Search for `fth_IJW`.
 
 ---
 
@@ -72,33 +88,19 @@ Once per scene until you leave it or the scene changes. Missed the toast? Open t
   - **Waking up** - normal right after a reload
   - **Late** - still working, but checks are slower than usual (busy game)
   - **Off** - you set Check every to 0
-  - **Dormant** - Enabled is off on Uninstall
+  - **Dormant** - Enabled is off on Settings
 
 - **Last self-repair** - the mod sometimes fixes its own bookkeeping (often after a reload). A line here is normal. Not a fault, not something you need to clear.
-
-- **Diagnostics log** - how much goes to the Papyrus log. Leave **Off** for normal play. Use **Events** when filing a bug; **Every check** only if you're chasing a timing issue, then turn it back.
-
-  Logging only works if the game is writing Papyrus logs. In `Documents\My Games\Skyrim Special Edition\`, edit `Skyrim.ini` or `SkyrimCustom.ini`:
-
-  ```
-  [Papyrus]
-  bEnableLogging=1
-  bEnableTrace=1
-  ```
-
-  Restart. Log file: `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`. Search for `fth_IJW`.
 
 - **Version** - build number, for help threads and updates.
 
 ---
 
-## Turning it off or removing it
-
-**Shelve it:** Uninstall page → **Enabled** off. Watchdog and hotkey stop; turn it back on later and it resumes. Your save is fine.
+## Uninstall
 
 **Remove it for good:**
 
-1. Turn **Enabled** off.
+1. On the **Settings** page, turn **Enabled** off.
 2. Save, quit to desktop.
 3. Remove the mod in your manager (or by hand).
 

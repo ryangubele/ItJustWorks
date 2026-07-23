@@ -5,6 +5,14 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.3.5
+
+- **Menu pages by job, not one junk drawer.** The crowded Scene page is split so each page does one
+  thing: **Scene** (this scene, plus Stop, Refresh, and recent history), a dedicated **Watchdog** page
+  (just the warn-after and check-every dials), and a **Settings** page (hotkey, the on/off switch, and
+  the Papyrus log level). Diagnostics keeps the read-only lights and version; the on/off switch moves
+  off the Uninstall page, which is now just the steps to leave. Find the control without hunting.
+
 ## 0.3.4
 
 - **Opens on the answer, not a blank page.** Pick It Just Works in the MCM and

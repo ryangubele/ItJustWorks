@@ -8,7 +8,7 @@ Skyrim používá *scény* pro rozhovory, cutscény a další skriptované momen
 
 Potřebuje **[SKSE64](https://skse.silverlock.org/)**, **[MCM Helper](https://www.nexusmods.com/skyrimspecialedition/mods/53000)**, **[powerofthree's Papyrus Extender](https://www.nexusmods.com/skyrimspecialedition/mods/22854)** a **[powerofthree's Tweaks](https://www.nexusmods.com/skyrimspecialedition/mods/51073)** (s `Load EditorIDs = true`, pokud chcete jména místo čísel ID). Poznámky k instalaci jsou na [stránce modu](https://www.nexusmods.com/skyrimspecialedition/mods/185927).
 
-Tři stránky v menu: **Scéna**, **Diagnostika**, **Odinstalovat**.
+Pět stránek: **Scéna**, **Hlídač**, **Nastavení**, **Diagnostika**, **Odinstalovat**.
 
 ---
 
@@ -48,9 +48,11 @@ Zastavujte jen scénu, kterou považujete za zaseknutou. Zastavení normální m
 
 Posledních deset scén, nejnovější první, s hrubou délkou. Stejný druh přibližného času jako výše (načtení nevede stopky dřívějších relací).
 
-### Hlídač
+---
 
-Na stejné stránce. Hlídá, abyste nemuseli.
+## Hlídač
+
+Hlídá, abyste nemuseli.
 
 - **Upozornit po** - minuty v jedné scéně před upozorněním. Výchozí **3**. **0** = nikdy neupozorňovat.
 - **Kontrolovat každých** - sekundy mezi kontrolami. Výchozí **30**. **0** = hlídač vypnout.
@@ -62,10 +64,24 @@ Upozornění jsou dva řádky v rohu, například:
 
 Jednou na scénu, dokud ji neopustíte nebo se scéna nezmění. Minuli jste toast? Otevřete menu - výpis pořád ukazuje, v čem jste a jak dlouho. Mod scénu sám nezastaví; na to je **Zastavit scénu**.
 
-### Klávesová zkratka
+---
 
+## Nastavení
+
+- **Zapnuto** - ve výchozím stavu zapnuto. Vypnutím mod odložíte bez odinstalace. Hlídač a zkratka se zastaví; později ho znovu zapněte a pokračuje. Váš save je v pořádku.
 - **Pojmenovat aktuální scénu** - přiřaďte klávesu; stiskněte ji a uvidíte jméno aktuální scény bez otevírání menu.
 - **Zrušit klávesu** - odstraní vazbu. ESC ji tady nevymaže (ESC je v tomto menu Pauza).
+- **Diagnostický log** - kolik jde do Papyrus logu. Pro běžné hraní nechte **Vypnuto**. **Události** při hlášení chyby; **Každá kontrola** jen když stíháte timing problém, pak vraťte zpět.
+
+  Logování funguje jen tehdy, když hra zapisuje Papyrus logy. V `Documents\My Games\Skyrim Special Edition\` upravte `Skyrim.ini` nebo `SkyrimCustom.ini`:
+
+  ```
+  [Papyrus]
+  bEnableLogging=1
+  bEnableTrace=1
+  ```
+
+  Restartujte. Soubor logu: `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`. Hledejte `fth_IJW`.
 
 ---
 
@@ -82,33 +98,19 @@ Jednou na scénu, dokud ji neopustíte nebo se scéna nezmění. Minuli jste toa
   - **Probouzí se** - normální hned po načtení
   - **Opožděno** - stále pracuje, ale kontroly jdou pomaleji než obvykle (vytížená hra)
   - **Vypnuto (kontroly zakázány)** - nastavili jste Kontrolovat každých na 0
-  - **Uspáno (vypnuto)** - **Zapnuto** je vypnuté na stránce Odinstalovat
+  - **Uspáno (vypnuto)** - **Zapnuto** je vypnuté na stránce **Nastavení**
 
 - **Poslední samooprava** - mod občas opraví vlastní účetnictví (často po načtení). Řádek tady je normální. Není to závada ani něco, co byste měli mazat.
-
-- **Diagnostický log** - kolik jde do Papyrus logu. Pro běžné hraní nechte **Vypnuto**. **Události** při hlášení chyby; **Každá kontrola** jen když stíháte timing problém, pak vraťte zpět.
-
-  Logování funguje jen tehdy, když hra zapisuje Papyrus logy. V `Documents\My Games\Skyrim Special Edition\` upravte `Skyrim.ini` nebo `SkyrimCustom.ini`:
-
-  ```
-  [Papyrus]
-  bEnableLogging=1
-  bEnableTrace=1
-  ```
-
-  Restartujte. Soubor logu: `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`. Hledejte `fth_IJW`.
 
 - **Verze** - číslo sestavení, pro vlákna o pomoc a aktualizace.
 
 ---
 
-## Vypnutí nebo odstranění
-
-**Odložit:** stránka Odinstalovat → **Zapnuto** vypnout. Hlídač a zkratka se zastaví; později znovu zapněte a pokračuje. Váš save je v pořádku.
+## Odinstalovat
 
 **Odstranit natrvalo:**
 
-1. Vypněte **Zapnuto**.
+1. Na stránce **Nastavení** vypněte **Zapnuto**.
 2. Uložte, ukončete na plochu.
 3. Odstraňte mod ve správci (nebo ručně).
 

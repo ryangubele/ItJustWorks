@@ -8,7 +8,7 @@ Skyrim 用 *场景* 处理对话、过场和其他带脚本的片段。有时场
 
 需要 **[SKSE64](https://skse.silverlock.org/)**、**[MCM Helper](https://www.nexusmods.com/skyrimspecialedition/mods/53000)**、**[powerofthree's Papyrus Extender](https://www.nexusmods.com/skyrimspecialedition/mods/22854)** 以及 **[powerofthree's Tweaks](https://www.nexusmods.com/skyrimspecialedition/mods/51073)**（若希望显示名称而非 ID 数字，请设 `Load EditorIDs = true`）。安装说明见 [模组页面](https://www.nexusmods.com/skyrimspecialedition/mods/185927)。
 
-菜单共三页：**场景**、**诊断**、**卸载**。
+菜单共五页：**场景**、**监视器**、**设置**、**诊断**、**卸载**。
 
 ---
 
@@ -48,9 +48,11 @@ Skyrim 用 *场景* 处理对话、过场和其他带脚本的片段。有时场
 
 最近十个场景，最新在前，附带大致时长。与上文同类的约数时间（重载不会保留先前会话的秒表）。
 
-### 监视器
+---
 
-仍在同一页。替你盯着，省得你自己盯。
+## 监视器
+
+替你盯着，省得你自己盯。
 
 - **多久后提醒** - 在单个场景中多少分钟后提醒。默认 **3**。**0** = 永不提醒。
 - **检查间隔** - 检查之间的秒数。默认 **30**。**0** = 关闭监视器。
@@ -62,10 +64,24 @@ Skyrim 用 *场景* 处理对话、过场和其他带脚本的片段。有时场
 
 每个场景一次，直到你离开该场景或场景变更。错过了 toast？打开菜单——读数仍会显示你在哪里、多久了。模组不会替你停止场景；那是 **停止场景**。
 
-### 热键
+---
 
+## 设置
+
+- **启用** - 默认开启。关闭它即可搁置模组而无需卸载。监视器与热键停止；以后再打开即可接上，之后照常运行。存档无恙。
 - **显示当前场景名称** - 绑定按键；按下即可在不打开菜单时查看当前场景名称。
 - **清除热键** - 移除绑定。此处 ESC 不会清除（在此菜单中 ESC 是暂停）。
+- **诊断日志** - 写入 Papyrus 日志的量。正常游玩保持 **关闭**。报 bug 时用 **事件**；只有追查时序问题时用 **每次检查**，然后改回去。
+
+  仅当游戏在写 Papyrus 日志时记录才会生效。在 `Documents\My Games\Skyrim Special Edition\` 中编辑 `Skyrim.ini` 或 `SkyrimCustom.ini`：
+
+  ```
+  [Papyrus]
+  bEnableLogging=1
+  bEnableTrace=1
+  ```
+
+  重启。日志文件：`Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`。搜索 `fth_IJW`。
 
 ---
 
@@ -82,33 +98,19 @@ Skyrim 用 *场景* 处理对话、过场和其他带脚本的片段。有时场
   - **唤醒中** - 重载后片刻属正常
   - **延迟** - 仍在工作，但检查比平时慢（游戏繁忙）
   - **关闭（已停用检查）** - 你把检查间隔设为 0
-  - **休眠（已关闭）** - 卸载页上的 **启用** 已关
+  - **休眠（已关闭）** - 设置页上的 **启用** 已关
 
 - **最近一次自我修复** - 模组有时会修正自身账本（常在重载后）。此处有一行属于正常。不是故障，也不必清除。
-
-- **诊断日志** - 写入 Papyrus 日志的量。正常游玩保持 **关闭**。报 bug 时用 **事件**；只有追查时序问题时用 **每次检查**，然后改回去。
-
-  仅当游戏在写 Papyrus 日志时记录才会生效。在 `Documents\My Games\Skyrim Special Edition\` 中编辑 `Skyrim.ini` 或 `SkyrimCustom.ini`：
-
-  ```
-  [Papyrus]
-  bEnableLogging=1
-  bEnableTrace=1
-  ```
-
-  重启。日志文件：`Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`。搜索 `fth_IJW`。
 
 - **版本** - 构建号，用于求助帖和更新核对。
 
 ---
 
-## 关掉或移除
-
-**先搁置：** 卸载页 → 关掉 **启用**。监视器与热键停止；以后再打开即可接上。存档无恙。
+## 卸载
 
 **彻底移除：**
 
-1. 关掉 **启用**。
+1. 在 **设置** 页，关掉 **启用**。
 2. 存档，退出到桌面。
 3. 在管理器中移除模组（或手动）。
 

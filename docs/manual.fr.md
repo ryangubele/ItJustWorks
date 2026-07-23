@@ -8,7 +8,7 @@ Skyrim utilise des *scènes* pour les conversations, les cinématiques et d'autr
 
 Nécessite **[SKSE64](https://skse.silverlock.org/)**, **[MCM Helper](https://www.nexusmods.com/skyrimspecialedition/mods/53000)**, **[powerofthree's Papyrus Extender](https://www.nexusmods.com/skyrimspecialedition/mods/22854)** et **[powerofthree's Tweaks](https://www.nexusmods.com/skyrimspecialedition/mods/51073)** (avec `Load EditorIDs = true` si vous voulez des noms plutôt que des numéros d'ID). Les notes d'installation sont sur la [page du mod](https://www.nexusmods.com/skyrimspecialedition/mods/185927).
 
-Trois pages dans le menu : **Scène**, **Diagnostic**, **Désinstallation**.
+Cinq pages : **Scène**, **Surveillance**, **Paramètres**, **Diagnostic**, **Désinstallation**.
 
 ---
 
@@ -48,9 +48,11 @@ N'arrêtez qu'une scène que vous croyez coincée. Arrêter une scène normale p
 
 Les dix dernières scènes, la plus récente en premier, avec une durée approximative. Le même genre de temps approximatif que ci-dessus (un rechargement ne conserve pas de chronomètre des sessions précédentes).
 
-### Surveillance
+---
 
-Sur la même page. Surveille pour que vous n'ayez pas à le faire.
+## Surveillance
+
+Surveille pour que vous n'ayez pas à le faire.
 
 - **M'avertir après** - minutes dans une scène avant une alerte. Défaut **3**. **0** = ne jamais avertir.
 - **Vérifier toutes les** - secondes entre les vérifications. Défaut **30**. **0** = éteindre la surveillance.
@@ -62,10 +64,24 @@ L'alerte est deux lignes dans le coin, par exemple :
 
 Une fois par scène jusqu'à ce que vous la quittiez ou que la scène change. Toast manqué ? Ouvrez le menu - l'affichage montre encore ce dans quoi vous êtes et depuis combien de temps. Le mod n'arrête pas la scène pour vous ; c'est **Arrêter la scène**.
 
-### Hotkey
+---
 
+## Paramètres
+
+- **Activé** - activé par défaut. Désactivez-le pour mettre le mod en veille sans le désinstaller. La surveillance et la touche s'arrêtent ; réactivez-le plus tard et il reprend. Votre sauvegarde est saine.
 - **Nommer la scène actuelle** - liez une touche ; appuyez pour voir le nom de la scène actuelle sans ouvrir le menu.
 - **Effacer la touche** - retire la liaison. ESC ne l'efface pas ici (ESC est Pause dans ce menu).
+- **Journal de diagnostic** - combien part dans le journal Papyrus. Laissez **Désactivé** pour le jeu normal. Utilisez **Événements** pour signaler un bug ; **Chaque vérification** seulement si vous traquez un problème de timing, puis remettez-le.
+
+  La journalisation ne fonctionne que si le jeu écrit des journaux Papyrus. Dans `Documents\My Games\Skyrim Special Edition\`, éditez `Skyrim.ini` ou `SkyrimCustom.ini` :
+
+  ```
+  [Papyrus]
+  bEnableLogging=1
+  bEnableTrace=1
+  ```
+
+  Redémarrez. Fichier journal : `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`. Cherchez `fth_IJW`.
 
 ---
 
@@ -82,33 +98,19 @@ Une fois par scène jusqu'à ce que vous la quittiez ou que la scène change. To
   - **Réveil en cours** - normal juste après un rechargement
   - **En retard** - toujours actif, mais les vérifications sont plus lentes que d'habitude (jeu chargé)
   - **Désactivée (vérifications coupées)** - vous avez mis Vérifier toutes les à 0
-  - **En veille (désactivé)** - Activé est désactivé sur Désinstallation
+  - **En veille (désactivé)** - Activé est désactivé sur **Paramètres**
 
 - **Dernière auto-réparation** - le mod corrige parfois sa propre comptabilité (souvent après un rechargement). Une ligne ici est normale. Pas une panne, rien à effacer.
-
-- **Journal de diagnostic** - combien part dans le journal Papyrus. Laissez **Désactivé** pour le jeu normal. Utilisez **Événements** pour signaler un bug ; **Chaque vérification** seulement si vous traquez un problème de timing, puis remettez-le.
-
-  La journalisation ne fonctionne que si le jeu écrit des journaux Papyrus. Dans `Documents\My Games\Skyrim Special Edition\`, éditez `Skyrim.ini` ou `SkyrimCustom.ini` :
-
-  ```
-  [Papyrus]
-  bEnableLogging=1
-  bEnableTrace=1
-  ```
-
-  Redémarrez. Fichier journal : `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log`. Cherchez `fth_IJW`.
 
 - **Version** - numéro de build, pour les fils d'aide et les mises à jour.
 
 ---
 
-## L'éteindre ou le retirer
-
-**Le mettre de côté :** page Désinstallation → **Activé** désactivé. Surveillance et hotkey s'arrêtent ; rallumez plus tard et il reprend. Votre sauvegarde est saine.
+## Désinstallation
 
 **Le retirer pour de bon :**
 
-1. Désactivez **Activé**.
+1. Sur la page **Paramètres**, désactivez **Activé**.
 2. Sauvegardez, quittez vers le bureau.
 3. Retirez le mod dans votre gestionnaire (ou à la main).
 
