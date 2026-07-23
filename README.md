@@ -92,7 +92,7 @@ After that, whatever else I catch the game leaving switched on when it shouldn't
 - **Kill your save.** Not on purpose, anyway - and every design choice bends away from it. Safe to add mid-playthrough, safe to remove, self-healing across reloads. It holds nothing of the world, latches onto nothing, and cleans up after itself. Every scripted mod carries some risk; this one is built to minimize it.
 - **Let you do something risky without a warning.** When an operation can cost you something, it'll tell you first.
 - **Break quietly.** If the mod itself is the one misbehaving, it tries to help you catch it, not hide it - a Papyrus log you can switch on, a nudge when a dependency's set up wrong, a readout of exactly what it's seeing. Better it point at its own faults than leave you guessing.
-- **Fix Skyrim.** I can't. Nobody can. USSEP - the patch in every serious load order, the one that's quietly fixed thousands of this game's sins - ran into a quest you can break just by *picking a locked door* instead of finding the key. Their fix wasn't to work out why a lockpick detonates it. They made the door need the key.
+- **Fix Skyrim.** I can't. Nobody can. [USSEP](https://www.nexusmods.com/skyrimspecialedition/mods/266) - the patch in every serious load order, the one that's quietly fixed thousands of this game's sins - ran into a quest you can break just by *picking a locked door* instead of finding the key. Their fix wasn't to work out why a lockpick detonates it. They made the door need the key.
 
   That's not surrender. That's the job, and it's ours too, from the far end. **Different bugs, same creed:** USSEP keeps you from falling in; this lets you know you're in a hole anyway. Nobody fixes the root, because nobody fixes Skyrim - the job is just to try to keep the save alive. So this mod doesn't argue with the game: It watches. It warns you. It hands you a shovel.
 
@@ -118,10 +118,10 @@ They were probably right to ration it. `ForceStart` doesn't check whether the sc
 
 ## Requirements
 
-- **SKSE64**
-- **MCM Helper**
-- **powerofthree's Papyrus Extender**
-- **powerofthree's Tweaks**, with `Load EditorIDs = true` set in `po3_Tweaks.ini`
+- **[SKSE64](https://skse.silverlock.org/)**
+- **[MCM Helper](https://www.nexusmods.com/skyrimspecialedition/mods/53000)**
+- **[powerofthree's Papyrus Extender](https://www.nexusmods.com/skyrimspecialedition/mods/22854)**
+- **[powerofthree's Tweaks](https://www.nexusmods.com/skyrimspecialedition/mods/51073)**, with `Load EditorIDs = true` set in `po3_Tweaks.ini`
 
 That last dependency is soft but strongly recommended. Without it, scenes show up as bare ID numbers instead of names, and you want the names. The mod will say so, once, if it notices.
 
@@ -139,17 +139,17 @@ The menu ships in English, with machine-translations for Simplified Chinese, Cze
 
 This mod does one thing: the stuck switch. It deliberately doesn't do the rest, because better mods already do. Keeping a save alive is a team sport. If you're serious about it, run these too:
 
-- **USSEP** - prevention. Fixes thousands of bugs before they ever bite.
-- **SSE Engine Fixes** and **Bug Fixes SSE** - the engine-level papercuts most people never diagnose.
-- **Crash Logger** - so a crash tells you *what*, not just *that*.
-- **ReSaver (FallrimTools)** - cleans script gunk out of a save. Powerful, and a genuine footgun; know what you're doing before you point it at a save you love.
+- **[USSEP](https://www.nexusmods.com/skyrimspecialedition/mods/266)** - prevention. Fixes thousands of bugs before they ever bite.
+- **[SSE Engine Fixes](https://www.nexusmods.com/skyrimspecialedition/mods/17230)** and **[Bug Fixes SSE](https://www.nexusmods.com/skyrimspecialedition/mods/33261)** - the engine-level papercuts most people never diagnose.
+- **[Crash Logger](https://www.nexusmods.com/skyrimspecialedition/mods/59818)** - so a crash tells you *what*, not just *that*.
+- **[ReSaver](https://www.nexusmods.com/skyrimspecialedition/mods/5031) (FallrimTools)** - cleans script gunk out of a save. Powerful, and a genuine footgun; know what you're doing before you point it at a save you love.
 
 ### Kindred spirits
 
 Not requirements - just proof you're not imagining it.
 
-- **Reset Random Dialogue Scenes** - someone else who noticed scenes stick, and built a quiet weekly reset for one flavor of it. They're not sure it's a bug. We're sure it is, but not what to call it. That *is* the story.
-- **Debug Menu - Navmesh Viewer** - another debug menu for a game that doesn't need one. Kindred by the name alone. There's a whole family of us out here, building tools for problems that officially don't exist.
+- **[Reset Random Dialogue Scenes](https://www.nexusmods.com/skyrimspecialedition/mods/34961)** - someone else who noticed scenes stick, and built a quiet weekly reset for one flavor of it. They're not sure it's a bug. We're sure it is, but not what to call it. That *is* the story.
+- **[Debug Menu - Navmesh Viewer](https://www.nexusmods.com/skyrimspecialedition/mods/136456)** - another debug menu for a game that doesn't need one. Kindred by the name alone. There's a whole family of us out here, building tools for problems that officially don't exist.
 
 ---
 
