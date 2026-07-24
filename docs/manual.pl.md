@@ -69,6 +69,7 @@ Raz na scenę, dopóki jej nie opuścisz albo scena się nie zmieni. Przegapiłe
 ## Ustawienia
 
 - **Włączony** — domyślnie włączony. Wyłącz, by odłożyć mod na bok bez odinstalowania.
+- **Lekkość** — domyślnie włączone. Powiadomienia zachowują lekki ton; wyłącz, aby uzyskać zwykły tekst. Zmienia się tylko tekst, nigdy działanie moda.
 - **Nazwij bieżącą scenę** — przypisz klawisz; naciśnij, by zobaczyć nazwę bieżącej sceny bez otwierania menu.
 - **Wyczyść klawisz** — usuwa przypisanie.
 - **Log diagnostyczny** — ile idzie do logu Papyrus. Zostaw **Wyłączony** przy normalnej grze. Użyj **Zdarzenia** przy zgłaszaniu błędu; **Każde sprawdzenie** tylko gdy tropisz problem z timingiem, potem wyłącz z powrotem. Może wpływać na wydajność, zwłaszcza przy **Każde sprawdzenie**.

@@ -69,6 +69,7 @@ Jednou na scénu, dokud ji neopustíte nebo se scéna nezmění. Minuli jste toa
 ## Nastavení
 
 - **Zapnuto** - ve výchozím stavu zapnuto. Vypnutím mod odložíte bez odinstalace.
+- **Lehkost** - ve výchozím stavu zapnuto. Oznámení si drží lehčí tón; vypnutím získáte prostý text. Mění se jen text, nikdy fungování modu.
 - **Pojmenovat aktuální scénu** - přiřaďte klávesu; stiskněte ji a uvidíte jméno aktuální scény bez otevírání menu.
 - **Zrušit klávesu** - odstraní vazbu.
 - **Diagnostický log** - kolik jde do Papyrus logu. Pro běžné hraní nechte **Vypnuto**. **Události** při hlášení chyby; **Každá kontrola** jen když stíháte timing problém, pak ho zase vypněte. Může ovlivnit výkon, zvlášť při **Každá kontrola**.

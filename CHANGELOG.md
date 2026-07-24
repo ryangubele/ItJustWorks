@@ -5,6 +5,13 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.4.0
+
+- **Levity, a light-touch switch.** New **Levity** toggle on the **Settings** page, on by default. Turn it
+  off to trade the notifications' flavored lines for plain ones: the `See? It Just Works!` sign-off after an
+  alert stops firing, and the "names are off" hint drops its product wink. The functional status line is
+  unchanged either way. Copy only - detection, timing, and behavior are untouched.
+
 ## 0.3.6
 
 - **Uninstall page points the right way.** After 0.3.5 moved the on/off switch to Settings, the

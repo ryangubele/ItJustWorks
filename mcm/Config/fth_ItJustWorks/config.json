@@ -62,6 +62,7 @@
       "cursorFillMode": "topToBottom",
       "content": [
         { "id": "bEnabled:Control", "text": "$fth_IJW_Enabled", "type": "toggle", "help": "$fth_IJW_Enabled_Help", "valueOptions": { "sourceType": "ModSettingBool" } },
+        { "id": "bLevity:Control", "text": "$fth_IJW_Levity", "type": "toggle", "help": "$fth_IJW_Levity_Help", "valueOptions": { "sourceType": "ModSettingBool" } },
         { "id": "iHotkey:Control", "text": "$fth_IJW_Hotkey", "type": "keymap", "help": "$fth_IJW_Hotkey_Help", "valueOptions": { "sourceType": "ModSettingInt" } },
         { "text": "$fth_IJW_HotkeyClear", "type": "text", "help": "$fth_IJW_HotkeyClear_Help", "action": { "type": "CallFunction", "function": "ClearHotkey" } },
         {

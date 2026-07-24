@@ -32,6 +32,7 @@ int Property LOG_CHECK  = 2 AutoReadOnly Hidden
 float  fPollInterval  = 30.0     ; seconds between polls; 0 disables the loop
 float  fAlertThreshold = 180.0   ; seconds in-scene before alerting; 0 = never
 int    iLogLevel = 0             ; 0 Off / 1 Events / 2 Every check
+bool   bLevity = true            ; flavored notification copy on; off = plain. Presentation only.
 
 ; Tracked state, persisted with the save.
 Scene  currentScene
@@ -96,16 +97,18 @@ Function Rearm()
 EndFunction
 
 ; Pushed by the MCM. 0 poll stops the loop; 0 warn disables alerting. Guarded on a
-; real change so a slider drag (fires per step) doesn't spam the log.
-Function ApplySettings(int aiPollSeconds, int aiWarnMinutes, int aiLogLevel)
+; real change so a slider drag (fires per step) doesn't spam the log. Levity (copy
+; only) rides along here so a flavor change traces with the rest and never touches the loop.
+Function ApplySettings(int aiPollSeconds, int aiWarnMinutes, int aiLogLevel, bool abLevity)
     float newPoll = aiPollSeconds as float
     float newThr = (aiWarnMinutes * 60) as float
-    bool changed = (newPoll != fPollInterval) || (newThr != fAlertThreshold) || (aiLogLevel != iLogLevel)
+    bool changed = (newPoll != fPollInterval) || (newThr != fAlertThreshold) || (aiLogLevel != iLogLevel) || (abLevity != bLevity)
     fPollInterval = newPoll
     fAlertThreshold = newThr
     iLogLevel = aiLogLevel
+    bLevity = abLevity
     if changed && iLogLevel >= LOG_EVENTS
-        Log(LOG_EVENTS, "life settings poll=" + aiPollSeconds + "s warn=" + aiWarnMinutes + "m level=" + iLogLevel)
+        Log(LOG_EVENTS, "life settings poll=" + aiPollSeconds + "s warn=" + aiWarnMinutes + "m level=" + iLogLevel + " levity=" + BoolField(abLevity))
     endif
     ; Mirror SetEnabled dormancy: poll 0 must kill a pending single-update, not only
     ; skip re-arm (otherwise one last OnUpdate can still fire after the user turns the loop off).
@@ -146,7 +149,9 @@ Function RunCheck()
         if elapsed > fAlertThreshold && currentScene.IsPlaying()
             ; two short lines -- Skyrim shrinks a single long notification
             Debug.Notification("scene blocking others " + ElapsedLabel(elapsed))
-            Debug.Notification("See? It Just Works!")
+            if bLevity
+                Debug.Notification("See? It Just Works!")   ; the sign-off; Levity off leaves the status line
+            endif
             bAlerted = true
             if iLogLevel >= LOG_EVENTS
                 Log(LOG_EVENTS, "alert fire scene=" + SceneKey(currentScene) + " name=" + QuietEdid(currentScene) + " el=" + (elapsed as int) + "s thr=" + (fAlertThreshold as int) + "s sig=wall")
@@ -421,7 +426,11 @@ string Function LabelFor(Scene akScene)
     endif
     if !bEditorIdHinted
         bEditorIdHinted = true
-        Debug.Notification("It Just Works: scenes show as ID numbers. Set Load EditorIDs = true in po3_Tweaks.ini for names.")
+        if bLevity
+            Debug.Notification("It Just Works: scenes show as ID numbers. Set Load EditorIDs = true in po3_Tweaks.ini for names.")
+        else
+            Debug.Notification("Scenes show as ID numbers. Set Load EditorIDs = true in po3_Tweaks.ini for names.")
+        endif
     endif
     return "0x" + HexOf(akScene.GetFormID())
 EndFunction

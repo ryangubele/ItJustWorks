@@ -59,6 +59,7 @@ Once per scene until you leave it or the scene changes. Missed the toast? Open t
 ## Settings
 
 - **Enabled** - on by default. Turn it off to shelve the mod without uninstalling.
+- **Levity** - on by default. The notifications keep a light touch; turn it off for plain wording. Only the text changes, never how the mod works.
 - **Name current scene** - bind a key; press it to see the current scene name without opening the menu.
 - **Clear hotkey** - removes the binding.
 - **Diagnostics log** - how much goes to the Papyrus log. Leave **Off** for normal play. Use **Events** when filing a bug; **Every check** only if you're chasing a timing issue, then turn it back off. Can impact performance, especially at **Every check**.

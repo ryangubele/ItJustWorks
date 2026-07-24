@@ -69,6 +69,7 @@ Einmal pro Szene, bis du sie verlässt oder die Szene wechselt. Toast verpasst? 
 ## Einstellungen
 
 - **Aktiviert** - standardmäßig an. Ausschalten legt den Mod zur Seite, ohne ihn zu deinstallieren.
+- **Leichtigkeit** - standardmäßig an. Die Benachrichtigungen behalten einen lockeren Ton; ausschalten für schlichten Text. Nur der Text ändert sich, nie die Funktion des Mods.
 - **Aktuelle Szene benennen** - Taste belegen; drücken zeigt den aktuellen Szenennamen ohne Menü.
 - **Belegung löschen** - entfernt die Belegung.
 - **Diagnoseprotokoll** - wie viel ins Papyrus-Log geht. Für normales Spielen **Aus**. **Ereignisse** beim Melden eines Fehlers; **Jede Prüfung** nur bei Timing-Problemen, dann wieder ausschalten. Kann die Leistung beeinträchtigen, besonders bei **Jede Prüfung**.

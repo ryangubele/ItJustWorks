@@ -69,6 +69,7 @@ Una volta per scena finché non la lasci o la scena non cambia. Toast perso? Apr
 ## Impostazioni
 
 - **Abilitata** - accesa in modo predefinito. Spegnila per mettere il mod da parte senza disinstallarlo.
+- **Leggerezza** - attivo per impostazione predefinita. Le notifiche mantengono un tono leggero; disattiva per un testo semplice. Cambia solo il testo, mai il funzionamento del mod.
 - **Mostra la scena attuale** - assegna un tasto; premilo per vedere il nome della scena attuale senza aprire il menu.
 - **Cancella tasto** - rimuove l'assegnazione.
 - **Log diagnostico** - quanto va nel log Papyrus. Lascia **Spento** per il gioco normale. Usa **Eventi** quando segnali un bug; **Ogni controllo** solo se rincorri un problema di timing, poi rispegnilo. Può influire sulle prestazioni, soprattutto a **Ogni controllo**.

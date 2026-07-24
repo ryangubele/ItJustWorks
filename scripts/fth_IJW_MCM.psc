@@ -111,7 +111,8 @@ Function PushSettingsToWatcher()
     int poll = GetModSettingInt("iPollSeconds:Watchdog")
     int warn = GetModSettingInt("iWarnMinutes:Watchdog")
     int level = GetModSettingInt("iLogLevel:Diagnostics")
-    GetWatcher().ApplySettings(poll, warn, level)
+    bool levity = GetModSettingBool("bLevity:Control")
+    GetWatcher().ApplySettings(poll, warn, level, levity)
 EndFunction
 
 ; Master switch + hotkey. Disk is the source of truth; the watcher mirrors it.

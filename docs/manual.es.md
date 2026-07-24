@@ -69,6 +69,7 @@ Una vez por escena hasta que la dejes o la escena cambie. ¿Perdiste el toast? A
 ## Ajustes
 
 - **Activado** - activado por defecto. Apágalo para dejar el mod inactivo sin desinstalarlo.
+- **Ligereza** - activado por defecto. Las notificaciones mantienen un tono desenfadado; desactívalo para un texto sencillo. Solo cambia el texto, nunca cómo funciona el mod.
 - **Nombrar la escena actual** - vincula una tecla; púlsala para ver el nombre de la escena actual sin abrir el menú.
 - **Borrar tecla** - quita la vinculación.
 - **Registro de diagnóstico** - cuánto va al registro de Papyrus. Deja **Apagado** para el juego normal. Usa **Eventos** al reportar un error; **Cada comprobación** solo si persigues un problema de temporización, y luego vuélvelo a apagar. Puede afectar al rendimiento, sobre todo en **Cada comprobación**.

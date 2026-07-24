@@ -69,6 +69,7 @@ Une fois par scène jusqu'à ce que vous la quittiez ou que la scène change. To
 ## Paramètres
 
 - **Activé** - activé par défaut. Désactivez-le pour mettre le mod en veille sans le désinstaller.
+- **Légèreté** - activé par défaut. Les notifications gardent un ton léger ; désactivez pour un texte neutre. Seul le texte change, jamais le fonctionnement du mod.
 - **Nommer la scène actuelle** - liez une touche ; appuyez pour voir le nom de la scène actuelle sans ouvrir le menu.
 - **Effacer la touche** - retire la liaison.
 - **Journal de diagnostic** - combien part dans le journal Papyrus. Laissez **Désactivé** pour le jeu normal. Utilisez **Événements** pour signaler un bug ; **Chaque vérification** seulement si vous traquez un problème de timing, puis remettez-le sur Désactivé. Peut affecter les performances, surtout à **Chaque vérification**.
