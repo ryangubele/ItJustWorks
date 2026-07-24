@@ -60,6 +60,7 @@ Once per scene until you leave it or the scene changes. Missed the toast? Open t
 
 - **Enabled** - on by default. Turn it off to shelve the mod without uninstalling.
 - **Levity** - on by default. The notifications keep a light touch; turn it off for plain wording. Only the text changes, never how the mod works.
+- **Notification language** - the language for the mod's own pop-up notifications (the corner toasts). Set it to match your menu language. English by default; independent of the game's language setting.
 - **Name current scene** - bind a key; press it to see the current scene name without opening the menu.
 - **Clear hotkey** - removes the binding.
 - **Diagnostics log** - how much goes to the Papyrus log. Leave **Off** for normal play. Use **Events** when filing a bug; **Every check** only if you're chasing a timing issue, then turn it back off. Can impact performance, especially at **Every check**.
@@ -80,8 +81,6 @@ Once per scene until you leave it or the scene changes. Missed the toast? Open t
 
 - **Editor IDs loaded** - an indicator. Names on **Scene** and owning quest when lit; ID numbers when dark. **Form ID** is still the raw `0x…` either way.
 
-  Names on: in `po3_Tweaks.ini`, set `Load EditorIDs = true`, restart Skyrim. The mod also says this once the first time it notices names are off. Mod managers can overwrite that file on deploy or update, so edit the copy *inside* the Tweaks mod (or a small override mod that wins), not only a loose file in `Data`. **MO2:** left-pane mod folder, or Overwrite / higher-priority mod. **Vortex:** Tweaks staging folder, or an override mod; re-check after updates.
-
 - **Watchdog** - whether the background check is up:
   - **Running** - fine
   - **Waking up** - normal right after a reload
@@ -95,6 +94,57 @@ Once per scene until you leave it or the scene changes. Missed the toast? Open t
 
 ---
 
+## Troubleshooting
+
+### Scenes show as ID numbers, not names
+
+po3 Tweaks isn't loading Editor IDs. In `po3_Tweaks.ini`, set `Load EditorIDs = true` and restart Skyrim; the **Diagnostics** page's *Editor IDs loaded* light confirms it. Mod managers can overwrite that file on deploy or update, so edit the copy *inside* the Tweaks mod (or a small override mod that wins), not just a loose file in `Data`:
+
+- **MO2:** the Tweaks mod folder in the left pane, or Overwrite / a higher-priority mod.
+- **Vortex:** the Tweaks staging folder, or an override mod. Re-check after every update.
+
+The **Form ID** shows either way, so you're never fully in the dark.
+
+### Notifications are in the wrong language
+
+The mod has two independent language settings; this is the one for its own pop-up notifications. Set **Settings > Notification language** to your language - it controls the corner toasts (the stuck-scene alert, the names hint, the Stop results). It is independent of the game's language and of the menu language below. English is the default and the fallback, so an untranslated line reads in English rather than breaking.
+
+### The menu is in the wrong language
+
+The MCM menu follows the game's **language setting**, not the notification language above. Skyrim loads the translation file that matches the game language, so an English game shows the English menu even if you installed another language. Two ways to change it:
+
+- **Installer:** tick your language in step 1, then choose it as the default menu language in step 2 (it writes over the English file and keeps an English `.bak`).
+- **By hand:** rename `Interface\Translations\fth_ItJustWorks_<LANGUAGE>.txt` to `fth_ItJustWorks_ENGLISH.txt`, replacing the English file.
+
+### The menu or notifications show garbled or unreadable characters
+
+The text is right - your game just has no font that can draw those characters, so it renders as garbage. Skyrim's stock font covers Latin and Western-European letters, but not Cyrillic, Chinese, Japanese, or some Central-European marks. If you run the menu or notifications in one of those, install a **font mod** that includes them; most non-English setups already have one. If yours doesn't, search Nexus for a font covering your language - [Unicode Font](https://www.nexusmods.com/skyrimspecialedition/mods/103346) is a broad starting point.
+
+### No alert ever appears
+
+Check the **Diagnostics** page's **Watchdog** status, then the **Watchdog** dials:
+
+- Status **Dormant** - the mod is off. Turn **Enabled** on (Settings).
+- Status **Off** - **Check every** is 0. Set it back to 10-240s.
+- **Warn me after** is **0** - that disables the alert. Set the minutes you want.
+
+**Time in scene** resets on a reload, so a scene alerts only once you have been in it, continuously, past the warn time this session. Even with no toast, the menu always shows the current scene and how long you have been in it.
+
+### Stop Scene didn't clear the scene
+
+A Stop has never once failed to take - not in 14 years of un-sticking saves, first with rough one-off versions and now with this. So if it ever reports that the scene didn't end, you've found something genuinely new - which is exciting, not alarming. Surprise is where learning happens. There's no known cause yet, and nothing's promised, but a complete log is the best shot at running one down. Turn on Papyrus logging, set **Settings > Diagnostics log** to **Every check**, and switch on every log or debug option you can find across your load order - so that if it happens again, it's captured. Then send the complete `Papyrus.0.log` as a bug report (channels below). Reload from before it stuck to keep playing in the meantime.
+
+### Filing a bug report, or asking for help
+
+For a bug, set **Settings > Diagnostics log** to **Events**, reproduce the problem, then quit. With Papyrus logging on (the `Skyrim.ini` lines are under **Settings**), open `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log` and search for `fth_IJW`. Include that, the scene's **Form ID** and **Owning quest**, and what you were doing when it stuck.
+
+Where to send it:
+
+- **Bug reports:** the [Bugs tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=bugs) on the mod page, or [GitHub Issues](https://github.com/ryangubele/ItJustWorks/issues).
+- **Questions and general help:** the [Posts tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=posts) on the mod page.
+
+---
+
 ## Uninstall
 
 **Remove it for good:**
@@ -104,13 +154,3 @@ Once per scene until you leave it or the scene changes. Missed the toast? Open t
 3. Remove the mod in your manager (or by hand).
 
 Safe to remove mid-playthrough. Skyrim may leave a small inert script stub in the save, like other scripted mods; the game ignores it. Optional: a save cleaner (e.g. **[ReSaver](https://www.nexusmods.com/skyrimspecialedition/mods/5031)** in FallrimTools) can clear stubs after removal - use cleaners carefully, on what you meant to remove. You can leave this mod installed while cleaning junk from *other* mods.
-
----
-
-## Seeing the menu in another language
-
-The mod ships menu translations - pick them in the installer. Skyrim loads the file that matches the game's **language setting**. English game + another language installed still reads the English menu file unless you override it.
-
-**Installer:** tick the language in step 1, then set it as default menu language in step 2 (writes over the English file; keeps an English `.bak`).
-
-**By hand:** rename `Interface\Translations\fth_ItJustWorks_<LANGUAGE>.txt` to `fth_ItJustWorks_ENGLISH.txt` (replace the English file).

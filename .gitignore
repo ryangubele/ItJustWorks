@@ -9,6 +9,9 @@ obj/
 # Papyrus compiler leftovers
 *.pex.bak
 
+# Generated at build time from the translation tables (build.ps1 bake step)
+scripts/fth_IJW_Toasts.psc
+
 # Editor / OS
 .vs/
 .idea/

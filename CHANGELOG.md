@@ -5,6 +5,16 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.5.0
+
+- **Notifications speak the player's language.** The mod's corner notifications - the stuck-scene alert,
+  Stop results, and others - now follow **Settings > Notification language**: all ten languages, English
+  default and fallback. Change it anytime; the installer seeds it from your menu language choice.
+- **English game, other-language menu still matches.** Toast copy lives in the same translation tables
+  as the menu and is baked at build time, so a heavy-mod English client with non-English menu content
+  gets matching corner toasts instead of a silent fall-through to English.
+- **Punchline stays English.** The `See? It Just Works!` sign-off is still English on purpose.
+
 ## 0.4.1
 
 - **Levity's resting state is in the log now.** The Papyrus "life armed" line written on load

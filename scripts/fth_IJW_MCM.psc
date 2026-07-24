@@ -58,10 +58,11 @@ Event OnConfigClose()
     if bStopOnClose
         bStopOnClose = false
         bool cleared = GetWatcher().StopCurrentScene()
+        int lang = GetModSettingInt("iToastLang:Control")
         if cleared
-            Debug.Notification("Scene stopped. Watch the next minute -- deferred stages may fire.")
+            Debug.Notification(fth_IJW_Toasts.StopOk(lang))
         else
-            Debug.Notification("Stop sent, but the scene did not clear. Open It Just Works again.")
+            Debug.Notification(fth_IJW_Toasts.StopFail(lang))
         endif
     endif
 EndEvent
@@ -77,8 +78,8 @@ EndFunction
 ; Two-step confirm: ShowMessage() can't display from a CallFunction action, so press
 ; once to arm (the hint row says so), again to cancel. The stop itself runs on menu
 ; close (OnConfigClose). Guards against an accidental misfire on a working scene.
-; Hint row uses $-keys so MCM Helper localizes them (same pattern as Diagnostics
-; loop/heal status). Not Debug.Notification -- those stay English on purpose.
+; Hint row uses $keys so MCM Helper localizes them (same pattern as Diagnostics
+; loop/heal status). Stop result toasts use fth_IJW_Toasts on close, not this row.
 Function StopScene()
     if !GetWatcher().GetCurrentSceneRef()
         SetStopHint("$fth_IJW_NoScene")
@@ -112,7 +113,8 @@ Function PushSettingsToWatcher()
     int warn = GetModSettingInt("iWarnMinutes:Watchdog")
     int level = GetModSettingInt("iLogLevel:Diagnostics")
     bool levity = GetModSettingBool("bLevity:Control")
-    GetWatcher().ApplySettings(poll, warn, level, levity)
+    int lang = GetModSettingInt("iToastLang:Control")
+    GetWatcher().ApplySettings(poll, warn, level, levity, lang)
 EndFunction
 
 ; Master switch + hotkey. Disk is the source of truth; the watcher mirrors it.

@@ -12,16 +12,6 @@ Pięć stron: **Scena**, **Strażnik**, **Ustawienia**, **Diagnostyka**, **Odins
 
 ---
 
-## Menu w innym języku
-
-Mod dostarcza tłumaczenia menu — wybierz je w instalatorze. Skyrim wczytuje plik pasujący do **ustawienia języka** gry. Angielska gra + inny zainstalowany język nadal czyta angielski plik menu, dopóki go nie nadpiszesz.
-
-**Instalator:** zaznacz język w kroku 1, potem ustaw go jako domyślny język menu w kroku 2 (nadpisuje angielski plik; zachowuje angielski `.bak`).
-
-**Ręcznie:** zmień nazwę `Interface\Translations\fth_ItJustWorks_POLISH.txt` na `fth_ItJustWorks_ENGLISH.txt` (zastąp angielski plik).
-
----
-
 ## Scena
 
 ### W czym jesteś
@@ -70,6 +60,7 @@ Raz na scenę, dopóki jej nie opuścisz albo scena się nie zmieni. Przegapiłe
 
 - **Włączony** — domyślnie włączony. Wyłącz, by odłożyć mod na bok bez odinstalowania.
 - **Lekkość** — domyślnie włączone. Powiadomienia zachowują lekki ton; wyłącz, aby uzyskać zwykły tekst. Zmienia się tylko tekst, nigdy działanie moda.
+- **Język powiadomień** — język własnych wyskakujących powiadomień moda (toastów w rogu). Ustaw go zgodnie z językiem swojego menu. Domyślnie angielski; niezależny od ustawienia języka gry.
 - **Nazwij bieżącą scenę** — przypisz klawisz; naciśnij, by zobaczyć nazwę bieżącej sceny bez otwierania menu.
 - **Wyczyść klawisz** — usuwa przypisanie.
 - **Log diagnostyczny** — ile idzie do logu Papyrus. Zostaw **Wyłączony** przy normalnej grze. Użyj **Zdarzenia** przy zgłaszaniu błędu; **Każde sprawdzenie** tylko gdy tropisz problem z timingiem, potem wyłącz z powrotem. Może wpływać na wydajność, zwłaszcza przy **Każde sprawdzenie**.
@@ -90,8 +81,6 @@ Raz na scenę, dopóki jej nie opuścisz albo scena się nie zmieni. Przegapiłe
 
 - **Editor ID wczytane** — wskaźnik. Gdy świeci, nazwy na **Scenie** i zadaniu nadrzędnym; gdy zgaszona, numery ID. **Form ID** i tak zawsze pozostaje surowym `0x…`.
 
-  Nazwy włączone: w `po3_Tweaks.ini` ustaw `Load EditorIDs = true`, zrestartuj Skyrim. Mod mówi to też raz, gdy po raz pierwszy zauważy, że nazwy są wyłączone. Menadżery modów mogą nadpisać ten plik przy wdrażaniu lub aktualizacji — edytuj kopię *wewnątrz* moda Tweaks (albo mały mod override, który wygrywa), a nie tylko luźny plik w `Data`. **MO2:** folder moda w lewym panelu albo Overwrite / mod o wyższym priorytecie. **Vortex:** folder staging Tweaks albo mod override; sprawdź ponownie po aktualizacjach.
-
 - **Strażnik** — czy sprawdzenie w tle działa:
   - **Działa** — w porządku
   - **Budzi się** — normalne tuż po przeładowaniu
@@ -102,6 +91,57 @@ Raz na scenę, dopóki jej nie opuścisz albo scena się nie zmieni. Przegapiłe
 - **Ostatnia samonaprawa** — mod czasem poprawia własną księgowość (często po przeładowaniu). Wiersz tutaj jest normalny.
 
 - **Wersja**
+
+---
+
+## Rozwiązywanie problemów
+
+### Sceny wyświetlają się jako numery ID, a nie nazwy
+
+po3 Tweaks nie wczytuje Editor ID. W `po3_Tweaks.ini` ustaw `Load EditorIDs = true` i zrestartuj Skyrim; lampka *Editor ID wczytane* na stronie **Diagnostyka** to potwierdza. Menadżery modów mogą nadpisać ten plik przy wdrażaniu lub aktualizacji, więc edytuj kopię *wewnątrz* moda Tweaks (albo mały mod override, który wygrywa), a nie tylko luźny plik w `Data`:
+
+- **MO2:** folder moda Tweaks w lewym panelu albo Overwrite / mod o wyższym priorytecie.
+- **Vortex:** folder staging Tweaks albo mod override. Sprawdź ponownie po każdej aktualizacji.
+
+**Form ID** i tak się wyświetla, więc nigdy nie zostajesz całkiem po ciemku.
+
+### Powiadomienia są w niewłaściwym języku
+
+Mod ma dwa niezależne ustawienia języka; to jest to dla jego własnych wyskakujących powiadomień. Ustaw **Ustawienia > Język powiadomień** na swój język — steruje toastami w rogu (alert o zaciętej scenie, podpowiedź o nazwach, wyniki Zatrzymania). Jest niezależne od języka gry i od języka menu poniżej. Angielski jest domyślny i zapasowy, więc nieprzetłumaczony wiersz czyta się po angielsku, zamiast się psuć.
+
+### Menu jest w niewłaściwym języku
+
+Menu MCM podąża za **ustawieniem języka** gry, a nie za językiem powiadomień powyżej. Skyrim wczytuje plik tłumaczenia pasujący do języka gry, więc angielska gra pokazuje angielskie menu, nawet jeśli zainstalowałeś inny język. Dwa sposoby, by to zmienić:
+
+- **Instalator:** zaznacz swój język w kroku 1, potem wybierz go jako domyślny język menu w kroku 2 (nadpisuje angielski plik i zachowuje angielski `.bak`).
+- **Ręcznie:** zmień nazwę `Interface\Translations\fth_ItJustWorks_POLISH.txt` na `fth_ItJustWorks_ENGLISH.txt`, zastępując angielski plik.
+
+### Menu lub powiadomienia pokazują nieczytelne albo zniekształcone znaki
+
+Tekst jest poprawny — twoja gra po prostu nie ma czcionki zdolnej narysować tych znaków, więc wyświetla się jako bełkot. Standardowa czcionka Skyrima obejmuje litery łacińskie i zachodnioeuropejskie, ale nie cyrylicę, chiński, japoński ani niektóre znaki środkowoeuropejskie. Jeśli używasz menu lub powiadomień w jednym z tych języków, zainstaluj **moda z czcionką**, który je zawiera; większość nieangielskich konfiguracji już go ma. Jeśli twoja nie, przeszukaj Nexus w poszukiwaniu czcionki obejmującej twój język — [Unicode Font](https://www.nexusmods.com/skyrimspecialedition/mods/103346) to szeroki punkt wyjścia.
+
+### Żaden alert się nie pojawia
+
+Sprawdź status **Strażnika** na stronie **Diagnostyka**, potem pokrętła **Strażnika**:
+
+- Status **Uśpiony** — mod jest wyłączony. Włącz **Włączony** (Ustawienia).
+- Status **Wyłączony** — **Sprawdzaj co** jest na 0. Ustaw z powrotem na 10–240 s.
+- **Ostrzeż po** jest na **0** — to wyłącza alert. Ustaw żądaną liczbę minut.
+
+**Czas w scenie** zeruje się przy przeładowaniu, więc scena ostrzega dopiero, gdy jesteś w niej nieprzerwanie dłużej niż czas ostrzeżenia w tej sesji. Nawet bez toasta menu zawsze pokazuje bieżącą scenę i jak długo w niej jesteś.
+
+### Zatrzymanie sceny nie usunęło sceny
+
+Zatrzymanie ani razu nie zawiodło — ani przez 14 lat odblokowywania zapisów, najpierw prowizorycznymi jednorazowymi wersjami, a teraz tym. Więc jeśli kiedyś zgłosi, że scena się nie zakończyła, znalazłeś coś naprawdę nowego — co jest ekscytujące, nie niepokojące. Zaskoczenie to miejsce, gdzie rodzi się nauka. Nie ma jeszcze znanej przyczyny i nic nie jest obiecane, ale kompletny log to najlepsza szansa, by ją wytropić. Włącz logowanie Papyrus, ustaw **Ustawienia > Log diagnostyczny** na **Każde sprawdzenie** i włącz każdą opcję logowania lub debugowania, jaką znajdziesz w całej swojej kolejności wczytywania — tak, by jeśli zdarzy się ponownie, zostało uchwycone. Potem wyślij kompletny `Papyrus.0.log` jako zgłoszenie błędu (kanały poniżej). W międzyczasie przeładuj sprzed zacięcia, żeby grać dalej.
+
+### Zgłaszanie błędu albo prośba o pomoc
+
+Przy błędzie ustaw **Ustawienia > Log diagnostyczny** na **Zdarzenia**, odtwórz problem, potem wyjdź. Z włączonym logowaniem Papyrus (wiersze `Skyrim.ini` są w **Ustawieniach**) otwórz `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log` i szukaj `fth_IJW`. Dołącz to, **Form ID** sceny i **Zadanie nadrzędne** oraz to, co robiłeś, gdy się zacięło.
+
+Gdzie to wysłać:
+
+- **Zgłoszenia błędów:** [Bugs tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=bugs) na stronie moda albo [GitHub Issues](https://github.com/ryangubele/ItJustWorks/issues).
+- **Pytania i ogólna pomoc:** [Posts tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=posts) na stronie moda.
 
 ---
 

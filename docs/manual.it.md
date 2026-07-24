@@ -12,16 +12,6 @@ Cinque pagine: **Scena**, **Sentinella**, **Impostazioni**, **Diagnostica**, **D
 
 ---
 
-## Vedere il menu in un'altra lingua
-
-Il mod include traduzioni del menu: sceglile nell'installer. Skyrim carica il file che corrisponde all'**impostazione lingua** del gioco. Un gioco in inglese + un'altra lingua installata continua a leggere il file del menu inglese finché non lo sostituisci.
-
-**Installer:** spunta la lingua al passo 1, poi impostala come lingua predefinita del menu al passo 2 (sovrascrive il file inglese; conserva un `.bak` inglese).
-
-**A mano:** rinomina `Interface\Translations\fth_ItJustWorks_ITALIAN.txt` in `fth_ItJustWorks_ENGLISH.txt` (sostituisci il file inglese).
-
----
-
 ## Scena
 
 ### In cosa ti trovi
@@ -70,6 +60,7 @@ Una volta per scena finché non la lasci o la scena non cambia. Toast perso? Apr
 
 - **Abilitata** - accesa in modo predefinito. Spegnila per mettere il mod da parte senza disinstallarlo.
 - **Leggerezza** - attivo per impostazione predefinita. Le notifiche mantengono un tono leggero; disattiva per un testo semplice. Cambia solo il testo, mai il funzionamento del mod.
+- **Lingua delle notifiche** - la lingua delle notifiche del mod (i toast nell'angolo). Impostala sulla lingua del tuo menu. Inglese per impostazione predefinita; indipendente dall'impostazione lingua del gioco.
 - **Mostra la scena attuale** - assegna un tasto; premilo per vedere il nome della scena attuale senza aprire il menu.
 - **Cancella tasto** - rimuove l'assegnazione.
 - **Log diagnostico** - quanto va nel log Papyrus. Lascia **Spento** per il gioco normale. Usa **Eventi** quando segnali un bug; **Ogni controllo** solo se rincorri un problema di timing, poi rispegnilo. Può influire sulle prestazioni, soprattutto a **Ogni controllo**.
@@ -90,8 +81,6 @@ Una volta per scena finché non la lasci o la scena non cambia. Toast perso? Apr
 
 - **Editor ID caricati** - un indicatore. Nomi su **Scena** e missione proprietaria quando accesa; numeri di ID quando spenta. **Form ID** resta l'`0x…` grezzo in ogni caso.
 
-  Per attivare i nomi: in `po3_Tweaks.ini`, imposta `Load EditorIDs = true`, riavvia Skyrim. Il mod lo dice anche una volta la prima volta che nota che i nomi sono disattivati. I gestori di mod possono sovrascrivere quel file al deploy o all'aggiornamento: modifica la copia *dentro* del mod Tweaks (o un piccolo mod di override che vince), non solo un file sparso in `Data`. **MO2:** cartella del mod nel riquadro sinistro, oppure Overwrite / mod a priorità più alta. **Vortex:** cartella di staging di Tweaks, o un mod di override; ricontrolla dopo gli aggiornamenti.
-
 - **Sentinella** - se il controllo in background è attivo:
   - **Attivo** - tutto a posto
   - **In avvio** - normale subito dopo un ricaricamento
@@ -102,6 +91,57 @@ Una volta per scena finché non la lasci o la scena non cambia. Toast perso? Apr
 - **Ultima auto-riparazione** - il mod a volte corregge la propria contabilità (spesso dopo un ricaricamento). Una riga qui è normale.
 
 - **Versione**
+
+---
+
+## Risoluzione dei problemi
+
+### Le scene appaiono come numeri ID, non come nomi
+
+po3 Tweaks non sta caricando gli Editor ID. In `po3_Tweaks.ini`, imposta `Load EditorIDs = true` e riavvia Skyrim; l'indicatore *Editor ID caricati* nella pagina **Diagnostica** lo conferma. I gestori di mod possono sovrascrivere quel file al deploy o all'aggiornamento, quindi modifica la copia *dentro* del mod Tweaks (o un piccolo mod di override che vince), non solo un file sparso in `Data`:
+
+- **MO2:** la cartella del mod Tweaks nel riquadro sinistro, oppure Overwrite / un mod a priorità più alta.
+- **Vortex:** la cartella di staging di Tweaks, oppure un mod di override. Ricontrolla dopo ogni aggiornamento.
+
+Il **Form ID** viene mostrato in ogni caso, quindi non resti mai completamente al buio.
+
+### Le notifiche sono nella lingua sbagliata
+
+Il mod ha due impostazioni lingua indipendenti; questa riguarda le sue notifiche pop-up. Imposta **Impostazioni > Lingua delle notifiche** sulla tua lingua - controlla i toast nell'angolo (l'avviso di scena bloccata, il suggerimento sui nomi, i risultati dell'arresto). È indipendente dalla lingua del gioco e dalla lingua del menu qui sotto. L'inglese è l'impostazione predefinita e il ripiego, così una riga non tradotta appare in inglese invece di rompersi.
+
+### Il menu è nella lingua sbagliata
+
+Il menu MCM segue l'**impostazione lingua** del gioco, non la lingua delle notifiche qui sopra. Skyrim carica il file di traduzione che corrisponde alla lingua del gioco, quindi un gioco in inglese mostra il menu inglese anche se hai installato un'altra lingua. Due modi per cambiarlo:
+
+- **Installer:** spunta la tua lingua al passo 1, poi sceglila come lingua predefinita del menu al passo 2 (sovrascrive il file inglese e conserva un `.bak` inglese).
+- **A mano:** rinomina `Interface\Translations\fth_ItJustWorks_ITALIAN.txt` in `fth_ItJustWorks_ENGLISH.txt`, sostituendo il file inglese.
+
+### Il menu o le notifiche mostrano caratteri illeggibili o corrotti
+
+Il testo è giusto - è solo che il tuo gioco non ha alcun font capace di disegnare quei caratteri, così appare incomprensibile. Il font di serie di Skyrim copre le lettere latine e dell'Europa occidentale, ma non il cirillico, il cinese, il giapponese o certi segni dell'Europa centrale. Se usi il menu o le notifiche in una di quelle lingue, installa un **font mod** che li includa; la maggior parte delle configurazioni non inglesi ne ha già uno. Se il tuo non ce l'ha, cerca su Nexus un font che copra la tua lingua - [Unicode Font](https://www.nexusmods.com/skyrimspecialedition/mods/103346) è un buon punto di partenza generale.
+
+### Non compare mai un avviso
+
+Controlla lo stato della **Sentinella** nella pagina **Diagnostica**, poi le manopole della **Sentinella**:
+
+- Stato **Inattivo (spenta)** - il mod è spento. Attiva **Abilitata** (Impostazioni).
+- Stato **Spento (controlli disattivati)** - **Controlla ogni** è a 0. Riportalo tra 10 e 240 s.
+- **Avvisami dopo** è a **0** - questo disattiva l'avviso. Imposta i minuti che vuoi.
+
+Il **Tempo nella scena** si azzera a un ricaricamento, quindi una scena avvisa solo dopo che ci sei rimasto, senza interruzioni, oltre il tempo di avviso in questa sessione. Anche senza toast, il menu mostra sempre la scena attuale e da quanto tempo ci sei.
+
+### Ferma scena non ha eliminato la scena
+
+Un arresto non ha mai fallito nel prendere - non in 14 anni passati a sbloccare salvataggi, prima con versioni grezze una tantum e ora con questo. Perciò se mai segnala che la scena non è finita, hai trovato qualcosa di davvero nuovo - il che è entusiasmante, non allarmante. La sorpresa è dove avviene l'apprendimento. Non c'è ancora una causa nota, e niente è promesso, ma un log completo è la migliore possibilità di rintracciarne una. Attiva la registrazione Papyrus, imposta **Impostazioni > Log diagnostico** su **Ogni controllo**, e attiva ogni opzione di log o debug che trovi in tutto il tuo ordine di caricamento - così che, se succede di nuovo, venga catturato. Poi invia il `Papyrus.0.log` completo come segnalazione di bug (canali sotto). Nel frattempo ricarica da prima del blocco per continuare a giocare.
+
+### Segnalare un bug, o chiedere aiuto
+
+Per un bug, imposta **Impostazioni > Log diagnostico** su **Eventi**, riproduci il problema, poi esci. Con la registrazione Papyrus attiva (le righe `Skyrim.ini` sono sotto **Impostazioni**), apri `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log` e cerca `fth_IJW`. Includi quello, il **Form ID** e la **Missione proprietaria** della scena, e cosa stavi facendo quando si è bloccata.
+
+Dove inviarlo:
+
+- **Segnalazioni di bug:** [Bugs tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=bugs) sulla pagina del mod, oppure [GitHub Issues](https://github.com/ryangubele/ItJustWorks/issues).
+- **Domande e aiuto generale:** [Posts tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=posts) sulla pagina del mod.
 
 ---
 

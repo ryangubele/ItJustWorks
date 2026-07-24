@@ -12,16 +12,6 @@ Pět stránek: **Scéna**, **Hlídač**, **Nastavení**, **Diagnostika**, **Odin
 
 ---
 
-## Menu v jiném jazyce
-
-Mod dodává překlady menu - vyberte je v instalátoru. Skyrim načte soubor, který odpovídá **nastavení jazyka** hry. Anglická hra + jiný nainstalovaný jazyk dál čte anglický soubor menu, dokud to nepřepíšete.
-
-**Instalátor:** zaškrtněte jazyk v kroku 1, pak ho nastavte jako výchozí jazyk menu v kroku 2 (zapíše přes anglický soubor; ponechá anglický `.bak`).
-
-**Ručně:** přejmenujte `Interface\Translations\fth_ItJustWorks_CZECH.txt` na `fth_ItJustWorks_ENGLISH.txt` (nahraďte anglický soubor).
-
----
-
 ## Scéna
 
 ### V čem jste
@@ -70,6 +60,7 @@ Jednou na scénu, dokud ji neopustíte nebo se scéna nezmění. Minuli jste toa
 
 - **Zapnuto** - ve výchozím stavu zapnuto. Vypnutím mod odložíte bez odinstalace.
 - **Lehkost** - ve výchozím stavu zapnuto. Oznámení si drží lehčí tón; vypnutím získáte prostý text. Mění se jen text, nikdy fungování modu.
+- **Jazyk oznámení** - jazyk vlastních vyskakovacích oznámení modu (toastů v rohu). Nastavte ho podle jazyka svého menu. Ve výchozím stavu angličtina; nezávislý na nastavení jazyka hry.
 - **Pojmenovat aktuální scénu** - přiřaďte klávesu; stiskněte ji a uvidíte jméno aktuální scény bez otevírání menu.
 - **Zrušit klávesu** - odstraní vazbu.
 - **Diagnostický log** - kolik jde do Papyrus logu. Pro běžné hraní nechte **Vypnuto**. **Události** při hlášení chyby; **Každá kontrola** jen když stíháte timing problém, pak ho zase vypněte. Může ovlivnit výkon, zvlášť při **Každá kontrola**.
@@ -90,8 +81,6 @@ Jednou na scénu, dokud ji neopustíte nebo se scéna nezmění. Minuli jste toa
 
 - **Editor ID načteny** - indikátor. Jména na **Scéna** a nadřazeném úkolu, když svítí; čísla ID, když je zhasnutá. **Form ID** je stále surové `0x…` v obou případech.
 
-  Jména zapnout: v `po3_Tweaks.ini` nastavte `Load EditorIDs = true`, restartujte Skyrim. Mod to také jednou řekne, když poprvé zjistí, že jména jsou vypnutá. Správci modů mohou tento soubor při nasazení nebo aktualizaci přepsat — upravte kopii *uvnitř* modu Tweaks (nebo malý override mod, který vyhraje), ne jen volný soubor v `Data`. **MO2:** složka modu v levém panelu, nebo Overwrite / mod s vyšší prioritou. **Vortex:** staging složka Tweaks, nebo override mod; po aktualizacích znovu zkontrolujte.
-
 - **Hlídač** - zda běží kontrola na pozadí:
   - **Běží** - v pořádku
   - **Probouzí se** - normální hned po načtení
@@ -102,6 +91,57 @@ Jednou na scénu, dokud ji neopustíte nebo se scéna nezmění. Minuli jste toa
 - **Poslední samooprava** - mod občas opraví vlastní účetnictví (často po načtení). Řádek tady je normální.
 
 - **Verze**
+
+---
+
+## Řešení potíží
+
+### Scény se zobrazují jako čísla ID, ne jména
+
+po3 Tweaks nenačítá Editor ID. V `po3_Tweaks.ini` nastavte `Load EditorIDs = true` a restartujte Skyrim; kontrolka *Editor ID načteny* na stránce **Diagnostika** to potvrdí. Správci modů mohou tento soubor při nasazení nebo aktualizaci přepsat, takže upravte kopii *uvnitř* modu Tweaks (nebo malý override mod, který vyhraje), ne jen volný soubor v `Data`:
+
+- **MO2:** složka modu Tweaks v levém panelu, nebo Overwrite / mod s vyšší prioritou.
+- **Vortex:** staging složka Tweaks, nebo override mod. Po každé aktualizaci znovu zkontrolujte.
+
+**Form ID** se zobrazí tak jako tak, takže nikdy nejste úplně v temnotě.
+
+### Oznámení jsou ve špatném jazyce
+
+Mod má dvě nezávislá nastavení jazyka; toto je to pro jeho vlastní vyskakovací oznámení. Nastavte **Nastavení > Jazyk oznámení** na svůj jazyk - ovládá toasty v rohu (upozornění na zaseknutou scénu, nápovědu se jmény, výsledky zastavení). Je nezávislé na jazyce hry i na jazyce menu níže. Angličtina je výchozí a záložní, takže nepřeložený řádek se zobrazí anglicky, místo aby se rozbil.
+
+### Menu je ve špatném jazyce
+
+Menu MCM se řídí **nastavením jazyka** hry, ne jazykem oznámení výše. Skyrim načte překladový soubor, který odpovídá jazyku hry, takže anglická hra ukáže anglické menu, i když jste nainstalovali jiný jazyk. Změnit to jde dvěma způsoby:
+
+- **Instalátor:** zaškrtněte svůj jazyk v kroku 1, pak ho v kroku 2 zvolte jako výchozí jazyk menu (zapíše přes anglický soubor a ponechá anglický `.bak`).
+- **Ručně:** přejmenujte `Interface\Translations\fth_ItJustWorks_CZECH.txt` na `fth_ItJustWorks_ENGLISH.txt` a nahraďte anglický soubor.
+
+### Menu nebo oznámení zobrazují zkomolené či nečitelné znaky
+
+Text je správně - vaše hra jen nemá žádné písmo, které by tyto znaky dokázalo vykreslit, takže se zobrazí jako guláš. Výchozí písmo Skyrimu pokrývá latinku a západoevropská písmena, ale ne cyrilici, čínštinu, japonštinu ani některé středoevropské znaky. Pokud používáte menu nebo oznámení v některém z nich, nainstalujte **font mod**, který je obsahuje; většina neanglických sestav už nějaký má. Pokud ten váš ne, prohledejte Nexus a najděte písmo pokrývající váš jazyk - [Unicode Font](https://www.nexusmods.com/skyrimspecialedition/mods/103346) je široký výchozí bod.
+
+### Žádné upozornění se nikdy neobjeví
+
+Zkontrolujte stav **Hlídače** na stránce **Diagnostika**, pak číselníky **Hlídače**:
+
+- Stav **Uspáno (vypnuto)** - mod je vypnutý. Zapněte **Zapnuto** (Nastavení).
+- Stav **Vypnuto (kontroly zakázány)** - **Kontrolovat každých** je 0. Nastavte zpět na 10-240 s.
+- **Upozornit po** je **0** - to vypíná upozornění. Nastavte počet minut, který chcete.
+
+**Čas ve scéně** se při načtení vynuluje, takže scéna upozorní, až když jste v ní byli, nepřetržitě, déle než je čas upozornění v této relaci. I bez toastu menu vždy ukazuje aktuální scénu a jak dlouho v ní jste.
+
+### Zastavit scénu scénu nevyčistilo
+
+Zastavení dosud ani jednou neselhalo - za 14 let odseknávání savů, nejdřív s hrubými jednorázovými verzemi a teď s tímhle. Takže pokud někdy nahlásí, že scéna neskončila, našli jste něco opravdu nového - což je vzrušující, ne znepokojivé. Překvapení je místo, kde se člověk učí. Zatím není známá žádná příčina a nic se neslibuje, ale úplný log je nejlepší šance ji vypátrat. Zapněte Papyrus logování, nastavte **Nastavení > Diagnostický log** na **Každá kontrola** a zapněte každou možnost logu nebo ladění, kterou napříč svým load orderem najdete - aby to, pokud se to stane znovu, bylo zachyceno. Pak pošlete úplný `Papyrus.0.log` jako hlášení chyby (kanály níže). Mezitím se vraťte k načtení z doby před zaseknutím a hrajte dál.
+
+### Podání hlášení chyby, nebo žádost o pomoc
+
+U chyby nastavte **Nastavení > Diagnostický log** na **Události**, problém reprodukujte a pak ukončete. Se zapnutým Papyrus logováním (řádky `Skyrim.ini` jsou pod **Nastavení**) otevřete `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log` a hledejte `fth_IJW`. Přiložte ho, **Form ID** scény a **Nadřazený úkol** a co jste dělali, když se to zaseklo.
+
+Kam to poslat:
+
+- **Hlášení chyb:** [Bugs tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=bugs) na stránce modu, nebo [GitHub Issues](https://github.com/ryangubele/ItJustWorks/issues).
+- **Dotazy a obecná pomoc:** [Posts tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=posts) na stránce modu.
 
 ---
 

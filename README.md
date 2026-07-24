@@ -125,6 +125,8 @@ They were probably right to ration it. `ForceStart` doesn't check whether the sc
 
 That last dependency is soft but strongly recommended. Without it, scenes show up as bare ID numbers instead of names, and you want the names. The mod will say so, once, if it notices.
 
+A **font mod** is soft too, and narrower: you only need one if you run the menu or notifications in a non-Latin script - Cyrillic, Chinese, Japanese, and the like. Skyrim's stock font can't draw those characters, so without a font that includes them the text renders as garbled, unreadable characters. Most non-English setups already have one; if yours doesn't, search Nexus for your language - [Unicode Font](https://www.nexusmods.com/skyrimspecialedition/mods/103346) is a broad starting point.
+
 ESL-flagged, so it costs you no load-order slot. Safe to add mid-playthrough. Safe to remove. It's a watchdog; it holds nothing.
 
 ---

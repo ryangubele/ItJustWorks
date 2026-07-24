@@ -5,19 +5,16 @@
 ; once you've been in a scene past a threshold. The MCM readout is a view of the
 ; state kept here.
 ;
-; Load-bearing:
-;   * IsPlaying() is not a stuck-detector (it stays true for stuck scenes); it only
-;     gates out already-ended scenes. Duration is the signal.
-;   * Quest scripts get no OnPlayerLoadGame, so the single-update loop re-registers
-;     itself each tick (persisted, non-stacking); the MCM re-arms it on open.
+; IsPlaying() stays true for stuck scenes -- it only filters already-ended ones;
+; duration past the threshold is the stuck signal. Quest scripts have no
+; OnPlayerLoadGame, so the single-update loop re-registers each tick (persisted,
+; non-stacking) and the MCM re-arms on open.
 ;
-; Observability (0.3.0): every transition and every self-correction writes a structured,
-; greppable line -- [fth_IJW] <tag> <event> key=value -- through Log(), gated by iLogLevel
-; (0 Off / 1 Events / 2 Every check). All values are space-free; the join key is
-; scene=0x<formid>. Logging is off by default and near-free when off: because Papyrus
-; builds call arguments eagerly, every concatenating line is gated at the call site so
-; nothing is built or fetched below its level. Log lines use SceneKey/QuietEdid, which
-; never fire the "names are off" hint -- that stays owned by the display path (LabelFor).
+; Log() writes structured [fth_IJW] lines gated by iLogLevel (0 Off / 1 Events /
+; 2 Every check). Values are space-free; join key is scene=0x<form id>. Papyrus
+; evaluates call arguments eagerly, so concatenating log lines are gated at the
+; call site. Logs use SceneKey/QuietEdid so they never fire the names-off toast
+; (that stays on the display path in LabelFor).
 
 Scriptname fth_IJW_Watcher extends Quest
 
@@ -32,7 +29,8 @@ int Property LOG_CHECK  = 2 AutoReadOnly Hidden
 float  fPollInterval  = 30.0     ; seconds between polls; 0 disables the loop
 float  fAlertThreshold = 180.0   ; seconds in-scene before alerting; 0 = never
 int    iLogLevel = 0             ; 0 Off / 1 Events / 2 Every check
-bool   bLevity = true            ; flavored notification copy on; off = plain. Presentation only.
+bool   bLevity = true            ; flavored copy on; off = plain (toasts only)
+int    iToastLang = 0            ; notification language index (0=English); see fth_IJW_Toasts
 
 ; Tracked state, persisted with the save.
 Scene  currentScene
@@ -71,7 +69,7 @@ Event OnInit()
         Log(LOG_EVENTS, "heal player via=GetPlayer")
     endif
     if iLogLevel >= LOG_EVENTS
-        Log(LOG_EVENTS, "life armed player=" + player + " hotkey=" + HotkeyField() + " level=" + iLogLevel + " levity=" + BoolField(bLevity))
+        Log(LOG_EVENTS, "life armed player=" + player + " hotkey=" + HotkeyField() + " level=" + iLogLevel + " levity=" + BoolField(bLevity) + " lang=" + iToastLang)
     endif
     RegisterHotkey()
     Rearm()
@@ -97,18 +95,19 @@ Function Rearm()
 EndFunction
 
 ; Pushed by the MCM. 0 poll stops the loop; 0 warn disables alerting. Guarded on a
-; real change so a slider drag (fires per step) doesn't spam the log. Levity (copy
-; only) rides along here so a flavor change traces with the rest and never touches the loop.
-Function ApplySettings(int aiPollSeconds, int aiWarnMinutes, int aiLogLevel, bool abLevity)
+; real change so a slider drag (fires per step) doesn't spam the log. Levity and
+; toast language only affect notification copy; they do not touch the poll loop.
+Function ApplySettings(int aiPollSeconds, int aiWarnMinutes, int aiLogLevel, bool abLevity, int aiToastLang)
     float newPoll = aiPollSeconds as float
     float newThr = (aiWarnMinutes * 60) as float
-    bool changed = (newPoll != fPollInterval) || (newThr != fAlertThreshold) || (aiLogLevel != iLogLevel) || (abLevity != bLevity)
+    bool changed = (newPoll != fPollInterval) || (newThr != fAlertThreshold) || (aiLogLevel != iLogLevel) || (abLevity != bLevity) || (aiToastLang != iToastLang)
     fPollInterval = newPoll
     fAlertThreshold = newThr
     iLogLevel = aiLogLevel
     bLevity = abLevity
+    iToastLang = aiToastLang
     if changed && iLogLevel >= LOG_EVENTS
-        Log(LOG_EVENTS, "life settings poll=" + aiPollSeconds + "s warn=" + aiWarnMinutes + "m level=" + iLogLevel + " levity=" + BoolField(abLevity))
+        Log(LOG_EVENTS, "life settings poll=" + aiPollSeconds + "s warn=" + aiWarnMinutes + "m level=" + iLogLevel + " levity=" + BoolField(abLevity) + " lang=" + iToastLang)
     endif
     ; Mirror SetEnabled dormancy: poll 0 must kill a pending single-update, not only
     ; skip re-arm (otherwise one last OnUpdate can still fire after the user turns the loop off).
@@ -148,9 +147,9 @@ Function RunCheck()
         float elapsed = ElapsedInScene()
         if elapsed > fAlertThreshold && currentScene.IsPlaying()
             ; two short lines -- Skyrim shrinks a single long notification
-            Debug.Notification("scene blocking others " + ElapsedLabel(elapsed))
+            Debug.Notification(fth_IJW_Toasts.Alert(iToastLang) + " " + ElapsedLabel(elapsed))
             if bLevity
-                Debug.Notification("See? It Just Works!")   ; the sign-off; Levity off leaves the status line
+                Debug.Notification("See? It Just Works!")   ; English sign-off; Levity off omits it
             endif
             bAlerted = true
             if iLogLevel >= LOG_EVENTS
@@ -187,7 +186,7 @@ EndFunction
 
 string Function GetSceneLabel()
     if !currentScene
-        return "None"
+        return "$fth_IJW_SceneNone"
     endif
     return LabelFor(currentScene)
 EndFunction
@@ -376,12 +375,12 @@ Event OnKeyDown(int aiKeyCode)
     endif
     Scene s = PlayerRef.GetCurrentScene()
     if s
-        Debug.Notification("In scene: " + LabelFor(s))
+        Debug.Notification(fth_IJW_Toasts.HotkeyInScene(iToastLang) + " " + LabelFor(s))
         if iLogLevel >= LOG_EVENTS
             Log(LOG_EVENTS, "hotkey name scene=" + SceneKey(s))
         endif
     else
-        Debug.Notification("Not in a scene.")
+        Debug.Notification(fth_IJW_Toasts.HotkeyNoScene(iToastLang))
         Log(LOG_EVENTS, "hotkey name scene=-")
     endif
 EndEvent
@@ -426,10 +425,11 @@ string Function LabelFor(Scene akScene)
     endif
     if !bEditorIdHinted
         bEditorIdHinted = true
+        string namesOff = fth_IJW_Toasts.NamesOff(iToastLang)
         if bLevity
-            Debug.Notification("It Just Works: scenes show as ID numbers. Set Load EditorIDs = true in po3_Tweaks.ini for names.")
+            Debug.Notification("It Just Works: " + namesOff)   ; product prefix English; body from fth_IJW_Toasts
         else
-            Debug.Notification("Scenes show as ID numbers. Set Load EditorIDs = true in po3_Tweaks.ini for names.")
+            Debug.Notification(namesOff)
         endif
     endif
     return "0x" + HexOf(akScene.GetFormID())

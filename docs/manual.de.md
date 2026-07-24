@@ -12,16 +12,6 @@ Fünf Seiten: **Szene**, **Wächter**, **Einstellungen**, **Diagnose**, **Deinst
 
 ---
 
-## Das Menü in einer anderen Sprache anzeigen
-
-Der Mod liefert Menü-Übersetzungen - wähle sie im Installer. Skyrim lädt die Datei, die zur **Spracheinstellung** des Spiels passt. Englisches Spiel + andere installierte Sprache liest weiter die englische Menüdatei, bis du das überschreibst.
-
-**Installer:** Sprache in Schritt 1 ankreuzen, dann in Schritt 2 als Standard-Menüsprache setzen (schreibt über die englische Datei; behält eine englische `.bak`).
-
-**Von Hand:** `Interface\Translations\fth_ItJustWorks_GERMAN.txt` in `fth_ItJustWorks_ENGLISH.txt` umbenennen (englische Datei ersetzen).
-
----
-
 ## Szene
 
 ### Worin du steckst
@@ -70,6 +60,7 @@ Einmal pro Szene, bis du sie verlässt oder die Szene wechselt. Toast verpasst? 
 
 - **Aktiviert** - standardmäßig an. Ausschalten legt den Mod zur Seite, ohne ihn zu deinstallieren.
 - **Leichtigkeit** - standardmäßig an. Die Benachrichtigungen behalten einen lockeren Ton; ausschalten für schlichten Text. Nur der Text ändert sich, nie die Funktion des Mods.
+- **Sprache der Benachrichtigungen** - die Sprache der eigenen Pop-up-Benachrichtigungen des Mods (die Toasts in der Ecke). Stelle sie auf deine Menüsprache ein. Standardmäßig Englisch; unabhängig von der Spracheinstellung des Spiels.
 - **Aktuelle Szene benennen** - Taste belegen; drücken zeigt den aktuellen Szenennamen ohne Menü.
 - **Belegung löschen** - entfernt die Belegung.
 - **Diagnoseprotokoll** - wie viel ins Papyrus-Log geht. Für normales Spielen **Aus**. **Ereignisse** beim Melden eines Fehlers; **Jede Prüfung** nur bei Timing-Problemen, dann wieder ausschalten. Kann die Leistung beeinträchtigen, besonders bei **Jede Prüfung**.
@@ -90,8 +81,6 @@ Einmal pro Szene, bis du sie verlässt oder die Szene wechselt. Toast verpasst? 
 
 - **Editor IDs geladen** - eine Anzeige. Namen auf **Szene** und zugehöriger Quest, wenn sie leuchtet; ID-Nummern, wenn sie dunkel ist. **Form ID** ist so oder so weiterhin die rohe `0x…`.
 
-  Namen an: in `po3_Tweaks.ini` `Load EditorIDs = true` setzen, Skyrim neu starten. Der Mod sagt das auch einmal, wenn er merkt, dass Namen aus sind. Mod-Manager können diese Datei beim Deploy oder Update überschreiben — also die Kopie *innerhalb* des Tweaks-Mods bearbeiten (oder einen kleinen Override-Mod, der gewinnt), nicht nur eine lose Datei in `Data`. **MO2:** Linker-Mod-Ordner, oder Overwrite / höher priorisierter Mod. **Vortex:** Tweaks-Staging-Ordner, oder ein Override-Mod; nach Updates erneut prüfen.
-
 - **Wächter** - ob die Hintergrundprüfung läuft:
   - **Läuft** - in Ordnung
   - **Wacht auf** - normal kurz nach einem Neuladen
@@ -102,6 +91,57 @@ Einmal pro Szene, bis du sie verlässt oder die Szene wechselt. Toast verpasst? 
 - **Letzte Selbstreparatur** - der Mod korrigiert manchmal seine eigene Buchhaltung (oft nach einem Neuladen). Eine Zeile hier ist normal.
 
 - **Version**
+
+---
+
+## Fehlerbehebung
+
+### Szenen erscheinen als ID-Nummern, nicht als Namen
+
+po3 Tweaks lädt keine Editor IDs. Setze in `po3_Tweaks.ini` `Load EditorIDs = true` und starte Skyrim neu; die Anzeige *Editor IDs geladen* auf der Seite **Diagnose** bestätigt es. Mod-Manager können diese Datei beim Deploy oder Update überschreiben, bearbeite also die Kopie *innerhalb* des Tweaks-Mods (oder einen kleinen Override-Mod, der gewinnt), nicht nur eine lose Datei in `Data`:
+
+- **MO2:** der Tweaks-Mod-Ordner im linken Bereich, oder Overwrite / ein höher priorisierter Mod.
+- **Vortex:** der Tweaks-Staging-Ordner, oder ein Override-Mod. Nach jedem Update erneut prüfen.
+
+Die **Form ID** wird so oder so angezeigt, du tappst also nie völlig im Dunkeln.
+
+### Die Benachrichtigungen sind in der falschen Sprache
+
+Der Mod hat zwei unabhängige Sprachen-Einstellungen; diese ist für seine eigenen Pop-up-Benachrichtigungen. Stelle **Einstellungen > Sprache der Benachrichtigungen** auf deine Sprache - sie steuert die Toasts in der Ecke (die Warnung zur feststeckenden Szene, den Namen-Hinweis, die Stopp-Ergebnisse). Sie ist unabhängig von der Sprache des Spiels und von der Menüsprache unten. Englisch ist der Standard und die Rückfallebene, sodass eine nicht übersetzte Zeile auf Englisch erscheint, statt zu brechen.
+
+### Das Menü ist in der falschen Sprache
+
+Das MCM-Menü folgt der **Spracheinstellung** des Spiels, nicht der Benachrichtigungssprache oben. Skyrim lädt die Übersetzungsdatei, die zur Spielsprache passt, daher zeigt ein englisches Spiel das englische Menü, selbst wenn du eine andere Sprache installiert hast. Zwei Wege, das zu ändern:
+
+- **Installer:** Sprache in Schritt 1 ankreuzen, dann in Schritt 2 als Standard-Menüsprache wählen (schreibt über die englische Datei und behält eine englische `.bak`).
+- **Von Hand:** `Interface\Translations\fth_ItJustWorks_GERMAN.txt` in `fth_ItJustWorks_ENGLISH.txt` umbenennen und die englische Datei ersetzen.
+
+### Das Menü oder die Benachrichtigungen zeigen wirre oder unlesbare Zeichen
+
+Der Text stimmt - dein Spiel hat nur keine Schrift, die diese Zeichen darstellen kann, also erscheint Kauderwelsch. Skyrims Standardschrift deckt lateinische und westeuropäische Buchstaben ab, aber kein Kyrillisch, Chinesisch, Japanisch oder manche mitteleuropäischen Zeichen. Wenn du das Menü oder die Benachrichtigungen in einer davon nutzt, installiere einen **Schrift-Mod**, der sie enthält; die meisten nicht-englischen Setups haben schon einen. Falls deiner nicht, suche auf Nexus nach einer Schrift für deine Sprache - [Unicode Font](https://www.nexusmods.com/skyrimspecialedition/mods/103346) ist ein breiter Ausgangspunkt.
+
+### Es erscheint nie eine Warnung
+
+Prüfe den **Wächter**-Status auf der Seite **Diagnose**, dann die **Wächter**-Regler:
+
+- Status **Ruht (abgeschaltet)** - der Mod ist aus. Schalte **Aktiviert** ein (Einstellungen).
+- Status **Aus (Prüfungen deaktiviert)** - **Prüfen alle** steht auf 0. Setze es zurück auf 10-240 s.
+- **Warnen nach** ist **0** - das schaltet die Warnung ab. Stelle die gewünschten Minuten ein.
+
+Die **Zeit in der Szene** setzt sich bei einem Neuladen zurück, daher warnt eine Szene erst, wenn du in dieser Sitzung ununterbrochen über der Warnzeit in ihr warst. Auch ohne Toast zeigt das Menü immer die aktuelle Szene und wie lange du schon darin bist.
+
+### Szene stoppen hat die Szene nicht aufgelöst
+
+Ein Stopp hat noch nie versagt - nicht in 14 Jahren des Losmachens festhängender Saves, erst mit groben Einzelversionen und jetzt mit diesem. Wenn er also je meldet, dass die Szene nicht endete, hast du etwas wirklich Neues gefunden - das ist spannend, nicht beunruhigend. Überraschung ist da, wo Lernen passiert. Es gibt noch keine bekannte Ursache, und nichts ist versprochen, aber ein vollständiges Log ist die beste Chance, eine aufzuspüren. Schalte das Papyrus-Logging ein, stelle **Einstellungen > Diagnoseprotokoll** auf **Jede Prüfung**, und aktiviere jede Log- oder Debug-Option, die du in deiner gesamten Ladereihenfolge findest - damit es, falls es wieder passiert, festgehalten wird. Schicke dann das vollständige `Papyrus.0.log` als Fehlerbericht (Kanäle unten). Lade in der Zwischenzeit von vor dem Feststecken neu, um weiterzuspielen.
+
+### Einen Fehler melden oder um Hilfe bitten
+
+Für einen Fehler stelle **Einstellungen > Diagnoseprotokoll** auf **Ereignisse**, reproduziere das Problem und beende dann. Mit eingeschaltetem Papyrus-Logging (die `Skyrim.ini`-Zeilen stehen unter **Einstellungen**) öffne `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log` und suche nach `fth_IJW`. Füge das bei, dazu die **Form ID** und **Zugehörige Quest** der Szene, und was du tatest, als sie feststeckte.
+
+Wohin damit:
+
+- **Fehlerberichte:** [Bugs tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=bugs) auf der Mod-Seite, oder [GitHub Issues](https://github.com/ryangubele/ItJustWorks/issues).
+- **Fragen und allgemeine Hilfe:** [Posts tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=posts) auf der Mod-Seite.
 
 ---
 

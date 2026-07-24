@@ -63,6 +63,13 @@
       "content": [
         { "id": "bEnabled:Control", "text": "$fth_IJW_Enabled", "type": "toggle", "help": "$fth_IJW_Enabled_Help", "valueOptions": { "sourceType": "ModSettingBool" } },
         { "id": "bLevity:Control", "text": "$fth_IJW_Levity", "type": "toggle", "help": "$fth_IJW_Levity_Help", "valueOptions": { "sourceType": "ModSettingBool" } },
+        {
+          "id": "iToastLang:Control",
+          "text": "$fth_IJW_ToastLang",
+          "type": "enum",
+          "help": "$fth_IJW_ToastLang_Help",
+          "valueOptions": { "sourceType": "ModSettingInt", "options": ["$fth_IJW_Lang_English", "$fth_IJW_Lang_French", "$fth_IJW_Lang_German", "$fth_IJW_Lang_Italian", "$fth_IJW_Lang_Spanish", "$fth_IJW_Lang_Polish", "$fth_IJW_Lang_Russian", "$fth_IJW_Lang_Chinese", "$fth_IJW_Lang_Japanese", "$fth_IJW_Lang_Czech"] }
+        },
         { "id": "iHotkey:Control", "text": "$fth_IJW_Hotkey", "type": "keymap", "help": "$fth_IJW_Hotkey_Help", "valueOptions": { "sourceType": "ModSettingInt" } },
         { "text": "$fth_IJW_HotkeyClear", "type": "text", "help": "$fth_IJW_HotkeyClear_Help", "action": { "type": "CallFunction", "function": "ClearHotkey" } },
         {

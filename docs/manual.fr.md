@@ -12,16 +12,6 @@ Cinq pages : **Scène**, **Surveillance**, **Paramètres**, **Diagnostic**, **D�
 
 ---
 
-## Voir le menu dans une autre langue
-
-Le mod livre des traductions de menu - choisissez-les dans l'installateur. Skyrim charge le fichier qui correspond au **réglage de langue** du jeu. Un jeu en anglais + une autre langue installée lit encore le fichier de menu anglais tant que vous ne le remplacez pas.
-
-**Installateur :** cochez la langue à l'étape 1, puis définissez-la comme langue de menu par défaut à l'étape 2 (écrit par-dessus le fichier anglais ; conserve un `.bak` anglais).
-
-**À la main :** renommez `Interface\Translations\fth_ItJustWorks_FRENCH.txt` en `fth_ItJustWorks_ENGLISH.txt` (remplacez le fichier anglais).
-
----
-
 ## Scène
 
 ### Ce dans quoi vous êtes
@@ -70,6 +60,7 @@ Une fois par scène jusqu'à ce que vous la quittiez ou que la scène change. To
 
 - **Activé** - activé par défaut. Désactivez-le pour mettre le mod en veille sans le désinstaller.
 - **Légèreté** - activé par défaut. Les notifications gardent un ton léger ; désactivez pour un texte neutre. Seul le texte change, jamais le fonctionnement du mod.
+- **Langue des notifications** - la langue des notifications du mod (les toasts dans le coin). Réglez-la sur celle de votre menu. Anglais par défaut ; indépendante du réglage de langue du jeu.
 - **Nommer la scène actuelle** - liez une touche ; appuyez pour voir le nom de la scène actuelle sans ouvrir le menu.
 - **Effacer la touche** - retire la liaison.
 - **Journal de diagnostic** - combien part dans le journal Papyrus. Laissez **Désactivé** pour le jeu normal. Utilisez **Événements** pour signaler un bug ; **Chaque vérification** seulement si vous traquez un problème de timing, puis remettez-le sur Désactivé. Peut affecter les performances, surtout à **Chaque vérification**.
@@ -90,8 +81,6 @@ Une fois par scène jusqu'à ce que vous la quittiez ou que la scène change. To
 
 - **Editor ID chargés** - un voyant. Les noms sur **Scène** et la quête associée quand il est allumé ; des numéros d'ID quand il est éteint. Le **Form ID** reste le `0x…` brut dans tous les cas.
 
-  Pour activer les noms : dans `po3_Tweaks.ini`, mettez `Load EditorIDs = true`, redémarrez Skyrim. Le mod le dit aussi une fois la première fois qu'il remarque que les noms sont désactivés. Les gestionnaires de mods peuvent écraser ce fichier au déploiement ou à la mise à jour : éditez la copie *dans* le mod Tweaks (ou un petit mod d'override qui gagne), pas seulement un fichier lâche dans `Data`. **MO2 :** dossier du mod dans le volet gauche, ou Overwrite / mod de priorité supérieure. **Vortex :** dossier de staging de Tweaks, ou un mod d'override ; revérifiez après les mises à jour.
-
 - **Surveillance** - si le contrôle en arrière-plan tourne :
   - **En marche** - tout va bien
   - **Réveil en cours** - normal juste après un rechargement
@@ -102,6 +91,57 @@ Une fois par scène jusqu'à ce que vous la quittiez ou que la scène change. To
 - **Dernière auto-réparation** - le mod corrige parfois sa propre comptabilité (souvent après un rechargement). Une ligne ici est normale.
 
 - **Version**
+
+---
+
+## Dépannage
+
+### Les scènes s'affichent en numéros d'ID, pas en noms
+
+po3 Tweaks ne charge pas les Editor ID. Dans `po3_Tweaks.ini`, mettez `Load EditorIDs = true` et redémarrez Skyrim ; le voyant *Editor ID chargés* de la page **Diagnostic** le confirme. Les gestionnaires de mods peuvent écraser ce fichier au déploiement ou à la mise à jour : éditez donc la copie *dans* le mod Tweaks (ou un petit mod d'override qui gagne), pas seulement un fichier lâche dans `Data` :
+
+- **MO2 :** le dossier du mod Tweaks dans le volet gauche, ou Overwrite / un mod de priorité supérieure.
+- **Vortex :** le dossier de staging de Tweaks, ou un mod d'override. Revérifiez après chaque mise à jour.
+
+Le **Form ID** s'affiche dans tous les cas, vous n'êtes donc jamais complètement dans le noir.
+
+### Les notifications sont dans la mauvaise langue
+
+Le mod a deux réglages de langue indépendants ; celui-ci concerne ses propres notifications contextuelles. Réglez **Paramètres > Langue des notifications** sur votre langue - elle contrôle les toasts dans le coin (l'alerte de scène coincée, l'indice sur les noms, les résultats d'arrêt). Elle est indépendante de la langue du jeu et de la langue du menu ci-dessous. L'anglais est la valeur par défaut et le repli, donc une ligne non traduite s'affiche en anglais plutôt que de casser.
+
+### Le menu est dans la mauvaise langue
+
+Le menu MCM suit le **réglage de langue** du jeu, pas la langue des notifications ci-dessus. Skyrim charge le fichier de traduction qui correspond à la langue du jeu, donc un jeu en anglais affiche le menu anglais même si vous avez installé une autre langue. Deux façons de le changer :
+
+- **Installateur :** cochez votre langue à l'étape 1, puis choisissez-la comme langue de menu par défaut à l'étape 2 (écrit par-dessus le fichier anglais et conserve un `.bak` anglais).
+- **À la main :** renommez `Interface\Translations\fth_ItJustWorks_FRENCH.txt` en `fth_ItJustWorks_ENGLISH.txt`, en remplaçant le fichier anglais.
+
+### Le menu ou les notifications affichent des caractères illisibles ou parasités
+
+Le texte est correct - c'est juste que votre jeu n'a aucune police capable de dessiner ces caractères, ils s'affichent donc en charabia. La police d'origine de Skyrim couvre les lettres latines et d'Europe de l'Ouest, mais pas le cyrillique, le chinois, le japonais, ni certains signes d'Europe centrale. Si vous utilisez le menu ou les notifications dans l'une de ces langues, installez un **mod de police** qui les inclut ; la plupart des configurations non anglaises en ont déjà un. Si ce n'est pas votre cas, cherchez sur Nexus une police couvrant votre langue - [Unicode Font](https://www.nexusmods.com/skyrimspecialedition/mods/103346) est un bon point de départ général.
+
+### Aucune alerte n'apparaît jamais
+
+Vérifiez l'état de la **Surveillance** sur la page **Diagnostic**, puis les réglages de **Surveillance** :
+
+- État **En veille (désactivé)** - le mod est éteint. Activez **Activé** (Paramètres).
+- État **Désactivée (vérifications coupées)** - **Vérifier toutes les** est à 0. Remettez-le entre 10 et 240 s.
+- **M'avertir après** est à **0** - cela désactive l'alerte. Réglez les minutes voulues.
+
+Le **Temps dans la scène** se remet à zéro à un rechargement, donc une scène n'alerte qu'une fois que vous y êtes resté, sans interruption, au-delà du délai d'avertissement pendant cette session. Même sans toast, le menu montre toujours la scène actuelle et depuis combien de temps vous y êtes.
+
+### Arrêter la scène n'a pas dissipé la scène
+
+Un arrêt n'a jamais échoué à prendre - pas en 14 ans à décoincer des sauvegardes, d'abord avec des versions rudimentaires ponctuelles et maintenant avec celle-ci. Donc s'il signale un jour que la scène ne s'est pas terminée, vous avez trouvé quelque chose de vraiment nouveau - ce qui est excitant, pas alarmant. La surprise, c'est là qu'on apprend. Il n'y a pas encore de cause connue, et rien n'est promis, mais un journal complet est la meilleure chance d'en trouver une. Activez la journalisation Papyrus, réglez **Paramètres > Journal de diagnostic** sur **Chaque vérification**, et activez toutes les options de journal ou de débogage que vous trouvez dans tout votre ordre de chargement - pour que, si cela se reproduit, ce soit capturé. Puis envoyez le `Papyrus.0.log` complet comme rapport de bug (canaux ci-dessous). Rechargez d'avant le blocage pour continuer à jouer entre-temps.
+
+### Signaler un bug, ou demander de l'aide
+
+Pour un bug, réglez **Paramètres > Journal de diagnostic** sur **Événements**, reproduisez le problème, puis quittez. Avec la journalisation Papyrus activée (les lignes `Skyrim.ini` sont sous **Paramètres**), ouvrez `Documents\My Games\Skyrim Special Edition\Logs\Script\Papyrus.0.log` et cherchez `fth_IJW`. Incluez cela, le **Form ID** et la **Quête associée** de la scène, et ce que vous faisiez au moment du blocage.
+
+Où l'envoyer :
+
+- **Rapports de bug :** [Bugs tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=bugs) sur la page du mod, ou [GitHub Issues](https://github.com/ryangubele/ItJustWorks/issues).
+- **Questions et aide générale :** [Posts tab](https://www.nexusmods.com/skyrimspecialedition/mods/185927?tab=posts) sur la page du mod.
 
 ---
 
