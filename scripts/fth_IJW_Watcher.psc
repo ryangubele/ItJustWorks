@@ -71,7 +71,7 @@ Event OnInit()
         Log(LOG_EVENTS, "heal player via=GetPlayer")
     endif
     if iLogLevel >= LOG_EVENTS
-        Log(LOG_EVENTS, "life armed player=" + player + " hotkey=" + HotkeyField() + " level=" + iLogLevel)
+        Log(LOG_EVENTS, "life armed player=" + player + " hotkey=" + HotkeyField() + " level=" + iLogLevel + " levity=" + BoolField(bLevity))
     endif
     RegisterHotkey()
     Rearm()

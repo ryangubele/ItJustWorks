@@ -5,6 +5,13 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.4.1
+
+- **Levity's resting state is in the log now.** The Papyrus "life armed" line written on load
+  reported the log level but not whether Levity was on, so a save that never touched the toggle left
+  its flavor state to be inferred from silence. The boot line now carries a `levity=` field beside
+  `level=`, matching how a Levity change already traces. Diagnostics only - no behavior change.
+
 ## 0.4.0
 
 - **Levity, a light-touch switch.** New **Levity** toggle on the **Settings** page, on by default. Turn it
