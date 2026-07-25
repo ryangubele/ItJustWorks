@@ -16,7 +16,7 @@ Nie musisz też być biegły, by pomóc. Jeśli wiersz w menu wygląda na **uci�
 
 - **Menu MCM** - w pełni przetłumaczone: każda etykieta opcji, każdy opis pomocy oraz dynamiczne łańcuchy stanu, które skrypty wysyłają do menu (podpowiedzi uzbrajania/anulowania Stop, stan strażnika, ostatnie frazy autonaprawy).
 - **Instrukcja** (`docs/manual.<lang>.md`) - w pełni przetłumaczona.
-- **Wyskakujące powiadomienia w grze** - przetłumaczone. Alert strażnika, komunikat „nazwy są nie te", wyniki Stop i odczyt skrótu klawiszowego podążają za ustawieniem **Notification language** na stronie **Settings** w MCM, we wszystkich dziesięciu językach; instalator ustawia je na podstawie wybranego języka menu.
+- **Wyskakujące powiadomienia w grze** - przetłumaczone. Alert strażnika, komunikat „nazwy są nie te", wyniki Stop i odczyt skrótu klawiszowego podążają za ustawieniem **Język powiadomień** na stronie **Ustawienia** w MCM, we wszystkich dziesięciu językach; instalator ustawia je na podstawie wybranego języka menu.
 
 ## Co celowo pozostaje po angielsku
 
@@ -40,7 +40,7 @@ Ustawienie **Notification language** wymienia dziesięć języków po ich angiel
 | Japanese | 日本語 | `JAPANESE` |
 | Czech | Čeština | `CZECH` |
 
-Język **menu** podąża za językiem gry Skyrim (wybranym przy instalacji); powyższy **Notification language** to osobny element sterujący na stronie Settings.
+Język **menu** podąża za plikiem języka gry Skyrim, chyba że go nadpiszesz (krok domyślnego menu w instalatorze albo ręczna zmiana nazwy na `fth_ItJustWorks_ENGLISH.txt`). Element sterujący **Język powiadomień** na stronie Ustawienia jest osobny: instalator może go ustawić, gdy wybierzesz domyślny język menu, ale ręczna zmiana nazwy pliku menu tego nie robi — ustaw enum tak, by pasował, jeśli toasty pozostają po angielsku.
 
 ## Instrukcje
 

@@ -60,7 +60,7 @@ Raz na scenę, dopóki jej nie opuścisz albo scena się nie zmieni. Przegapiłe
 
 - **Włączony** — domyślnie włączony. Wyłącz, by odłożyć mod na bok bez odinstalowania.
 - **Lekkość** — domyślnie włączone. Powiadomienia zachowują lekki ton; wyłącz, aby uzyskać zwykły tekst. Zmienia się tylko tekst, nigdy działanie moda.
-- **Język powiadomień** — język własnych wyskakujących powiadomień moda (toastów w rogu). Ustaw go zgodnie z językiem swojego menu. Domyślnie angielski; niezależny od ustawienia języka gry.
+- **Język powiadomień** — język własnych wyskakujących powiadomień moda (toastów w rogu). Instalator może go ustawić, gdy wybierzesz domyślny język menu; zmienisz go w każdej chwili na tej stronie. Domyślnie i zapasowo angielski; niezależny od ustawienia języka gry.
 - **Nazwij bieżącą scenę** — przypisz klawisz; naciśnij, by zobaczyć nazwę bieżącej sceny bez otwierania menu.
 - **Wyczyść klawisz** — usuwa przypisanie.
 - **Log diagnostyczny** — ile idzie do logu Papyrus. Zostaw **Wyłączony** przy normalnej grze. Użyj **Zdarzenia** przy zgłaszaniu błędu; **Każde sprawdzenie** tylko gdy tropisz problem z timingiem, potem wyłącz z powrotem. Może wpływać na wydajność, zwłaszcza przy **Każde sprawdzenie**.
@@ -107,14 +107,16 @@ po3 Tweaks nie wczytuje Editor ID. W `po3_Tweaks.ini` ustaw `Load EditorIDs = tr
 
 ### Powiadomienia są w niewłaściwym języku
 
-Mod ma dwa niezależne ustawienia języka; to jest to dla jego własnych wyskakujących powiadomień. Ustaw **Ustawienia > Język powiadomień** na swój język — steruje toastami w rogu (alert o zaciętej scenie, podpowiedź o nazwach, wyniki Zatrzymania). Jest niezależne od języka gry i od języka menu poniżej. Angielski jest domyślny i zapasowy, więc nieprzetłumaczony wiersz czyta się po angielsku, zamiast się psuć.
+Toasty w rogu (alert o zaciętej scenie, podpowiedź o nazwach, wyniki Zatrzymania, odczyt skrótu klawiszowego) podążają za **Ustawienia > Język powiadomień**, a nie za językiem gry ani za tym, który plik tłumaczenia menu jest zainstalowany. Angielski jest domyślny i zapasowy.
+
+Normalne uruchomienie **instalatora**, które ustawia domyślny język menu, ustawia też ten element sterujący, żeby menu i toasty się zgadzały. Jeśli tylko podmieniłeś plik menu ręcznie albo zaktualizowałeś bez ponownego wykonania tego kroku instalatora, ustaw **Język powiadomień** raz, by pasował do twojego menu.
 
 ### Menu jest w niewłaściwym języku
 
 Menu MCM podąża za **ustawieniem języka** gry, a nie za językiem powiadomień powyżej. Skyrim wczytuje plik tłumaczenia pasujący do języka gry, więc angielska gra pokazuje angielskie menu, nawet jeśli zainstalowałeś inny język. Dwa sposoby, by to zmienić:
 
-- **Instalator:** zaznacz swój język w kroku 1, potem wybierz go jako domyślny język menu w kroku 2 (nadpisuje angielski plik i zachowuje angielski `.bak`).
-- **Ręcznie:** zmień nazwę `Interface\Translations\fth_ItJustWorks_POLISH.txt` na `fth_ItJustWorks_ENGLISH.txt`, zastępując angielski plik.
+- **Instalator:** zaznacz swój język w kroku 1, potem wybierz go jako domyślny język menu w kroku 2. Nadpisuje to angielski plik menu (i zachowuje angielski `.bak`) **oraz** ustawia **Język powiadomień**, by pasował.
+- **Ręcznie:** zmień nazwę `Interface\Translations\fth_ItJustWorks_POLISH.txt` na `fth_ItJustWorks_ENGLISH.txt`, zastępując angielski plik. To **nie** zmienia **Języka powiadomień** — ustaw go w **Ustawieniach**, by pasował, albo toasty pozostaną po angielsku.
 
 ### Menu lub powiadomienia pokazują nieczytelne albo zniekształcone znaki
 

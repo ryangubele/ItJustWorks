@@ -60,7 +60,7 @@ Einmal pro Szene, bis du sie verlässt oder die Szene wechselt. Toast verpasst? 
 
 - **Aktiviert** - standardmäßig an. Ausschalten legt den Mod zur Seite, ohne ihn zu deinstallieren.
 - **Leichtigkeit** - standardmäßig an. Die Benachrichtigungen behalten einen lockeren Ton; ausschalten für schlichten Text. Nur der Text ändert sich, nie die Funktion des Mods.
-- **Sprache der Benachrichtigungen** - die Sprache der eigenen Pop-up-Benachrichtigungen des Mods (die Toasts in der Ecke). Stelle sie auf deine Menüsprache ein. Standardmäßig Englisch; unabhängig von der Spracheinstellung des Spiels.
+- **Sprache der Benachrichtigungen** - die Sprache der eigenen Pop-up-Benachrichtigungen des Mods (die Toasts in der Ecke). Der Installer kann sie vorbelegen, wenn du eine Standard-Menüsprache wählst; ändere sie jederzeit auf dieser Seite. Standardmäßig Englisch und als Rückfallebene; unabhängig von der Spracheinstellung des Spiels.
 - **Aktuelle Szene benennen** - Taste belegen; drücken zeigt den aktuellen Szenennamen ohne Menü.
 - **Belegung löschen** - entfernt die Belegung.
 - **Diagnoseprotokoll** - wie viel ins Papyrus-Log geht. Für normales Spielen **Aus**. **Ereignisse** beim Melden eines Fehlers; **Jede Prüfung** nur bei Timing-Problemen, dann wieder ausschalten. Kann die Leistung beeinträchtigen, besonders bei **Jede Prüfung**.
@@ -107,14 +107,16 @@ Die **Form ID** wird so oder so angezeigt, du tappst also nie völlig im Dunkeln
 
 ### Die Benachrichtigungen sind in der falschen Sprache
 
-Der Mod hat zwei unabhängige Sprachen-Einstellungen; diese ist für seine eigenen Pop-up-Benachrichtigungen. Stelle **Einstellungen > Sprache der Benachrichtigungen** auf deine Sprache - sie steuert die Toasts in der Ecke (die Warnung zur feststeckenden Szene, den Namen-Hinweis, die Stopp-Ergebnisse). Sie ist unabhängig von der Sprache des Spiels und von der Menüsprache unten. Englisch ist der Standard und die Rückfallebene, sodass eine nicht übersetzte Zeile auf Englisch erscheint, statt zu brechen.
+Die Toasts in der Ecke (die Warnung zur feststeckenden Szene, der Namen-Hinweis, die Stopp-Ergebnisse, die Tastenanzeige) folgen **Einstellungen > Sprache der Benachrichtigungen**, nicht der Sprache des Spiels und nicht der installierten Menü-Übersetzungsdatei. Englisch ist der Standard und die Rückfallebene.
+
+Ein normaler Lauf des **Installers**, der die Standard-Menüsprache setzt, belegt auch diese Steuerung vor, sodass Menü und Toasts zusammenpassen. Wenn du die Menüdatei nur von Hand getauscht oder ohne erneutes Ausführen dieses Installer-Schritts aktualisiert hast, stelle **Sprache der Benachrichtigungen** einmal passend zu deinem Menü ein.
 
 ### Das Menü ist in der falschen Sprache
 
 Das MCM-Menü folgt der **Spracheinstellung** des Spiels, nicht der Benachrichtigungssprache oben. Skyrim lädt die Übersetzungsdatei, die zur Spielsprache passt, daher zeigt ein englisches Spiel das englische Menü, selbst wenn du eine andere Sprache installiert hast. Zwei Wege, das zu ändern:
 
-- **Installer:** Sprache in Schritt 1 ankreuzen, dann in Schritt 2 als Standard-Menüsprache wählen (schreibt über die englische Datei und behält eine englische `.bak`).
-- **Von Hand:** `Interface\Translations\fth_ItJustWorks_GERMAN.txt` in `fth_ItJustWorks_ENGLISH.txt` umbenennen und die englische Datei ersetzen.
+- **Installer:** Sprache in Schritt 1 ankreuzen, dann in Schritt 2 als Standard-Menüsprache wählen. Das schreibt über die englische Menüdatei (und behält eine englische `.bak`) **und** belegt **Sprache der Benachrichtigungen** passend vor.
+- **Von Hand:** `Interface\Translations\fth_ItJustWorks_GERMAN.txt` in `fth_ItJustWorks_ENGLISH.txt` umbenennen und die englische Datei ersetzen. Das ändert **Sprache der Benachrichtigungen** **nicht** - stelle sie unter **Einstellungen** passend ein, sonst bleiben die Toasts englisch.
 
 ### Das Menü oder die Benachrichtigungen zeigen wirre oder unlesbare Zeichen
 

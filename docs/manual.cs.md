@@ -60,7 +60,7 @@ Jednou na scénu, dokud ji neopustíte nebo se scéna nezmění. Minuli jste toa
 
 - **Zapnuto** - ve výchozím stavu zapnuto. Vypnutím mod odložíte bez odinstalace.
 - **Lehkost** - ve výchozím stavu zapnuto. Oznámení si drží lehčí tón; vypnutím získáte prostý text. Mění se jen text, nikdy fungování modu.
-- **Jazyk oznámení** - jazyk vlastních vyskakovacích oznámení modu (toastů v rohu). Nastavte ho podle jazyka svého menu. Ve výchozím stavu angličtina; nezávislý na nastavení jazyka hry.
+- **Jazyk oznámení** - jazyk vlastních vyskakovacích oznámení modu (toastů v rohu). Instalátor ho může předvyplnit, když zvolíte výchozí jazyk menu; kdykoli ho změníte na této stránce. Ve výchozím stavu i jako záloha angličtina; nezávislý na nastavení jazyka hry.
 - **Pojmenovat aktuální scénu** - přiřaďte klávesu; stiskněte ji a uvidíte jméno aktuální scény bez otevírání menu.
 - **Zrušit klávesu** - odstraní vazbu.
 - **Diagnostický log** - kolik jde do Papyrus logu. Pro běžné hraní nechte **Vypnuto**. **Události** při hlášení chyby; **Každá kontrola** jen když stíháte timing problém, pak ho zase vypněte. Může ovlivnit výkon, zvlášť při **Každá kontrola**.
@@ -107,14 +107,16 @@ po3 Tweaks nenačítá Editor ID. V `po3_Tweaks.ini` nastavte `Load EditorIDs = 
 
 ### Oznámení jsou ve špatném jazyce
 
-Mod má dvě nezávislá nastavení jazyka; toto je to pro jeho vlastní vyskakovací oznámení. Nastavte **Nastavení > Jazyk oznámení** na svůj jazyk - ovládá toasty v rohu (upozornění na zaseknutou scénu, nápovědu se jmény, výsledky zastavení). Je nezávislé na jazyce hry i na jazyce menu níže. Angličtina je výchozí a záložní, takže nepřeložený řádek se zobrazí anglicky, místo aby se rozbil.
+Toasty v rohu (upozornění na zaseknutou scénu, nápověda se jmény, výsledky zastavení, výpis klávesové zkratky) se řídí nastavením **Nastavení > Jazyk oznámení**, ne jazykem hry ani tím, který překladový soubor menu je nainstalovaný. Angličtina je výchozí a záložní.
+
+Normální běh **instalátoru**, který nastaví výchozí jazyk menu, předvyplní i tento ovládací prvek, takže menu a toasty ladí. Pokud jste soubor menu jen vyměnili ručně, nebo jste aktualizovali bez opětovného spuštění tohoto kroku instalátoru, nastavte **Jazyk oznámení** jednou tak, aby odpovídal vašemu menu.
 
 ### Menu je ve špatném jazyce
 
 Menu MCM se řídí **nastavením jazyka** hry, ne jazykem oznámení výše. Skyrim načte překladový soubor, který odpovídá jazyku hry, takže anglická hra ukáže anglické menu, i když jste nainstalovali jiný jazyk. Změnit to jde dvěma způsoby:
 
-- **Instalátor:** zaškrtněte svůj jazyk v kroku 1, pak ho v kroku 2 zvolte jako výchozí jazyk menu (zapíše přes anglický soubor a ponechá anglický `.bak`).
-- **Ručně:** přejmenujte `Interface\Translations\fth_ItJustWorks_CZECH.txt` na `fth_ItJustWorks_ENGLISH.txt` a nahraďte anglický soubor.
+- **Instalátor:** zaškrtněte svůj jazyk v kroku 1, pak ho v kroku 2 zvolte jako výchozí jazyk menu. To přepíše anglický soubor menu (a ponechá anglický `.bak`) **a** předvyplní **Jazyk oznámení** tak, aby odpovídal.
+- **Ručně:** přejmenujte `Interface\Translations\fth_ItJustWorks_CZECH.txt` na `fth_ItJustWorks_ENGLISH.txt` a nahraďte anglický soubor. To **nezmění** **Jazyk oznámení** - nastavte ho v **Nastavení** tak, aby odpovídal, jinak toasty zůstanou anglicky.
 
 ### Menu nebo oznámení zobrazují zkomolené či nečitelné znaky
 

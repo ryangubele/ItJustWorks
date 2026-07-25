@@ -60,7 +60,7 @@ Una vez por escena hasta que la dejes o la escena cambie. ¿Perdiste el toast? A
 
 - **Activado** - activado por defecto. Apágalo para dejar el mod inactivo sin desinstalarlo.
 - **Ligereza** - activado por defecto. Las notificaciones mantienen un tono desenfadado; desactívalo para un texto sencillo. Solo cambia el texto, nunca cómo funciona el mod.
-- **Idioma de las notificaciones** - el idioma de las notificaciones emergentes del mod (los toasts de la esquina). Ponlo igual que el idioma de tu menú. Inglés por defecto; independiente del ajuste de idioma del juego.
+- **Idioma de las notificaciones** - el idioma de las notificaciones emergentes del mod (los toasts de la esquina). El instalador puede inicializarlo cuando eliges un idioma de menú predeterminado; cámbialo cuando quieras en esta página. Inglés por defecto y como reserva; independiente del ajuste de idioma del juego.
 - **Nombrar la escena actual** - vincula una tecla; púlsala para ver el nombre de la escena actual sin abrir el menú.
 - **Borrar tecla** - quita la vinculación.
 - **Registro de diagnóstico** - cuánto va al registro de Papyrus. Deja **Apagado** para el juego normal. Usa **Eventos** al reportar un error; **Cada comprobación** solo si persigues un problema de temporización, y luego vuélvelo a apagar. Puede afectar al rendimiento, sobre todo en **Cada comprobación**.
@@ -107,14 +107,16 @@ El **Form ID** se muestra en cualquier caso, así que nunca te quedas del todo a
 
 ### Las notificaciones están en el idioma equivocado
 
-El mod tiene dos ajustes de idioma independientes; este es el de sus propias notificaciones emergentes. Pon **Ajustes > Idioma de las notificaciones** en tu idioma: controla los toasts de la esquina (la alerta de escena atascada, la pista de nombres, los resultados de Detener). Es independiente del idioma del juego y del idioma del menú de abajo. El inglés es el valor por defecto y el de reserva, así que una línea sin traducir se lee en inglés en lugar de romperse.
+Los toasts de la esquina (la alerta de escena atascada, la pista de nombres, los resultados de Detener, la lectura de la tecla de acceso rápido) siguen **Ajustes > Idioma de las notificaciones**, no el idioma del juego ni qué archivo de traducción de menú esté instalado. El inglés es el valor por defecto y el de reserva.
+
+Una ejecución normal del **instalador** que fija el idioma de menú predeterminado también inicializa este control para que menú y toasts coincidan. Si solo cambiaste el archivo de menú a mano, o actualizaste sin volver a ejecutar ese paso del instalador, pon **Idioma de las notificaciones** una vez para que coincida con tu menú.
 
 ### El menú está en el idioma equivocado
 
 El menú MCM sigue el **ajuste de idioma** del juego, no el idioma de las notificaciones de arriba. Skyrim carga el archivo de traducción que coincide con el idioma del juego, así que un juego en inglés muestra el menú en inglés aunque hayas instalado otro idioma. Dos formas de cambiarlo:
 
-- **Instalador:** marca tu idioma en el paso 1 y luego elígelo como idioma de menú predeterminado en el paso 2 (escribe sobre el archivo inglés y guarda un `.bak` en inglés).
-- **A mano:** renombra `Interface\Translations\fth_ItJustWorks_SPANISH.txt` a `fth_ItJustWorks_ENGLISH.txt`, sustituyendo el archivo inglés.
+- **Instalador:** marca tu idioma en el paso 1 y luego elígelo como idioma de menú predeterminado en el paso 2. Eso escribe sobre el archivo de menú inglés (y guarda un `.bak` en inglés) **y** inicializa **Idioma de las notificaciones** para que coincida.
+- **A mano:** renombra `Interface\Translations\fth_ItJustWorks_SPANISH.txt` a `fth_ItJustWorks_ENGLISH.txt`, sustituyendo el archivo inglés. Eso **no** cambia **Idioma de las notificaciones** - ponlo en **Ajustes** para que coincida, o los toasts se quedan en inglés.
 
 ### El menú o las notificaciones muestran caracteres ilegibles o corruptos
 

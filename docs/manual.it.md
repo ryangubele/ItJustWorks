@@ -60,7 +60,7 @@ Una volta per scena finché non la lasci o la scena non cambia. Toast perso? Apr
 
 - **Abilitata** - accesa in modo predefinito. Spegnila per mettere il mod da parte senza disinstallarlo.
 - **Leggerezza** - attivo per impostazione predefinita. Le notifiche mantengono un tono leggero; disattiva per un testo semplice. Cambia solo il testo, mai il funzionamento del mod.
-- **Lingua delle notifiche** - la lingua delle notifiche del mod (i toast nell'angolo). Impostala sulla lingua del tuo menu. Inglese per impostazione predefinita; indipendente dall'impostazione lingua del gioco.
+- **Lingua delle notifiche** - la lingua delle notifiche pop-up proprie del mod (i toast nell'angolo). L'installer può impostarla quando scegli una lingua predefinita del menu; cambiala quando vuoi in questa pagina. Inglese per impostazione predefinita e come ripiego; indipendente dall'impostazione lingua del gioco.
 - **Mostra la scena attuale** - assegna un tasto; premilo per vedere il nome della scena attuale senza aprire il menu.
 - **Cancella tasto** - rimuove l'assegnazione.
 - **Log diagnostico** - quanto va nel log Papyrus. Lascia **Spento** per il gioco normale. Usa **Eventi** quando segnali un bug; **Ogni controllo** solo se rincorri un problema di timing, poi rispegnilo. Può influire sulle prestazioni, soprattutto a **Ogni controllo**.
@@ -107,14 +107,15 @@ Il **Form ID** viene mostrato in ogni caso, quindi non resti mai completamente a
 
 ### Le notifiche sono nella lingua sbagliata
 
-Il mod ha due impostazioni lingua indipendenti; questa riguarda le sue notifiche pop-up. Imposta **Impostazioni > Lingua delle notifiche** sulla tua lingua - controlla i toast nell'angolo (l'avviso di scena bloccata, il suggerimento sui nomi, i risultati dell'arresto). È indipendente dalla lingua del gioco e dalla lingua del menu qui sotto. L'inglese è l'impostazione predefinita e il ripiego, così una riga non tradotta appare in inglese invece di rompersi.
+I toast nell'angolo (l'avviso di scena bloccata, il suggerimento sui nomi, i risultati di Ferma scena, la lettura del tasto di scelta rapida) seguono **Impostazioni > Lingua delle notifiche**, non la lingua del gioco né quale file di traduzione del menu è installato. L'inglese è l'impostazione predefinita e il ripiego.
+Una normale esecuzione dell'**installer** che imposta la lingua predefinita del menu imposta anche questo controllo, così menu e toast corrispondono. Se hai solo scambiato il file del menu a mano, o hai aggiornato senza rieseguire quel passo dell'installer, imposta una volta la **Lingua delle notifiche** perché corrisponda al tuo menu.
 
 ### Il menu è nella lingua sbagliata
 
 Il menu MCM segue l'**impostazione lingua** del gioco, non la lingua delle notifiche qui sopra. Skyrim carica il file di traduzione che corrisponde alla lingua del gioco, quindi un gioco in inglese mostra il menu inglese anche se hai installato un'altra lingua. Due modi per cambiarlo:
 
-- **Installer:** spunta la tua lingua al passo 1, poi sceglila come lingua predefinita del menu al passo 2 (sovrascrive il file inglese e conserva un `.bak` inglese).
-- **A mano:** rinomina `Interface\Translations\fth_ItJustWorks_ITALIAN.txt` in `fth_ItJustWorks_ENGLISH.txt`, sostituendo il file inglese.
+- **Installer:** spunta la tua lingua al passo 1, poi sceglila come lingua predefinita del menu al passo 2. Questo sovrascrive il file del menu inglese (e conserva un `.bak` inglese) **e** imposta la **Lingua delle notifiche** perché corrisponda.
+- **A mano:** rinomina `Interface\Translations\fth_ItJustWorks_ITALIAN.txt` in `fth_ItJustWorks_ENGLISH.txt`, sostituendo il file inglese. Questo **non** cambia la **Lingua delle notifiche** - impostala in **Impostazioni** perché corrisponda, altrimenti i toast restano in inglese.
 
 ### Il menu o le notifiche mostrano caratteri illeggibili o corrotti
 

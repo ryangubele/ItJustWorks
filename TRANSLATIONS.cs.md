@@ -16,7 +16,7 @@ Abyste pomohli, nemusíte být ani plynulí. Pokud některý řádek v nabídce 
 
 - **Nabídka MCM** – plně přeložena: každý popisek volby, každý text nápovědy i dynamické stavové řetězce, které skripty vkládají do nabídky (pokyny k aktivaci/zrušení Stop, stav hlídače, poslední fráze samoopravy).
 - **Manuál** (`docs/manual.<lang>.md`) – plně přeložen.
-- **Herní vyskakovací oznámení** – přeložena. Upozornění hlídače, oznámení „názvy jsou vypnuté", výsledky Stop a výpis klávesových zkratek se řídí nastavením **Notification language** na stránce **Settings** v MCM, ve všech deseti jazycích; instalátor je předvyplní podle vámi zvoleného jazyka nabídky.
+- **Herní vyskakovací oznámení** – přeložena. Upozornění hlídače, oznámení „názvy jsou vypnuté", výsledky Stop a výpis klávesových zkratek se řídí nastavením **Jazyk oznámení** na stránce **Nastavení** v MCM, ve všech deseti jazycích; instalátor je předvyplní podle vámi zvoleného jazyka nabídky.
 
 ## Co je záměrně anglicky
 
@@ -25,7 +25,7 @@ Abyste pomohli, nemusíte být ani plynulí. Pokud některý řádek v nabídce 
 
 ## Jazyky
 
-Nastavení **Notification language** vypisuje těchto deset jazyků pod jejich anglickými názvy, takže rozevírací seznam zůstává čitelný, ať máte jakékoli písmo. Najděte ten svůj zde (pořadí shora dolů odpovídá pořadí v rozevíracím seznamu):
+Nastavení **Jazyk oznámení** vypisuje těchto deset jazyků pod jejich anglickými názvy, takže rozevírací seznam zůstává čitelný, ať máte jakékoli písmo. Najděte ten svůj zde (pořadí shora dolů odpovídá pořadí v rozevíracím seznamu):
 
 | V nabídce | Váš jazyk | Kód Skyrimu |
 |-------------|---------------|-------------|
@@ -40,7 +40,7 @@ Nastavení **Notification language** vypisuje těchto deset jazyků pod jejich a
 | Japanese | 日本語 | `JAPANESE` |
 | Czech | Čeština | `CZECH` |
 
-Jazyk **nabídky** se řídí jazykem vaší hry Skyrim (zvoleným při instalaci); výše uvedený **Notification language** je samostatný ovládací prvek na stránce Settings.
+Jazyk **nabídky** se řídí souborem jazyka vaší hry Skyrim, dokud jej nepřepíšete (krok výchozího menu v instalátoru, nebo ruční přejmenování na `fth_ItJustWorks_ENGLISH.txt`). Ovládací prvek **Jazyk oznámení** v Nastavení je samostatný: instalátor jej může předvyplnit, když zvolíte výchozí jazyk menu, ale ruční přejmenování menu ne - pokud toasty zůstávají anglicky, nastavte tento výčet tak, aby odpovídal.
 
 ## Manuály
 

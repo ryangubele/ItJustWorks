@@ -60,7 +60,7 @@ Une fois par scène jusqu'à ce que vous la quittiez ou que la scène change. To
 
 - **Activé** - activé par défaut. Désactivez-le pour mettre le mod en veille sans le désinstaller.
 - **Légèreté** - activé par défaut. Les notifications gardent un ton léger ; désactivez pour un texte neutre. Seul le texte change, jamais le fonctionnement du mod.
-- **Langue des notifications** - la langue des notifications du mod (les toasts dans le coin). Réglez-la sur celle de votre menu. Anglais par défaut ; indépendante du réglage de langue du jeu.
+- **Langue des notifications** - la langue des notifications contextuelles du mod (les toasts dans le coin). L'installateur peut l'initialiser lorsque vous choisissez une langue de menu par défaut ; modifiez-la à tout moment sur cette page. Anglais par défaut et comme repli ; indépendante du réglage de langue du jeu.
 - **Nommer la scène actuelle** - liez une touche ; appuyez pour voir le nom de la scène actuelle sans ouvrir le menu.
 - **Effacer la touche** - retire la liaison.
 - **Journal de diagnostic** - combien part dans le journal Papyrus. Laissez **Désactivé** pour le jeu normal. Utilisez **Événements** pour signaler un bug ; **Chaque vérification** seulement si vous traquez un problème de timing, puis remettez-le sur Désactivé. Peut affecter les performances, surtout à **Chaque vérification**.
@@ -107,14 +107,16 @@ Le **Form ID** s'affiche dans tous les cas, vous n'êtes donc jamais complèteme
 
 ### Les notifications sont dans la mauvaise langue
 
-Le mod a deux réglages de langue indépendants ; celui-ci concerne ses propres notifications contextuelles. Réglez **Paramètres > Langue des notifications** sur votre langue - elle contrôle les toasts dans le coin (l'alerte de scène coincée, l'indice sur les noms, les résultats d'arrêt). Elle est indépendante de la langue du jeu et de la langue du menu ci-dessous. L'anglais est la valeur par défaut et le repli, donc une ligne non traduite s'affiche en anglais plutôt que de casser.
+Les toasts dans le coin (l'alerte de scène coincée, l'indice sur les noms, les résultats d'arrêt, l'affichage de la touche de raccourci) suivent **Paramètres > Langue des notifications**, pas la langue du jeu ni le fichier de traduction du menu installé. L'anglais est la valeur par défaut et le repli.
+
+Un lancement normal de l'**installateur** qui définit la langue de menu par défaut initialise aussi ce réglage pour que le menu et les toasts correspondent. Si vous avez seulement remplacé le fichier du menu à la main, ou effectué une mise à jour sans relancer cette étape de l'installateur, réglez une fois la **Langue des notifications** pour qu'elle corresponde à votre menu.
 
 ### Le menu est dans la mauvaise langue
 
 Le menu MCM suit le **réglage de langue** du jeu, pas la langue des notifications ci-dessus. Skyrim charge le fichier de traduction qui correspond à la langue du jeu, donc un jeu en anglais affiche le menu anglais même si vous avez installé une autre langue. Deux façons de le changer :
 
-- **Installateur :** cochez votre langue à l'étape 1, puis choisissez-la comme langue de menu par défaut à l'étape 2 (écrit par-dessus le fichier anglais et conserve un `.bak` anglais).
-- **À la main :** renommez `Interface\Translations\fth_ItJustWorks_FRENCH.txt` en `fth_ItJustWorks_ENGLISH.txt`, en remplaçant le fichier anglais.
+- **Installateur :** cochez votre langue à l'étape 1, puis choisissez-la comme langue de menu par défaut à l'étape 2. Cela écrase le fichier de menu anglais (et conserve un `.bak` anglais) **et** initialise la **Langue des notifications** pour qu'elle corresponde.
+- **À la main :** renommez `Interface\Translations\fth_ItJustWorks_FRENCH.txt` en `fth_ItJustWorks_ENGLISH.txt`, en remplaçant le fichier anglais. Cela ne change **pas** la **Langue des notifications** - réglez-la sur **Paramètres** pour qu'elle corresponde, sinon les toasts restent en anglais.
 
 ### Le menu ou les notifications affichent des caractères illisibles ou parasités
 

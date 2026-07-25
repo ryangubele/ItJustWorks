@@ -16,7 +16,7 @@ Non serve nemmeno parlare fluentemente per aiutare. Se una riga nel menu sembra 
 
 - **Il menu MCM** - completamente tradotto: ogni etichetta di opzione, ogni descrizione di aiuto e le stringhe di stato dinamiche che gli script inviano al menu (i suggerimenti di attivazione/annullamento di Stop, lo stato del watchdog, le ultime frasi di auto-riparazione).
 - **Il manuale** (`docs/manual.<lang>.md`) - completamente tradotto.
-- **Le notifiche pop-up di gioco** - tradotte. L'avviso del watchdog, l'avviso «i nomi sono errati», i risultati di Stop e la lettura del tasto di scelta rapida seguono l'impostazione **Notification language** nella pagina **Settings** dell'MCM, in tutte e dieci le lingue; l'installer la imposta in base alla tua scelta della lingua del menu.
+- **Le notifiche pop-up di gioco** - tradotte. L'avviso del watchdog, l'avviso «i nomi sono errati», i risultati di Stop e la lettura del tasto di scelta rapida seguono l'impostazione **Lingua delle notifiche** nella pagina **Impostazioni** dell'MCM, in tutte e dieci le lingue; l'installer la imposta in base alla tua scelta della lingua del menu.
 
 ## Cosa è deliberatamente in inglese
 
@@ -25,7 +25,7 @@ Non serve nemmeno parlare fluentemente per aiutare. Se una riga nel menu sembra 
 
 ## Lingue
 
-L'impostazione **Notification language** elenca le dieci lingue con i loro nomi inglesi, così il menu a discesa resta leggibile qualunque font tu abbia. Trova la tua qui (dall'alto in basso corrisponde all'ordine del menu a discesa):
+L'impostazione **Lingua delle notifiche** elenca le dieci lingue con i loro nomi inglesi, così il menu a discesa resta leggibile qualunque font tu abbia. Trova la tua qui (dall'alto in basso corrisponde all'ordine del menu a discesa):
 
 | Nel menu | La tua lingua | Codice Skyrim |
 |-------------|---------------|-------------|
@@ -40,7 +40,7 @@ L'impostazione **Notification language** elenca le dieci lingue con i loro nomi 
 | Japanese | 日本語 | `JAPANESE` |
 | Czech | Čeština | `CZECH` |
 
-La lingua del **menu** segue la lingua del tuo gioco Skyrim (scelta all'installazione); la **Notification language** qui sopra è un controllo separato nella pagina Settings.
+La lingua del **menu** segue il file lingua del gioco Skyrim a meno che tu non la sovrascriva (il passo dell'installer per il menu predefinito, oppure la rinomina a mano su `fth_ItJustWorks_ENGLISH.txt`). Il controllo **Lingua delle notifiche** in Impostazioni è separato: l'installer può impostarlo quando scegli una lingua predefinita del menu, ma una rinomina del menu a mano no - imposta l'enum perché corrisponda se i toast restano in inglese.
 
 ## Manuali
 
