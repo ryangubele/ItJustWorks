@@ -51,7 +51,7 @@ Optional save cleaner (e.g. ReSaver) only if you know what you’re doing — no
 
 ## The rest of the toolkit
 
-This mod does one thing: the stuck scene. It doesn’t do the rest, because better mods already do. Keeping a save alive is a team sport. If you’re serious about it, run these too:
+This mod does one thing: the stuck scene. We don't try to duplicate what other mods already do better — keeping a save alive is a team sport. If you’re serious about it, run these too:
 
 - **[USSEP](https://www.nexusmods.com/skyrimspecialedition/mods/266)** — prevention. Fixes thousands of bugs before they ever bite.
 - **[SSE Engine Fixes](https://www.nexusmods.com/skyrimspecialedition/mods/17230)** and **[Bug Fixes SSE](https://www.nexusmods.com/skyrimspecialedition/mods/33261)** — the engine-level papercuts most people never diagnose.

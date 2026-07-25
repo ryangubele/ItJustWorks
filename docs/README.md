@@ -1,7 +1,6 @@
 # It Just Works — architecture notes
 
-How the mod is put together, for reading, building, or forking. Not the player pitch
-and not the long *why*.
+How the mod is put together, for reading, building, or forking.
 
 | Doc | Role |
 |-----|------|
