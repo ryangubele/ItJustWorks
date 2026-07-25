@@ -18,11 +18,13 @@ Which is the actual game, isn't it? Everyone argues stealth archer versus spells
 
 So here's a rule nobody told you, and a tool for it.
 
-Skyrim is a machine full of switches, and it flips them on you all day - you're in a scene, your controls lock, your camera's yanked, an NPC takes the wheel. Every one is supposed to flip back when the moment ends. Every one, now and then, doesn't. That's where this mod lives: **the switch that got stuck.** Not crashes, not vanilla bugs, not save bloat - good mods exist for those, and you should run them. This one's for the specific, maddening, near-invisible thing where the game gets stuck and won't let go.
+Skyrim is a machine full of switches, and it flips them on you all day - you're in a scene, your controls lock, your camera's yanked, an NPC takes the wheel. Every one is supposed to flip back when the moment ends. Every one, now and then, doesn't.
+
+Most of those sticks are loud. You can't move. You can't look. You know something's wrong. **Stuck scenes are the quiet ones** - no error, no crash, sometimes no symptom until a quest hours later won't advance and the internet tells you the save is dead. That's the switch this mod is for. Not crashes, not vanilla bugs, not save bloat - good mods exist for those, and you should run them. Not every stuck toggle in the game, either: the ones that only *annoy* you are a different job, for a different tool. This one's for the near-invisible thing that ends playthroughs.
 
 It's a debug menu. It's a watchdog. It's a shovel to dig yourself out, if you can.
 
-Stuck scenes are where it starts, not where it ends.
+**Scenes.** That's the whole product.
 
 ---
 
@@ -76,15 +78,9 @@ Here's a button.
 
 ---
 
-## Where this is going
+## What this is (and stays)
 
-Debug *menu*. Scenes are the first thing it does, not the last.
-
-The pattern, once you see it, is everywhere: Skyrim is constantly flipping switches on you - you're in a scene, your controls are locked for an animation, your camera's been forced - and every one of those switches occasionally sticks in a position it should have left. Same fix every time: find the stuck switch, flip it back.
-
-**Next up, the player lockouts** - the invisible toggles that freeze your inputs so a scripted moment looks like a scripted moment. They get stuck too, and then you're standing there unable to move, open a menu, or draw a weapon, wondering what you did. Unlike scenes, the game will actually *tell you* which switches are flipped, so this one's a proper diagnosis: here's exactly what's locked, here's the button, done.
-
-After that, whatever else I catch the game leaving switched on when it shouldn't.
+A scene watchdog and a shovel. Better judgment over time - clearer alerts, better clocks, the same Stop button - is fair game. Turning this into a general "unstick my character" suite is not. Controls frozen mid-animation, camera stuck in a forced angle, the other stuck switches: same *family* of game mistakes, different product.
 
 ### What it will never do
 

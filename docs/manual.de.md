@@ -16,7 +16,7 @@ Fünf Seiten: **Szene**, **Wächter**, **Einstellungen**, **Diagnose**, **Deinst
 
 ### Worin du steckst
 
-Live-Anzeige der aktuellen Szene, oder **None**. Menü öffnen für eine frische Messung.
+Live-Anzeige der aktuellen Szene, oder **Keine**. Menü öffnen für eine frische Messung.
 
 - **Zeit in der Szene** - ungefähr wie lange du schon in dieser Szene bist; ein Neuladen des Spiels setzt sie zurück. Das ist das Signal für feststecken oder nicht.
 - **Szene** - Name, wenn Namen verfügbar sind; sonst eine ID-Nummer.

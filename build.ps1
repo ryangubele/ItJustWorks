@@ -167,11 +167,13 @@ if ($LASTEXITCODE -ne 0) { Fail "Builder exited $LASTEXITCODE" }
 
 # --- 2. Compile Papyrus ------------------------------------------------------
 Step 2 "Compile Papyrus"
-# Toast bake: $fth_IJW_Toast_* from the translation tables -> fth_IJW_Toasts.psc.
+# Toast bake: allow-listed $fth_IJW_Toast_* from the translation tables -> fth_IJW_Toasts.psc.
 # Missing cells fall back to English. PapyrusCompiler corrupts non-ASCII string
 # literals in .psc, so those become ASCII placeholders (__IJW_*__) and PexScrub
 # --replace writes the real UTF-8 into the .pex string table after compile.
+# $langOrder index order must match MCM iToastLang enum options and FOMOD seeds.
 $langOrder = @("ENGLISH","FRENCH","GERMAN","ITALIAN","SPANISH","POLISH","RUSSIAN","CHINESE","JAPANESE","CZECH")
+$toastAllow = @("Alert","NamesOff","StopOk","StopFail","HotkeyInScene","HotkeyNoScene")
 $toastByKey = [ordered]@{}
 for ($li = 0; $li -lt $langOrder.Count; $li++) {
     $tp = Join-Path $root ("interface\translations\fth_ItJustWorks_{0}.txt" -f $langOrder[$li])
@@ -179,12 +181,20 @@ for ($li = 0; $li -lt $langOrder.Count; $li++) {
     foreach ($line in ([IO.File]::ReadAllText($tp, [Text.Encoding]::Unicode) -split "`r?`n")) {
         if ($line -match '^(\$fth_IJW_Toast_[A-Za-z0-9_]+)\t(.*)$') {
             $k = $Matches[1]; $v = $Matches[2]
+            $fn = $k -replace '^\$fth_IJW_Toast_',''
+            if ($toastAllow -notcontains $fn) {
+                Fail "bake: unexpected toast key $k (allow-list: $($toastAllow -join ', '))"
+            }
             if (-not $toastByKey.Contains($k)) { $toastByKey[$k] = New-Object string[] $langOrder.Count }
             $toastByKey[$k][$li] = $v
         }
     }
 }
 if ($toastByKey.Count -eq 0) { Fail "bake: no `$fth_IJW_Toast_* keys in the tables" }
+foreach ($fn in $toastAllow) {
+    $k = "`$fth_IJW_Toast_$fn"
+    if (-not $toastByKey.Contains($k)) { Fail "bake: missing required toast key $k" }
+}
 $esc = { param($s) $s.Replace('\','\\').Replace('"','\"') }
 $isAscii = { param($s) -not [regex]::IsMatch($s, '[^\x00-\x7F]') }
 $toastReplace = [ordered]@{}
@@ -266,6 +276,22 @@ if (Test-Path $toastMapPath) {
 $pexScrubArgs += (Join-Path $scriptsOut "*.pex")
 & dotnet run --project (Join-Path $root "src\Fth.ItJustWorks.PexScrub") -c Release -- @pexScrubArgs
 if ($LASTEXITCODE -ne 0) { Fail "PexScrub exited $LASTEXITCODE" }
+# Placeholders must not ship: if the bake map was non-empty, fth_IJW_Toasts.pex must have no __IJW_ left.
+$toastsPex = Join-Path $scriptsOut "fth_IJW_Toasts.pex"
+if (-not (Test-Path $toastsPex)) { Fail "toast gate: missing $toastsPex after compile/scrub" }
+$toastsBytes = [IO.File]::ReadAllBytes($toastsPex)
+$phNeedle = [Text.Encoding]::ASCII.GetBytes("__IJW_")
+$phHits = 0
+for ($i = 0; $i -le $toastsBytes.Length - $phNeedle.Length; $i++) {
+    $ok = $true
+    for ($j = 0; $j -lt $phNeedle.Length; $j++) {
+        if ($toastsBytes[$i + $j] -ne $phNeedle[$j]) { $ok = $false; break }
+    }
+    if ($ok) { $phHits++ }
+}
+if ($phHits -gt 0) {
+    Fail "toast gate: fth_IJW_Toasts.pex still contains $phHits `__IJW_` placeholder marker(s) after PexScrub --replace"
+}
 if (Test-Path $toastMapPath) { Remove-Item -Force $toastMapPath }
 
 # --- 4. Assemble the archive tree -------------------------------------------
@@ -333,11 +359,30 @@ $fomodLangs = [ordered]@{
     RUSSIAN  = '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian)'
     SPANISH  = 'Espa&#241;ol (Spanish)'
 }
-# Must match bake $langOrder / MCM enum options (0 = English).
-$toastLangIndex = @{
-    ENGLISH = 0; FRENCH = 1; GERMAN = 2; ITALIAN = 3; SPANISH = 4
-    POLISH = 5; RUSSIAN = 6; CHINESE = 7; JAPANESE = 8; CZECH = 9
+# Derived from $langOrder so FOMOD seeds cannot drift from the bake index.
+$toastLangIndex = @{}
+for ($li = 0; $li -lt $langOrder.Count; $li++) { $toastLangIndex[$langOrder[$li]] = $li }
+# MCM enum option order must match $langOrder (Title-case $fth_IJW_Lang_* labels).
+$langTitle = @{
+    ENGLISH = "English"; FRENCH = "French"; GERMAN = "German"; ITALIAN = "Italian"
+    SPANISH = "Spanish"; POLISH = "Polish"; RUSSIAN = "Russian"; CHINESE = "Chinese"
+    JAPANESE = "Japanese"; CZECH = "Czech"
 }
+$expectedToastOpts = @($langOrder | ForEach-Object { "`$fth_IJW_Lang_$($langTitle[$_])" })
+$cfgForToast = Get-Content (Join-Path $root "mcm\Config\fth_ItJustWorks\config.json") -Raw -Encoding UTF8
+if ($cfgForToast -notmatch '"id"\s*:\s*"iToastLang:Control"[\s\S]*?"options"\s*:\s*\[([^\]]+)\]') {
+    Fail "toast lang: could not find iToastLang:Control options array in config.json"
+}
+$foundToastOpts = @([regex]::Matches($Matches[1], '"(\$fth_IJW_Lang_[A-Za-z]+)"') | ForEach-Object { $_.Groups[1].Value })
+if ($foundToastOpts.Count -ne $expectedToastOpts.Count) {
+    Fail "toast lang: config.json has $($foundToastOpts.Count) enum options, expected $($expectedToastOpts.Count)"
+}
+for ($ti = 0; $ti -lt $expectedToastOpts.Count; $ti++) {
+    if ($foundToastOpts[$ti] -ne $expectedToastOpts[$ti]) {
+        Fail "toast lang: config.json options[$ti]=$($foundToastOpts[$ti]), expected $($expectedToastOpts[$ti]) (must match bake `$langOrder)"
+    }
+}
+Write-Host "  toast lang: MCM enum order matches bake `$langOrder ($($langOrder.Count) langs)"
 $fomodDescPath = Join-Path $root "packaging\fomod-descriptions.json"
 if (-not (Test-Path $fomodDescPath)) { Fail "FOMOD: missing packaging\fomod-descriptions.json" }
 $fomodDesc = Get-Content $fomodDescPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -623,11 +668,18 @@ $transFiles = @(Get-ChildItem $transDir -Filter "fth_ItJustWorks_*.txt" | Sort-O
 if ($transFiles.Count -ne 10) { Fail "translation gate: expected 10 language tables, got $($transFiles.Count)" }
 
 function Get-TranslationKeys([string]$path) {
-    # UTF-16 LE (BOM). Lines are `$key\tvalue`.
+    # UTF-16 LE (BOM). Lines are `$key\tvalue`; every non-blank line must be keyed.
     $text = [IO.File]::ReadAllText($path, [Text.Encoding]::Unicode)
     $set = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    $ln = 0
     foreach ($line in ($text -split "`r?`n")) {
-        if ($line -match '^(\$fth_IJW_[A-Za-z0-9_]+)\t') { [void]$set.Add($Matches[1]) }
+        $ln++
+        if ($line -match '^\s*$') { continue }
+        if ($line -match '^(\$fth_IJW_[A-Za-z0-9_]+)\t(.*)$') {
+            [void]$set.Add($Matches[1])
+        } else {
+            Fail "translation gate: $(Split-Path $path -Leaf) line $ln is not `$key<TAB>value"
+        }
     }
     return $set
 }

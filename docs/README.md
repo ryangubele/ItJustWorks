@@ -22,9 +22,10 @@ rebuilds byte-for-byte. Two Papyrus scripts ride the quest's VMAD:
   Both scripts sit on the same quest, so `Self as fth_IJW_Watcher` reaches the sibling.
 
 The menu itself is data: **MCM Helper** renders it from `mcm/Config/fth_ItJustWorks/`
-(`config.json` = layout, three pages - Scene, Diagnostics, Uninstall; `settings.ini`
-= ModSetting defaults). Labels come from the `interface/translations/*.txt` string
-tables (UTF-16LE, ten languages).
+(`config.json` = layout, five pages - Scene, Watchdog, Settings, Diagnostics,
+Uninstall; `settings.ini` = ModSetting defaults). Settings holds Enabled, Levity,
+Notification language, hotkey, and diagnostics log level. Labels come from the
+`interface/translations/*.txt` string tables (UTF-16LE, ten languages).
 
 ## Settings model
 

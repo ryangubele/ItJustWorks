@@ -16,7 +16,7 @@ Pět stránek: **Scéna**, **Hlídač**, **Nastavení**, **Diagnostika**, **Odin
 
 ### V čem jste
 
-Živý výpis aktuální scény, nebo **None**. Otevřete menu pro čerstvé čtení.
+Živý výpis aktuální scény, nebo **Žádná**. Otevřete menu pro čerstvé čtení.
 
 - **Čas ve scéně** - zhruba jak dlouho jste v této scéně; načtení hry ho vynuluje. To je signál zaseknutí.
 - **Scéna** - jméno, když jsou jména k dispozici; jinak číslo ID.

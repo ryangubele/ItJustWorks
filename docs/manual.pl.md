@@ -16,7 +16,7 @@ Pięć stron: **Scena**, **Strażnik**, **Ustawienia**, **Diagnostyka**, **Odins
 
 ### W czym jesteś
 
-Na żywo odczyt bieżącej sceny albo **None**. Otwórz menu, by dostać świeży odczyt.
+Na żywo odczyt bieżącej sceny albo **Żadna**. Otwórz menu, by dostać świeży odczyt.
 
 - **Czas w scenie** — mniej więcej jak długo jesteś w tej scenie; przeładowanie gry to zeruje. To sygnał zacięcia albo jego braku.
 - **Scena** — nazwa, gdy nazwy są dostępne; w przeciwnym razie numer ID.

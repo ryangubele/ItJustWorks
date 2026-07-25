@@ -96,11 +96,13 @@ EndFunction
 
 ; Pushed by the MCM. 0 poll stops the loop; 0 warn disables alerting. Guarded on a
 ; real change so a slider drag (fires per step) doesn't spam the log. Levity and
-; toast language only affect notification copy; they do not touch the poll loop.
+; toast language only affect notification copy; re-arm only when poll interval changes
+; (or we go dormant), so flipping copy knobs does not reset the countdown.
 Function ApplySettings(int aiPollSeconds, int aiWarnMinutes, int aiLogLevel, bool abLevity, int aiToastLang)
     float newPoll = aiPollSeconds as float
     float newThr = (aiWarnMinutes * 60) as float
-    bool changed = (newPoll != fPollInterval) || (newThr != fAlertThreshold) || (aiLogLevel != iLogLevel) || (abLevity != bLevity) || (aiToastLang != iToastLang)
+    bool pollChanged = (newPoll != fPollInterval)
+    bool changed = pollChanged || (newThr != fAlertThreshold) || (aiLogLevel != iLogLevel) || (abLevity != bLevity) || (aiToastLang != iToastLang)
     fPollInterval = newPoll
     fAlertThreshold = newThr
     iLogLevel = aiLogLevel
@@ -111,8 +113,11 @@ Function ApplySettings(int aiPollSeconds, int aiWarnMinutes, int aiLogLevel, boo
     endif
     ; Mirror SetEnabled dormancy: poll 0 must kill a pending single-update, not only
     ; skip re-arm (otherwise one last OnUpdate can still fire after the user turns the loop off).
+    ; Re-arm only when the interval itself changes or we leave the running-poll path.
     if bEnabled && fPollInterval >= 1.0
-        Rearm()
+        if pollChanged
+            Rearm()
+        endif
     else
         UnregisterForUpdate()
     endif

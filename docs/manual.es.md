@@ -16,7 +16,7 @@ Cinco páginas: **Escena**, **Vigilante**, **Ajustes**, **Diagnóstico**, **Desi
 
 ### En qué estás
 
-Lectura en vivo de la escena actual, o **None**. Abre el menú para una lectura fresca.
+Lectura en vivo de la escena actual, o **Ninguna**. Abre el menú para una lectura fresca.
 
 - **Tiempo en la escena** - aproximadamente cuánto tiempo llevas en esta escena; recargar el juego lo reinicia. Es la señal de atascado o no.
 - **Escena** - el nombre cuando hay nombres disponibles; si no, un número de ID.

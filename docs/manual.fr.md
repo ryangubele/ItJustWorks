@@ -16,7 +16,7 @@ Cinq pages : **Scène**, **Surveillance**, **Paramètres**, **Diagnostic**, **D�
 
 ### Ce dans quoi vous êtes
 
-Affichage en direct de la scène actuelle, ou **None**. Ouvrez le menu pour une lecture fraîche.
+Affichage en direct de la scène actuelle, ou **Aucune**. Ouvrez le menu pour une lecture fraîche.
 
 - **Temps dans la scène** - à peu près combien de temps vous êtes resté dans cette scène ; un rechargement du jeu le remet à zéro. C'est le signal coincé-ou-pas.
 - **Scène** - le nom quand les noms sont disponibles ; sinon un numéro d'ID.

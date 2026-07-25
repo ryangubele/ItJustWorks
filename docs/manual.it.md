@@ -16,7 +16,7 @@ Cinque pagine: **Scena**, **Sentinella**, **Impostazioni**, **Diagnostica**, **D
 
 ### In cosa ti trovi
 
-Lettura in tempo reale della scena attuale, oppure **None**. Apri il menu per una lettura aggiornata.
+Lettura in tempo reale della scena attuale, oppure **Nessuna**. Apri il menu per una lettura aggiornata.
 
 - **Tempo nella scena** - all'incirca da quanto tempo sei in questa scena; ricaricare il gioco lo azzera. È il segnale bloccato-o-no.
 - **Scena** - il nome quando i nomi sono disponibili; altrimenti un numero di ID.
@@ -108,6 +108,7 @@ Il **Form ID** viene mostrato in ogni caso, quindi non resti mai completamente a
 ### Le notifiche sono nella lingua sbagliata
 
 I toast nell'angolo (l'avviso di scena bloccata, il suggerimento sui nomi, i risultati di Ferma scena, la lettura del tasto di scelta rapida) seguono **Impostazioni > Lingua delle notifiche**, non la lingua del gioco né quale file di traduzione del menu è installato. L'inglese è l'impostazione predefinita e il ripiego.
+
 Una normale esecuzione dell'**installer** che imposta la lingua predefinita del menu imposta anche questo controllo, così menu e toast corrispondono. Se hai solo scambiato il file del menu a mano, o hai aggiornato senza rieseguire quel passo dell'installer, imposta una volta la **Lingua delle notifiche** perché corrisponda al tuo menu.
 
 ### Il menu è nella lingua sbagliata

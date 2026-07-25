@@ -180,7 +180,8 @@ static void Scrub(string path, long compileTime, Dictionary<string, string>? rep
                 missing.Add(k);
         }
         // Map is shared across all .pex in one run; only the toast script has hits.
-        // Fail if that script matched some keys but not all (partial bake).
+        // Fail partial apply on any file that matched some keys. Zero hits is normal for
+        // non-toast pex; build.ps1 fails the package if placeholders remain in Toasts.pex.
         if (replaced > 0 && missing.Count > 0)
             throw new InvalidDataException(
                 $"{Path.GetFileName(path)}: {missing.Count} toast placeholder(s) not found in string table " +

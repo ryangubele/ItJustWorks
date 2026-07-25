@@ -25,7 +25,7 @@ Nie musisz też być biegły, by pomóc. Jeśli wiersz w menu wygląda na **uci�
 
 ## Języki
 
-Ustawienie **Notification language** wymienia dziesięć języków po ich angielskich nazwach, aby lista rozwijana pozostała czytelna niezależnie od posiadanej czcionki. Znajdź swój tutaj (kolejność z góry na dół odpowiada kolejności listy):
+Ustawienie **Język powiadomień** wymienia dziesięć języków po ich angielskich nazwach, aby lista rozwijana pozostała czytelna niezależnie od posiadanej czcionki. Znajdź swój tutaj (kolejność z góry na dół odpowiada kolejności listy):
 
 | W menu | Twój język | Kod Skyrim |
 |-------------|---------------|-------------|
