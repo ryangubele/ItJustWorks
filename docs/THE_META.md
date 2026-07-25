@@ -47,7 +47,7 @@ What happens then? It waits. Or it doesn't. Or it skips the whole thing. Or the 
 | Waits on the scene, but its finish line fires anyway | The quest ticks *complete* - a step inside it never ran | You didn't notice it was broken |
 | Needs a thing the scene *did* | A dead end nothing will ever clear | Todd Howard |
 
-Every row looks identical from where you're standing: **an animation didn't play**. Top row costs you nothing. Bottom row costs you the questline. There's usually no way to tell them apart - and if the quest's new to you, the game may never hint a scene was even due. It just moves on, sometimes. Or doesn't. Sometimes the quest even *finishes*, ticked off and done, with one of its own scenes frozen the whole time.
+Every row looks identical from where you're standing: **an animation didn't play**, or a dialogue skipped, or the game just feels vaguely glitchy. Top row costs you nothing. Bottom row costs you the questline. There's usually no way to tell them apart, and the game may never hint a scene was even due. It just moves on, sometimes. Or doesn't. Sometimes the quest even *finishes*, ticked off and done, with one of its own scenes frozen the whole time, off to cause who knows what sorts of trouble down the line.
 
 ### Reloading won't save you
 
@@ -78,7 +78,7 @@ And there's a menu, for when you already smell smoke:
 
 Why *roughly*? It checks every half-minute, so it knows when you got stuck to within about that. It could give you a stopwatch, but if you've been stuck for two hours and haven't noticed, a stopwatch was never the missing piece.
 
-The missing piece is a button. It always was.
+The missing piece is a button. It was always a button. It will always be a button.
 
 Here's a button.
 
