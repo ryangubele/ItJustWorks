@@ -114,23 +114,32 @@ Players use the how-to and the menu together. **Page names, control labels, and 
 - **English:** when a control is named in `docs/manual.md`, the matching `$fth_IJW_*` value in `fth_ItJustWorks_ENGLISH.txt` uses that same wording (and the reverse: if the MCM label is the product term, the manual names it that way). Do not ship one label in the menu and a synonym in the manual.
 - **Other languages:** when regenerating or editing translations, **one vocabulary per language**. Port UI chrome from English, then use **identical** terms in both `fth_ItJustWorks_<SKYRIMLANG>.txt` and `docs/manual.<lang>.md`. Read both files while editing so labels cannot drift.
 - MCM files are **UTF-16 LE** (BOM), `$key` + tab + value. Same key set in every language file.
-- Leave technical tokens consistent with English where the tables already do (`Editor ID`, `Form ID`, `Papyrus`, paths, ini keys, `fth_IJW`, product name **It Just Works**, English notify examples still printed by scripts).
+- Leave technical tokens consistent with English where the tables already do (`Editor ID`, `Form ID`, `Papyrus`, paths, ini keys, `fth_IJW`, product name **It Just Works**). Functional corner toasts are localized via the notification-language bake; the Levity punchline stays English on purpose.
 
-### Menu-language quirk placement
+### Troubleshooting section (manuals)
 
-When editing or regenerating `docs/manual*.md`, **do not mirror English section order blindly** for the menu-language quirk. Placement differs on purpose:
+Player how-tos for breakage live under **`## Troubleshooting`** in the manuals — not scattered as freestanding “quirks,” not in `README.md`. English source: `docs/manual.md`, after **Diagnostics** and before **Uninstall**. Translated manuals use the same section inventory and the same relative place in the doc (after Diagnostics / before Uninstall).
 
-| File | Where the “menu in another language” / Skyrim language-file quirk goes |
-|------|------------------------------------------------------------------------|
-| `docs/manual.md` (English source) | **Bottom** of the manual — reference only. English readers rarely need it first. |
-| `docs/manual.<lang>.md` (machine translations) | **Near the top**, right after the intro/deps and **before** Current scene — readers of a translated manual are the ones most likely to hit English-game + non-English menu. |
+Subsections (keep this set; add only when the English manual does):
+
+| English heading (authoritative) | Topic |
+|---------------------------------|--------|
+| Scenes show as ID numbers, not names | po3 `Load EditorIDs`, mod-manager overwrite, Diagnostics light |
+| Notifications are in the wrong language | **Settings > Notification language** (toasts; independent of menu / `sLanguage`) |
+| The menu is in the wrong language | Installer or rename `fth_ItJustWorks_<SKYRIMLANG>.txt` → `…_ENGLISH.txt` |
+| The menu or notifications show garbled / unreadable characters | Non-Latin script needs a game **font** that has those glyphs; point at a font mod |
+| No alert ever appears | Watchdog status / dials; session timer after reload |
+| Stop Scene didn't clear the scene | Rare / log capture guidance |
+| Filing a bug report, or asking for help | Diagnostics log **Events**, `fth_IJW` in Papyrus log, Nexus/GitHub channels |
 
 Rules:
 
-- **Do not** put that quirk in `README.md`. Manuals own it (English at the bottom; translations near the top). A one-line pointer to `TRANSLATIONS.md` in the README Languages blurb is fine.
-- **Do not** put a “menu already English — skip this section” line in any manual. English keeps the section at the bottom without a skip banner; translation manuals keep it near the top because their readers are the primary audience for the quirk.
-- In each translated manual, use that language’s real Skyrim token in the filename example (`GERMAN`, `FRENCH`, `CHINESE`, …), not a `<LANGUAGE>` placeholder.
-- When regenerating a machine translation from English, **preserve this placement difference** — do not move the quirk to the bottom of a translated manual just because English put it there, and do not promote it to the top of English just because translations do.
+- **Manuals own troubleshooting.** Do not put these how-tos in `README.md`. A one-line pointer to `TRANSLATIONS.md` in the README Languages blurb is fine.
+- **One section, full inventory.** Do not peel “menu language” (or any other item) out into a lone top- or bottom-of-file quirk. Do not drop subsections when regenerating a machine translation.
+- **Terminology** still matches MCM/manual pairing above (`Notification language`, **Diagnostics**, **Watchdog**, **Enabled**, etc.).
+- In each translated manual, use that language’s real Skyrim token in the menu-language filename example (`GERMAN`, `FRENCH`, `CHINESE`, …), not a `<LANGUAGE>` placeholder.
+- **Do not** add a “menu already English — skip this section” (or similar) skip banner in any language.
+- When regenerating from English, **preserve Troubleshooting as a block** in the English order — do not reintroduce the old split (menu-language near the top of translations only / bottom of English only). That placement rule is retired.
 
 ---
 
