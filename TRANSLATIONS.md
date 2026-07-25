@@ -40,7 +40,7 @@ The **Notification language** setting lists the ten languages by their English n
 | Japanese | 日本語 | `JAPANESE` |
 | Czech | Čeština | `CZECH` |
 
-The **menu** language follows your Skyrim game language (chosen at install); the **Notification language** above is a separate control on the Settings page.
+The **menu** language follows Skyrim's game language file unless you override it (installer default-menu step, or by-hand rename onto `fth_ItJustWorks_ENGLISH.txt`). The **Notification language** control on Settings is separate: the installer can seed it when you pick a default menu language, but a by-hand menu rename does not - set the enum to match if toasts stay English.
 
 ## Manuals
 

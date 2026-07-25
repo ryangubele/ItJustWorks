@@ -133,7 +133,7 @@ ESL-flagged, so it costs you no load-order slot. Safe to add mid-playthrough. Sa
 
 ## Languages
 
-The menu ships in English, with machine-translations for Simplified Chinese, Czech, French, German, Italian, Japanese, Polish, Russian, and Spanish. Pick the ones you want in the installer - corrections are always welcome. Details and the per-language manuals are in [TRANSLATIONS.md](TRANSLATIONS.md).
+The menu ships in English, with machine-translations for Simplified Chinese, Czech, French, German, Italian, Japanese, Polish, Russian, and Spanish. Corner notifications (stuck-scene alert and the rest) follow **Settings > Notification language** in those same languages; a normal installer run that picks a default menu language seeds that setting so menu and toasts match. Pick the language files you want in the installer - corrections are always welcome. Details and the per-language manuals are in [TRANSLATIONS.md](TRANSLATIONS.md).
 
 ---
 

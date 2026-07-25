@@ -60,7 +60,7 @@ Once per scene until you leave it or the scene changes. Missed the toast? Open t
 
 - **Enabled** - on by default. Turn it off to shelve the mod without uninstalling.
 - **Levity** - on by default. The notifications keep a light touch; turn it off for plain wording. Only the text changes, never how the mod works.
-- **Notification language** - the language for the mod's own pop-up notifications (the corner toasts). Set it to match your menu language. English by default; independent of the game's language setting.
+- **Notification language** - the language for the mod's own pop-up notifications (the corner toasts). The installer can seed this when you pick a default menu language; change it anytime on this page. English by default and as fallback; independent of the game's language setting.
 - **Name current scene** - bind a key; press it to see the current scene name without opening the menu.
 - **Clear hotkey** - removes the binding.
 - **Diagnostics log** - how much goes to the Papyrus log. Leave **Off** for normal play. Use **Events** when filing a bug; **Every check** only if you're chasing a timing issue, then turn it back off. Can impact performance, especially at **Every check**.
@@ -107,14 +107,16 @@ The **Form ID** shows either way, so you're never fully in the dark.
 
 ### Notifications are in the wrong language
 
-The mod has two independent language settings; this is the one for its own pop-up notifications. Set **Settings > Notification language** to your language - it controls the corner toasts (the stuck-scene alert, the names hint, the Stop results). It is independent of the game's language and of the menu language below. English is the default and the fallback, so an untranslated line reads in English rather than breaking.
+Corner toasts (stuck-scene alert, names hint, Stop results, hotkey readout) follow **Settings > Notification language**, not the game's language and not which menu translation file is installed. English is the default and the fallback.
+
+A normal **installer** run that sets the default menu language also seeds this control so menu and toasts match. If you only swapped the menu file by hand, or upgraded without re-running that installer step, set **Notification language** once to match your menu.
 
 ### The menu is in the wrong language
 
 The MCM menu follows the game's **language setting**, not the notification language above. Skyrim loads the translation file that matches the game language, so an English game shows the English menu even if you installed another language. Two ways to change it:
 
-- **Installer:** tick your language in step 1, then choose it as the default menu language in step 2 (it writes over the English file and keeps an English `.bak`).
-- **By hand:** rename `Interface\Translations\fth_ItJustWorks_<LANGUAGE>.txt` to `fth_ItJustWorks_ENGLISH.txt`, replacing the English file.
+- **Installer:** tick your language in step 1, then choose it as the default menu language in step 2. That overwrites the English menu file (and keeps an English `.bak`) **and** seeds **Notification language** to match.
+- **By hand:** rename `Interface\Translations\fth_ItJustWorks_<LANGUAGE>.txt` to `fth_ItJustWorks_ENGLISH.txt`, replacing the English file. That does **not** change **Notification language** - set it on **Settings** to match, or toasts stay English.
 
 ### The menu or notifications show garbled or unreadable characters
 

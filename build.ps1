@@ -314,9 +314,10 @@ if ($cfg.Length -gt 0 -and [int][char]$cfg[0] -eq 0xFEFF) { $cfg = $cfg.Substrin
 #      and raises a flag so step 2 can offer it.
 #   2. "Default menu language" - one radio pick that overwrites the ENGLISH file the
 #      game reads on an English-language install (and drops an English .bak sidecar so the
-#      original strings can be restored by rename). English is the default; every other
-#      option is greyed out until its box is ticked in step 1. Picking one there installs
-#      BOTH language files, so the menu shows through whatever the game's language is.
+#      original strings can be restored by rename). The same option seeds Config
+#      settings.ini iToastLang to match the notification-language enum (not user
+#      Settings/ - that would fight reset-to-default). English is the default; every
+#      other option is greyed out until its box is ticked in step 1.
 # The mod + the English file install unconditionally, so there is always a valid menu.
 # Endonym display names carry non-ASCII as XML numeric entities to keep build.ps1 ASCII.
 # The per-option descriptions are too long to entity-encode, so they live in a UTF-8 data
@@ -332,16 +333,39 @@ $fomodLangs = [ordered]@{
     RUSSIAN  = '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian)'
     SPANISH  = 'Espa&#241;ol (Spanish)'
 }
+# Must match bake $langOrder / MCM enum options (0 = English).
+$toastLangIndex = @{
+    ENGLISH = 0; FRENCH = 1; GERMAN = 2; ITALIAN = 3; SPANISH = 4
+    POLISH = 5; RUSSIAN = 6; CHINESE = 7; JAPANESE = 8; CZECH = 9
+}
 $fomodDescPath = Join-Path $root "packaging\fomod-descriptions.json"
 if (-not (Test-Path $fomodDescPath)) { Fail "FOMOD: missing packaging\fomod-descriptions.json" }
 $fomodDesc = Get-Content $fomodDescPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $engRel = "Interface\translations\fth_ItJustWorks_ENGLISH.txt"
+$settingsRel = "MCM\Config\fth_ItJustWorks\settings.ini"
+$baseSettingsPath = Join-Path $pkg $settingsRel
+if (-not (Test-Path $baseSettingsPath)) { Fail "FOMOD: missing baseline $settingsRel" }
+$baseSettingsText = [IO.File]::ReadAllText($baseSettingsPath)
+if ($baseSettingsText -notmatch '(?m)^iToastLang\s*=\s*0\s*$') {
+    Fail "FOMOD: baseline settings.ini must contain iToastLang = 0 (got no match)"
+}
+$seedDir = Join-Path $pkg "fomod\toast-lang"
+New-Item -ItemType Directory -Force $seedDir | Out-Null
+$utf8NoBomSeed = [Text.UTF8Encoding]::new($false)
 $fomodLangFiles = ""   # step 1: install the native-name file, raise a flag
-$fomodDefaults  = ""   # step 2: overwrite ENGLISH (+ English .bak), greyed until the step-1 flag is set
+$fomodDefaults  = ""   # step 2: overwrite ENGLISH (+ .bak) + seed iToastLang
 foreach ($lang in $fomodLangs.Keys) {
     $rel = "Interface\translations\fth_ItJustWorks_$lang.txt"
     if (-not (Test-Path (Join-Path $pkg $rel))) { Fail "FOMOD: missing translation $rel" }
     if (-not ($fomodDesc.PSObject.Properties.Name -contains $lang)) { Fail "FOMOD: no descriptions for $lang in fomod-descriptions.json" }
+    if (-not $toastLangIndex.ContainsKey($lang)) { Fail "FOMOD: no toast index for $lang" }
+    $idx = [int]$toastLangIndex[$lang]
+    $seedRel = "fomod\toast-lang\settings_$lang.ini"
+    $seedText = [regex]::Replace($baseSettingsText, '(?m)^iToastLang\s*=\s*\d+\s*$', "iToastLang = $idx")
+    if ($seedText -notmatch "(?m)^iToastLang\s*=\s*$idx\s*$") {
+        Fail "FOMOD: failed to stamp iToastLang = $idx into $seedRel"
+    }
+    [IO.File]::WriteAllText((Join-Path $pkg $seedRel), $seedText, $utf8NoBomSeed)
     $disp = $fomodLangs[$lang]
     $descCheckbox = ($fomodDesc.$lang.checkbox) -replace '&', '&amp;' -replace '<', '&lt;' -replace '>', '&gt;'
     $descOverride = ($fomodDesc.$lang.override) -replace '&', '&amp;' -replace '<', '&lt;' -replace '>', '&gt;'
@@ -360,6 +384,7 @@ foreach ($lang in $fomodLangs.Keys) {
         "            <files>`n" +
         "              <file source=`"$rel`" destination=`"$engRel`" priority=`"1`"/>`n" +
         "              <file source=`"$engRel`" destination=`"${engRel}.bak`" priority=`"0`"/>`n" +
+        "              <file source=`"$seedRel`" destination=`"$settingsRel`" priority=`"1`"/>`n" +
         "            </files>`n" +
         "            <typeDescriptor>`n" +
         "              <dependencyType>`n" +
@@ -501,9 +526,10 @@ Write-Host "  version $Version consistent across info.xml, ESP, MCM title, CHANG
 # FOMOD sanity: a scripted installer copies ONLY what it lists. Prove every referenced
 # source exists; the two steps are shaped right; the default-language mechanism is fully
 # wired (step-2 flags match step-1 flags, the translation overwrites ENGLISH at priority 1,
-# and an English .bak sidecar is preserved); and no shipped file is left unreferenced.
-# GetAttribute + SelectNodes throughout: the "English (default)" option has no <files>, and
-# property access on a missing node/attribute trips Set-StrictMode.
+# English .bak sidecar, Config settings.ini iToastLang seed at priority 1); and no shipped
+# file outside fomod/ is left unreferenced. GetAttribute + SelectNodes throughout: the
+# "English (default)" option has no <files>, and property access on a missing node/attribute
+# trips Set-StrictMode.
 [xml]$mc = Get-Content (Join-Path $fomodDir "ModuleConfig.xml") -Raw
 $steps = @($mc.config.installSteps.installStep)
 if ($steps.Count -ne 2) { Fail "FOMOD: expected 2 install steps, got $($steps.Count)" }
@@ -539,18 +565,35 @@ if ($step1Flags.Count -ne 9) { Fail "FOMOD: expected 9 step-1 condition flags, g
 
 # Step 2: English (default) + 9 language options. Each language option must (a) overwrite
 # the ENGLISH file with a non-ENGLISH translation at priority 1, (b) drop an English .bak
-# sidecar, and (c) gate on a flagDependency that a step-1 checkbox actually raises.
+# sidecar, (c) seed Config settings.ini iToastLang at priority 1, and (d) gate on a
+# flagDependency that a step-1 checkbox actually raises.
 if ($defPlugins.Count -ne 10) { Fail "FOMOD: expected 10 default-language options (English + 9), got $($defPlugins.Count)" }
 $transNodes = @($defFileNodes | Where-Object { $_.GetAttribute('destination') -match 'fth_ItJustWorks_ENGLISH\.txt$' })
 $bakNodes   = @($defFileNodes | Where-Object { $_.GetAttribute('destination') -match 'fth_ItJustWorks_ENGLISH\.txt\.bak$' })
+$seedNodes  = @($defFileNodes | Where-Object { $_.GetAttribute('destination') -match '(?i)MCM[/\\]Config[/\\]fth_ItJustWorks[/\\]settings\.ini$' })
 if ($transNodes.Count -ne 9) { Fail "FOMOD: expected 9 default-language overwrites of the ENGLISH file, got $($transNodes.Count)" }
 if ($bakNodes.Count   -ne 9) { Fail "FOMOD: expected 9 English .bak sidecars, got $($bakNodes.Count)" }
+if ($seedNodes.Count  -ne 9) { Fail "FOMOD: expected 9 Config settings.ini toast-lang seeds, got $($seedNodes.Count)" }
 foreach ($f in $transNodes) {
     if ($f.GetAttribute('source') -match 'ENGLISH')  { Fail "FOMOD: a default-language overwrite sources the ENGLISH file; it must source a translation" }
     if ($f.GetAttribute('priority') -ne '1')         { Fail "FOMOD: a default-language overwrite must be priority 1 to outrank the required ENGLISH file" }
 }
 foreach ($f in $bakNodes) {
     if ($f.GetAttribute('source') -notmatch 'fth_ItJustWorks_ENGLISH\.txt$') { Fail "FOMOD: the .bak sidecar must source the ENGLISH file, got '$($f.GetAttribute('source'))'" }
+}
+foreach ($f in $seedNodes) {
+    if ($f.GetAttribute('priority') -ne '1') { Fail "FOMOD: toast-lang settings.ini seed must be priority 1" }
+    $src = $f.GetAttribute('source')
+    if ($src -notmatch 'fomod[/\\]toast-lang[/\\]settings_([A-Z]+)\.ini$') {
+        Fail "FOMOD: toast-lang seed source must be fomod/toast-lang/settings_<LANG>.ini, got '$src'"
+    }
+    $seedLang = $Matches[1]
+    if (-not $toastLangIndex.ContainsKey($seedLang)) { Fail "FOMOD: seed for unknown lang $seedLang" }
+    $want = [int]$toastLangIndex[$seedLang]
+    $seedBody = [IO.File]::ReadAllText((Join-Path $pkg $src))
+    if ($seedBody -notmatch "(?m)^iToastLang\s*=\s*$want\s*$") {
+        Fail "FOMOD: $src must set iToastLang = $want"
+    }
 }
 $step2Deps = @($defStep.SelectNodes('.//plugin/typeDescriptor/dependencyType/patterns/pattern/dependencies/flagDependency') | ForEach-Object { $_.GetAttribute('flag') })
 if ($step2Deps.Count -ne 9) { Fail "FOMOD: expected 9 default-language flag dependencies, got $($step2Deps.Count)" }
@@ -559,7 +602,7 @@ foreach ($flag in $step1Flags) { if ($step2Deps -notcontains $flag) { Fail "FOMO
 
 $fomodOrphans = @(Get-ChildItem $pkg -Recurse -File | Where-Object { $_.FullName -notlike "*\fomod\*" -and -not $fomodRefs.Contains($_.FullName.ToLower()) })
 if ($fomodOrphans.Count -gt 0) { Fail "FOMOD: $($fomodOrphans.Count) shipped file(s) not referenced, would not install: $($fomodOrphans.Name -join ', ')" }
-Write-Host "  fomod: valid; all $($fomodRefs.Count) shipped files referenced; 9 checkboxes + 10 default options; flags linked, priorities correct, English .bak preserved"
+Write-Host "  fomod: valid; all $($fomodRefs.Count) shipped files referenced; 9 checkboxes + 10 default options; flags linked; ENGLISH overwrite + .bak + iToastLang seed"
 
 # Translation key-set: every $fth_IJW_* used by MCM config or scripts must exist in all
 # ten UTF-16 tables; no orphan keys left from retired UX (Trace toggle, old confirm, ...).
