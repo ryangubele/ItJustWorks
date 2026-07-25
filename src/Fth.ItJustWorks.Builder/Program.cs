@@ -91,8 +91,8 @@ mod.WriteToBinary(outPath, new BinaryWriteParameters
 // written little-endian. NOT the bare object id, and NOT the runtime FE address: the light-slot
 // index is assigned at load order time, so it can never live in a static file. Master count is
 // read back from the file we just wrote so it tracks the real masters, not an assumed 1.
-// Read back masters + StartGameEnabled invariant. The SEQ is a single 4-byte entry;
-// more than one SGE quest would ship unarmed extras if we only ever wrote one dword.
+// Read back masters + StartGameEnabled. The SEQ is a single 4-byte entry; more than
+// one SGE quest would ship unarmed extras if we only ever wrote one dword.
 int masterCount;
 int sgeCount = 0;
 bool ourQuestIsSge = false;

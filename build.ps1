@@ -647,7 +647,39 @@ foreach ($flag in $step1Flags) { if ($step2Deps -notcontains $flag) { Fail "FOMO
 
 $fomodOrphans = @(Get-ChildItem $pkg -Recurse -File | Where-Object { $_.FullName -notlike "*\fomod\*" -and -not $fomodRefs.Contains($_.FullName.ToLower()) })
 if ($fomodOrphans.Count -gt 0) { Fail "FOMOD: $($fomodOrphans.Count) shipped file(s) not referenced, would not install: $($fomodOrphans.Name -join ', ')" }
-Write-Host "  fomod: valid; all $($fomodRefs.Count) shipped files referenced; 9 checkboxes + 10 default options; flags linked; ENGLISH overwrite + .bak + iToastLang seed"
+
+# Folder sources install everything under them. The scan above would "bless" a stray
+# .bak/.tmp as intentional. Deny common junk, then require an exact known file set.
+$strayUnderFolders = @(Get-ChildItem (Join-Path $pkg "Scripts"), (Join-Path $pkg "MCM"), (Join-Path $pkg "SEQ") -Recurse -File -ErrorAction SilentlyContinue |
+    Where-Object {
+        $n = $_.Name
+        $n -match '\.(bak|orig|tmp|swp|rej)$' -or $n -match '~$' -or $n -like '*.bak.*' -or $n -like '*~' -or $n -eq 'Thumbs.db' -or $n -eq '.DS_Store'
+    })
+if ($strayUnderFolders.Count -gt 0) {
+    Fail "FOMOD: stray backup/temp file(s) under Scripts/MCM/SEQ would ship: $($strayUnderFolders.FullName -join ', ')"
+}
+$expectScript = @("fth_IJW_Watcher.pex", "fth_IJW_MCM.pex", "fth_IJW_Toasts.pex") | ForEach-Object { $_.ToLower() }
+$gotScript = @(Get-ChildItem (Join-Path $pkg "Scripts") -File -ErrorAction SilentlyContinue | ForEach-Object { $_.Name.ToLower() }) | Sort-Object
+$expScriptSorted = @($expectScript | Sort-Object)
+if (($gotScript -join "|") -ne ($expScriptSorted -join "|")) {
+    Fail "FOMOD: Scripts/ must be exactly $($expectScript -join ', '); got: $($gotScript -join ', ')"
+}
+$mcmCfg = Join-Path $pkg "MCM\Config\fth_ItJustWorks"
+$expectMcm = @("config.json", "settings.ini") | ForEach-Object { $_.ToLower() }
+$gotMcm = @(Get-ChildItem $mcmCfg -File -ErrorAction SilentlyContinue | ForEach-Object { $_.Name.ToLower() }) | Sort-Object
+$extraMcm = @(Get-ChildItem (Join-Path $pkg "MCM") -Recurse -File -ErrorAction SilentlyContinue |
+    Where-Object { $_.FullName -notlike "*\Config\fth_ItJustWorks\*" })
+if ($extraMcm.Count -gt 0) {
+    Fail "FOMOD: unexpected file(s) under MCM/ outside Config/fth_ItJustWorks: $($extraMcm.Name -join ', ')"
+}
+if (($gotMcm -join "|") -ne (($expectMcm | Sort-Object) -join "|")) {
+    Fail "FOMOD: MCM/Config/fth_ItJustWorks/ must be exactly config.json + settings.ini; got: $($gotMcm -join ', ')"
+}
+$gotSeq = @(Get-ChildItem (Join-Path $pkg "SEQ") -File -ErrorAction SilentlyContinue | ForEach-Object { $_.Name.ToLower() })
+if ($gotSeq.Count -ne 1 -or $gotSeq[0] -ne "fth_itjustworks.seq") {
+    Fail "FOMOD: SEQ/ must contain only fth_ItJustWorks.seq; got: $($gotSeq -join ', ')"
+}
+Write-Host "  fomod: valid; all $($fomodRefs.Count) shipped files referenced; folder trees exact; 9 checkboxes + 10 default options; flags linked; ENGLISH overwrite + .bak + iToastLang seed"
 
 # Translation key-set: every $fth_IJW_* used by MCM config or scripts must exist in all
 # ten UTF-16 tables; no orphan keys left from retired UX (Trace toggle, old confirm, ...).
