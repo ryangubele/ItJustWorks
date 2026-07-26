@@ -128,9 +128,11 @@ Subsections (keep this set; add only when the English manual does):
 | Notifications are in the wrong language | **Settings > Notification language** (corner notifications; independent of menu / `sLanguage`) |
 | The menu is in the wrong language | Installer or rename `fth_ItJustWorks_<SKYRIMLANG>.txt` → `…_ENGLISH.txt` |
 | The menu or notifications show garbled / unreadable characters | Non-Latin script needs a game **font** that has those glyphs; point at a font mod |
-| No alert ever appears | Watchdog status / dials; session timer after reload |
+| No nudge ever appears | Watchdog status / dials; session timer after reload |
 | Stop Scene didn't clear the scene | Rare / log capture guidance |
 | Filing a bug report, or asking for help | Diagnostics log **Events**, `fth_IJW` in Papyrus log, Nexus/GitHub channels |
+
+Scope: this inventory is a check for **translation runs**, not a vocabulary rule for the product. Code, logs and internal prose use "alert" and similar freely, and that is not drift. But a translator cannot tell a deliberate English term from a stale one, and translated manuals get far less review than the English, so the headings above are authoritative - match them exactly rather than improving on them.
 
 Rules:
 
