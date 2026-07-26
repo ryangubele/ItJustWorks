@@ -344,11 +344,6 @@ string Function GetLastCorrection()
     return sLastCorrection
 EndFunction
 
-; True when a scene is present but its editor ID is empty (Load EditorIDs off).
-bool Function EditorIdMissing()
-    return currentScene && PO3_SKSEFunctions.GetFormEditorID(currentScene as Form) == ""
-EndFunction
-
 ; po3 Load EditorIDs on? Probe PlayerRef (and base); independent of current scene.
 bool Function EditorIdsLoading()
     if PO3_SKSEFunctions.GetFormEditorID(PlayerRef as Form) != ""
@@ -395,10 +390,6 @@ Function SetEnabled(bool abEnabled)
         UnregisterHotkey()
         Log(LOG_EVENTS, "life disabled")
     endif
-EndFunction
-
-bool Function IsEnabled()
-    return bEnabled
 EndFunction
 
 ; MCM pushes the bound keycode here (-1 clears). We own the live registration.
