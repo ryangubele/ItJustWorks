@@ -114,7 +114,7 @@ Players use the how-to and the menu together. **Page names, control labels, and 
 - **English:** when a control is named in `docs/manual.md`, the matching `$fth_IJW_*` value in `fth_ItJustWorks_ENGLISH.txt` uses that same wording (and the reverse: if the MCM label is the product term, the manual names it that way). Do not ship one label in the menu and a synonym in the manual.
 - **Other languages:** when regenerating or editing translations, **one vocabulary per language**. Port UI chrome from English, then use **identical** terms in both `fth_ItJustWorks_<SKYRIMLANG>.txt` and `docs/manual.<lang>.md`. Read both files while editing so labels cannot drift.
 - MCM files are **UTF-16 LE** (BOM), `$key` + tab + value. Same key set in every language file.
-- Leave technical tokens consistent with English where the tables already do (`Editor ID`, `Form ID`, `Papyrus`, paths, ini keys, `fth_IJW`, product name **It Just Works**). Functional corner toasts are localized via the notification-language bake; the Levity punchline stays English on purpose.
+- Leave technical tokens consistent with English where the tables already do (`Editor ID`, `Form ID`, `Papyrus`, paths, ini keys, `fth_IJW`, product name **It Just Works**). Functional corner notifications are localized via the notification-language bake; the Levity punchline stays English on purpose. Player and contributor prose says **notification** instead of toast.
 
 ### Troubleshooting section (manuals)
 
@@ -125,7 +125,7 @@ Subsections (keep this set; add only when the English manual does):
 | English heading (authoritative) | Topic |
 |---------------------------------|--------|
 | Scenes show as ID numbers, not names | po3 `Load EditorIDs`, mod-manager overwrite, Diagnostics light |
-| Notifications are in the wrong language | **Settings > Notification language** (toasts; independent of menu / `sLanguage`) |
+| Notifications are in the wrong language | **Settings > Notification language** (corner notifications; independent of menu / `sLanguage`) |
 | The menu is in the wrong language | Installer or rename `fth_ItJustWorks_<SKYRIMLANG>.txt` → `…_ENGLISH.txt` |
 | The menu or notifications show garbled / unreadable characters | Non-Latin script needs a game **font** that has those glyphs; point at a font mod |
 | No alert ever appears | Watchdog status / dials; session timer after reload |
