@@ -6,26 +6,26 @@ It Just Works™ distribuisce il suo menu di gioco (l'MCM) e il suo manuale in d
 
 ## Importante: tutto tranne l'inglese è stato tradotto automaticamente
 
-L'inglese è scritto dall'autore. **Ogni altra lingua è stata tradotta da un'IA (un grande modello linguistico), non da un madrelingua.** Le traduzioni sono accurate e tecnicamente coerenti - i nomi dei file, le impostazioni e i termini come `Editor ID`, `Form ID` e `Papyrus` sono deliberatamente lasciati non tradotti così da poterli ancora incrociare come riferimento - ma nessun essere umano che parli fluentemente la lingua le ha riviste.
+L'inglese è scritto dall'autore. Ogni altra lingua è stata tradotta da un grande modello linguistico, non da un madrelingua. Le traduzioni sono accurate e tecnicamente coerenti - i nomi dei file, le impostazioni e i termini come `Editor ID`, `Form ID` e `Papyrus` sono deliberatamente lasciati non tradotti così da poterli ancora incrociare come riferimento - ma nessun essere umano che parli fluentemente la lingua le ha riviste.
 
-Se parli una di queste lingue e qualcosa suona sbagliato, rigido o semplicemente scorretto: **per favore, miglioralo.** È proprio questo il senso dell'open source e di una licenza condivisibile. Apri una pull request, oppure invia le correzioni come preferisci - il merito è tuo, e la gratitudine è garantita. Una revisione madrelingua è l'unica cosa che una macchina non può dare a tutto questo, ed è benvenuta per ogni lingua, inglese incluso.
+Se parli una di queste lingue e qualcosa suona sbagliato, rigido o semplicemente scorretto: **per favore, miglioralo.** Apri una pull request, oppure invia le correzioni come preferisci - il merito è tuo, e la gratitudine è garantita. Una revisione madrelingua è l'unica cosa che una macchina non può dare a tutto questo, ed è benvenuta per ogni lingua, inglese incluso.
 
-Non serve nemmeno parlare fluentemente per aiutare. Se una riga nel menu sembra **tagliata** o sborda dal bordo del pannello - più probabile in cinese o giapponese, dove i caratteri sono più larghi - è una segnalazione davvero utile, e facile da inviare: bastano uno screenshot e la lingua. La colonna del menu è stretta, quindi una riga occasionalmente troppo lunga è un adattamento di visualizzazione da rifinire, non una traduzione difettosa.
+Non serve nemmeno parlare fluentemente per aiutare. Se una riga nel menu sembra **tagliata** o sborda dal bordo del pannello - più probabile in cinese o giapponese, dove i caratteri sono più larghi - è una segnalazione davvero utile, e facile da inviare: bastano uno screenshot e la lingua.
 
 ## Cosa è tradotto
 
-- **Il menu MCM** - completamente tradotto: ogni etichetta di opzione, ogni descrizione di aiuto e le stringhe di stato dinamiche che gli script inviano al menu (i suggerimenti di attivazione/annullamento di Stop, lo stato del watchdog, le ultime frasi di auto-riparazione).
-- **Il manuale** (`docs/manual.<lang>.md`) - completamente tradotto.
-- **Le notifiche pop-up di gioco** - tradotte. L'avviso del watchdog, l'avviso «i nomi sono errati», i risultati di Stop e la lettura del tasto di scelta rapida seguono l'impostazione **Lingua delle notifiche** nella pagina **Impostazioni** dell'MCM, in tutte e dieci le lingue; l'installer la imposta in base alla tua scelta della lingua del menu.
+- **Il menu MCM**
+- **Il manuale** (`docs/manual.<lang>.md`)
+- **Le notifiche pop-up di gioco** - seguono l'impostazione **Lingua delle notifiche** nella pagina **Impostazioni** dell'MCM; l'installer la imposta in base alla tua scelta della lingua del menu.
 
 ## Cosa è deliberatamente in inglese
 
 - **La firma `See? It Just Works!`** - la battuta è nativa dell'inglese. Questione di gusto, non un limite.
-- **Il log di diagnostica Papyrus** - le righe opzionali `[fth_IJW] …` che la mod scrive quando attivi la registrazione restano in inglese di proposito. Sono un dialetto `key=value` strutturato e «greppabile», pensato per essere cercato e incollato in una segnalazione di bug; tradurle romperebbe questa ricercabilità e si diramerebbe in una matrice ingestibile per lingua, senza vantaggio per nessuno.
+- **Il log di diagnostica Papyrus** - le righe che il mod scrive quando attivi la registrazione restano in inglese di proposito. Sono un dialetto `key=value` strutturato e "greppabile", pensato per essere cercato e incollato in una segnalazione di bug; tradurle romperebbe gran parte della loro utilità per un beneficio minimo.
 
 ## Lingue
 
-L'impostazione **Lingua delle notifiche** elenca le dieci lingue con i loro nomi inglesi, così il menu a discesa resta leggibile qualunque font tu abbia. Trova la tua qui (dall'alto in basso corrisponde all'ordine del menu a discesa):
+Il font predefinito di Skyrim per i giocatori inglesi non può rappresentare gli alfabeti non latini, quindi usare gli endonimi delle lingue nell'MCM farebbe sembrare il mod rotto. Come soluzione, l'impostazione **Lingua delle notifiche** elenca le dieci lingue con i loro nomi inglesi. Trova la tua qui se non la conosci già:
 
 | Nel menu | La tua lingua | Codice Skyrim |
 |-------------|---------------|-------------|
@@ -40,7 +40,7 @@ L'impostazione **Lingua delle notifiche** elenca le dieci lingue con i loro nomi
 | Japanese | 日本語 | `JAPANESE` |
 | Czech | Čeština | `CZECH` |
 
-La lingua del **menu** segue il file lingua del gioco Skyrim a meno che tu non la sovrascriva (il passo dell'installer per il menu predefinito, oppure la rinomina a mano su `fth_ItJustWorks_ENGLISH.txt`). Il controllo **Lingua delle notifiche** in Impostazioni è separato: l'installer può impostarlo quando scegli una lingua predefinita del menu, ma una rinomina del menu a mano no - imposta l'enum perché corrisponda se i toast restano in inglese.
+La lingua del **menu** segue il file lingua di gioco di Skyrim a meno che tu non la sovrascriva (il passo dell'installer per il menu predefinito, oppure la rinomina a mano su `fth_ItJustWorks_ENGLISH.txt`). Il controllo **Lingua delle notifiche** in Impostazioni è separato: l'installer lo imposta quando scegli una lingua predefinita del menu, ma una rinomina del menu a mano no. Impostalo perché corrisponda se le notifiche sono nella lingua sbagliata.
 
 ## Manuali
 

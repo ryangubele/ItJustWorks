@@ -1,9 +1,8 @@
-// Copyright (c) 2026 Ryan Gubele
-// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) 2026 Ryan Gubele SPDX-License-Identifier: MPL-2.0
 //
-// Generates fth_ItJustWorks.esp from code, so the plugin diffs in git and
-// rebuilds byte-for-byte -- no Creation Kit authoring. One QUST record, ESL-
-// flagged, master Skyrim.esm only, carrying two script bindings on its VMAD.
+// Generates fth_ItJustWorks.esp from code, so the plugin diffs in git -- no
+// Creation Kit authoring. One QUST record, ESL- flagged, master Skyrim.esm
+// only, carrying two script bindings on its VMAD.
 
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
@@ -41,7 +40,7 @@ var mod = new SkyrimMod(modKey, SkyrimRelease.SkyrimSE);
 // username/hostname are scrubbed, and only from the .pex.
 mod.ModHeader.Author = author;
 // Keeps the literal "v{version}" so the build's version gate can find it.
-mod.ModHeader.Description = $"It Just Works v{version} - un-sticks the states Skyrim leaves stuck; scenes first";
+mod.ModHeader.Description = $"It Just Works v{version} - a debug menu for a game that doesn't need one";
 mod.ModHeader.Flags |= SkyrimModHeader.HeaderFlag.Small; // ESL flag (bit 0x200)
 
 // The one record.
@@ -58,18 +57,22 @@ if (quest.FormKey.ID is < 0x800 or > 0xFFF)
 }
 
 // VMAD: two scripts on the quest. fth_IJW_Watcher gets PlayerRef; fth_IJW_MCM
-// gets ModName (how MCM Helper binds this quest to config.json).
+// gets ModName.
 var adapter = new QuestAdapter();
 
 var watcher = new ScriptEntry { Name = "fth_IJW_Watcher", Flags = ScriptEntry.Flag.Local };
 var playerProp = new ScriptObjectProperty { Name = "PlayerRef", Flags = ScriptProperty.Flag.Edited };
 playerProp.Object.SetTo(FormKey.Factory("000014:Skyrim.esm"));
 watcher.Properties.Add(playerProp);
+// Vanilla TimeScale GLOB (Skyrim.esm 0x3A) for the detection game-time gate.
+var timescaleProp = new ScriptObjectProperty { Name = "TimeScale", Flags = ScriptProperty.Flag.Edited };
+timescaleProp.Object.SetTo(FormKey.Factory("00003A:Skyrim.esm"));
+watcher.Properties.Add(timescaleProp);
 adapter.Scripts.Add(watcher);
 
 // ModName must match the MCM/Config folder name. This inherited SKI_ConfigBase
 // property doesn't actually bind through the VMAD, so MCM Helper falls back to the
-// plugin filename regardless -- which is why the folder is named "fth_ItJustWorks".
+// plugin filename regardless.
 var menu = new ScriptEntry { Name = "fth_IJW_MCM", Flags = ScriptEntry.Flag.Local };
 menu.Properties.Add(new ScriptStringProperty { Name = "ModName", Flags = ScriptProperty.Flag.Edited, Data = "fth_ItJustWorks" });
 adapter.Scripts.Add(menu);
@@ -78,21 +81,10 @@ quest.VirtualMachineAdapter = adapter;
 
 mod.WriteToBinary(outPath, new BinaryWriteParameters
 {
-    // Derive the masters list from the record links (-> Skyrim.esm) rather than
-    // trusting an in-memory list.
     MastersListContent = MastersListContentOption.Iterate,
 });
 
-// SEQ: reliably start the StartGameEnabled quest on a mid-playthrough save. A StartGameEnabled
-// quest is NOT reliably started when its plugin is added to a save that predates it; Data/SEQ/
-// <plugin>.seq is the engine's deterministic "start these quests on load" list. The entry is the
-// quest's FILE FormID -- the object id (quest.FormKey.ID, forced into 0x800-0xFFF above) under the
-// plugin's own index in its master list (= master count; 0x01 with one master -> 0x01000800),
-// written little-endian. NOT the bare object id, and NOT the runtime FE address: the light-slot
-// index is assigned at load order time, so it can never live in a static file. Master count is
-// read back from the file we just wrote so it tracks the real masters, not an assumed 1.
-// Read back masters + StartGameEnabled. The SEQ is a single 4-byte entry; more than
-// one SGE quest would ship unarmed extras if we only ever wrote one dword.
+// SEQ: reliably start the StartGameEnabled quest on a mid-playthrough save.
 int masterCount;
 int sgeCount = 0;
 bool ourQuestIsSge = false;

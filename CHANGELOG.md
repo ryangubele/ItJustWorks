@@ -5,14 +5,39 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.6.0
+
+- **Times a scene the way you mean "stuck".** Game time is considered alongside
+  real time to cut false-positive notifications: game time holds back early fire
+  when menus freeze the world; real time holds it back when the world skips
+  (sleep/fast travel). The threshold still means the scene's been running a
+  while. A long scene, or an uncommon sleep/travel-then-menu stretch, can
+  still fire. Both clocks effectively agree on unpause/Souls, because:
+- **Self-tunes to your timescale.** The check scales with your timescale, so the
+  same stretch of play trips the alert on vanilla or a custom-timescale setup -
+  nothing to re-tune. If a mod shifts timescale mid-scene, the check
+  re-baselines to the new rate.
+- **The warn default is now 6 minutes** (was 3) - a touch looser, and small
+  either way. Those minutes are roughly running time for the scene as-played.
+- **Repeat alerts, opt-in.** New **Repeat alerts** toggle on the **Watchdog**
+  page - off by default (one alert per scene, same as before), with a **Repeat
+  every** slider (default 5 minutes). On, the alert repeats while you're still
+  over the threshold. The menu shows the current scene and elapsed time either
+  way.
+- **The log explains fires and holds.** With logging on, Events records each
+  fire and each held check with the real / game / gate numbers, and *why* a
+  check held (`why=gate`), so a "stuck, no notification" report can be
+  diagnosed. A mid-scene timescale change logs a re-baseline; the Every-check
+  heartbeat gains `playing=`.
+
 ## 0.5.0
 
 - **Notifications speak the player's language.** The mod's corner notifications - the stuck-scene alert,
   Stop results, and others - now follow **Settings > Notification language**: all ten languages, English
   default and fallback. Change it anytime; the installer seeds it from your menu language choice.
-- **English game, other-language menu still matches.** Toast copy lives in the same translation tables
+- **English game, other-language menu still matches.** Notification copy lives in the same translation tables
   as the menu and is baked at build time, so a heavy-mod English client with non-English menu content
-  gets matching corner toasts instead of a silent fall-through to English.
+  gets matching corner notifications instead of a silent fall-through to English.
 - **Punchline stays English.** The `See? It Just Works!` sign-off is still English on purpose.
 
 ## 0.4.1

@@ -1,20 +1,18 @@
 ; Copyright (c) 2026 Ryan Gubele
 ; SPDX-License-Identifier: MPL-2.0
 ;
-; Polls the player's current scene on a timer and fires one advisory notification
-; once you've been in a scene past a threshold. The MCM readout is a view of the
-; state kept here.
+; Polls the player's current scene on a timer and fires one advisory toast when
+; wallclock and a game-time gate both clear the warn threshold. MCM readout is
+; a view of state kept here.
 ;
-; IsPlaying() stays true for stuck scenes -- it only filters already-ended ones;
-; duration past the threshold is the stuck signal. Quest scripts have no
-; OnPlayerLoadGame, so the single-update loop re-registers each tick (persisted,
-; non-stacking) and the MCM re-arms on open.
+; IsPlaying() stays true for stuck scenes -- it only filters already-ended ones.
+; Quest scripts have no OnPlayerLoadGame, so the single-update loop re-registers
+; each tick (persisted, non-stacking) and the MCM re-arms on open.
 ;
-; Log() writes structured [fth_IJW] lines gated by iLogLevel (0 Off / 1 Events /
+; Log() emits structured [fth_IJW] lines gated by iLogLevel (0 Off / 1 Events /
 ; 2 Every check). Values are space-free; join key is scene=0x<form id>. Papyrus
-; evaluates call arguments eagerly, so concatenating log lines are gated at the
-; call site. Logs use SceneKey/QuietEdid so they never fire the names-off toast
-; (that stays on the display path in LabelFor).
+; evaluates args eagerly, so non-literal lines are gated at the call site. Logs
+; use SceneKey/QuietEdid so they never fire the names-off toast.
 
 Scriptname fth_IJW_Watcher extends Quest
 
@@ -27,37 +25,40 @@ int Property LOG_CHECK  = 2 AutoReadOnly Hidden
 
 ; Settings, pushed from the MCM; defaults match settings.ini.
 float  fPollInterval  = 30.0     ; seconds between polls; 0 disables the loop
-float  fAlertThreshold = 180.0   ; seconds in-scene before alerting; 0 = never
+float  fAlertThreshold = 360.0   ; wallclock seconds before alert (warn minutes * 60); 0 = never
+bool   bRealert = false          ; opt-in repeat alerts; off = one toast per scene
+float  fRealertInterval = 300.0  ; wallclock seconds between repeats when bRealert
 int    iLogLevel = 0             ; 0 Off / 1 Events / 2 Every check
-bool   bLevity = true            ; flavored copy on; off = plain (toasts only)
-int    iToastLang = 0            ; notification language index (0=English); see fth_IJW_Toasts
+bool   bLevity = true            ; flavored toast copy; off = plain
+int    iToastLang = 0            ; notification language index; see fth_IJW_Toasts
+
+; Game-time gate: also require game minutes >= warn_minutes * TimeScale (live).
+GlobalVariable Property TimeScale Auto  ; Skyrim.esm TimeScale (0x3A), ESP-filled; live GetValue
+float  TS_EPSILON = 0.01         ; ignore tiny mid-scene timescale jitter
 
 ; Tracked state, persisted with the save.
 Scene  currentScene
-float  fSceneFirstSeen
-bool   bAlerted
-bool   bEditorIdHinted           ; nag once about Load EditorIDs
+float  fSceneFirstSeen           ; wallclock stamp on scene enter; rebaselined across reload
+float  fSceneFirstSeenGame       ; game-time (days) stamp on enter; rebaselined on timescale change
+float  fTsAtEnter                ; timescale at enter or last re-baseline
+bool   bAlerted                  ; one-shot toast already fired for this scene
+float  fLastAlertReal = -1.0     ; wallclock of last toast for re-alert cadence; -1 = none
+bool   bAlertHoldLogged          ; Events hold/fire already explained this episode
+bool   bEditorIdHinted           ; one-time Load EditorIDs hint
 
-; Loop-alive + last self-repair, for the readout. fLastTickRealTime is stamped in
-; OnUpdate only (the real timer tick), -1 until the first tick; guarded for the
-; real-time reset like ElapsedInScene. sLastCorrection holds the $-key of the most
-; recent genuine self-heal ("" = none). Inert value types, no world handles.
+; Loop heartbeat + last self-repair for Diagnostics. fLastTickRealTime only from OnUpdate.
 float  fLastTickRealTime = -1.0
-string sLastCorrection
+string sLastCorrection           ; $-key of last real self-heal, or ""
 
-; Master switch + bound hotkey, persisted so a reload keeps them without the menu.
-; bEnabled off = dormant (loop + hotkey unregistered), nothing lost. iHotkeyCode is
-; the DXScanCode, -1 when unbound; the MCM owns the on-disk copies, these mirror them.
+; Master switch + hotkey mirror (MCM owns disk). Off = dormant, state kept.
 bool bEnabled = true
-int  iHotkeyCode = -1
+int  iHotkeyCode = -1            ; DXScanCode, -1 unbound
 
-; 10-entry history ring, newest first. Papyrus throws on array==None and OnInit
-; doesn't re-run on load, so readiness is a bool and the array is built lazily in
-; EnsureHist() -- self-heals across save/reload and recompiles.
+; History ring, newest first. Built lazily -- OnInit does not re-run on load.
 string[] histLabel
 bool     histReady
 
-; =================================================================== lifecycle
+; --- lifecycle
 
 Event OnInit()
     EnsureHist()
@@ -68,8 +69,11 @@ Event OnInit()
         RecordCorrection("$fth_IJW_Heal_Player")
         Log(LOG_EVENTS, "heal player via=GetPlayer")
     endif
+    if !TimeScale                 ; packaging fault: ESP fill missing; bare Trace (not level-gated)
+        Debug.Trace("[fth_IJW] FAULT timescale property unfilled -- game-time gate off (real-only); rebuild the ESP")
+    endif
     if iLogLevel >= LOG_EVENTS
-        Log(LOG_EVENTS, "life armed player=" + player + " hotkey=" + HotkeyField() + " level=" + iLogLevel + " levity=" + BoolField(bLevity) + " lang=" + iToastLang)
+        Log(LOG_EVENTS, "life armed player=" + player + " hotkey=" + HotkeyField() + " warn=" + ((fAlertThreshold / 60.0) as int) + "m realert=" + BoolField(bRealert) + " ts=" + TsField() + " level=" + iLogLevel + " levity=" + BoolField(bLevity) + " lang=" + iToastLang)
     endif
     RegisterHotkey()
     Rearm()
@@ -81,7 +85,7 @@ Event OnUpdate()
     endif
     fLastTickRealTime = Utility.GetCurrentRealTime()   ; heartbeat -- real timer path only
     if iLogLevel >= LOG_CHECK
-        Log(LOG_CHECK, "poll tick scene=" + SceneKey(currentScene) + " el=" + ElapsedField() + " thr=" + (fAlertThreshold as int) + "s alerted=" + BoolField(bAlerted) + " alive=1")
+        Log(LOG_CHECK, "poll tick scene=" + SceneKey(currentScene) + " el=" + ElapsedField() + " thr=" + (fAlertThreshold as int) + "s alerted=" + BoolField(bAlerted) + " playing=" + PlayingField() + " alive=1")
     endif
     Rearm()                       ; re-arm before the work, so a fault in RunCheck can't kill the loop
     RunCheck()
@@ -94,26 +98,25 @@ Function Rearm()
     endif
 EndFunction
 
-; Pushed by the MCM. 0 poll stops the loop; 0 warn disables alerting. Guarded on a
-; real change so a slider drag (fires per step) doesn't spam the log. Levity and
-; toast language only affect notification copy; re-arm only when poll interval changes
-; (or we go dormant), so flipping copy knobs does not reset the countdown.
-Function ApplySettings(int aiPollSeconds, int aiWarnMinutes, int aiLogLevel, bool abLevity, int aiToastLang)
+; MCM push. 0 poll stops the loop; 0 warn disables alerts. Log only on real change
+; (slider drag is per-step). Re-arm only when poll interval changes or we go dormant.
+Function ApplySettings(int aiPollSeconds, int aiWarnMinutes, bool abRealert, int aiRealertMinutes, int aiLogLevel, bool abLevity, int aiToastLang)
     float newPoll = aiPollSeconds as float
     float newThr = (aiWarnMinutes * 60) as float
+    float newRealertInt = (aiRealertMinutes * 60) as float
     bool pollChanged = (newPoll != fPollInterval)
-    bool changed = pollChanged || (newThr != fAlertThreshold) || (aiLogLevel != iLogLevel) || (abLevity != bLevity) || (aiToastLang != iToastLang)
+    bool changed = pollChanged || (newThr != fAlertThreshold) || (abRealert != bRealert) || (newRealertInt != fRealertInterval) || (aiLogLevel != iLogLevel) || (abLevity != bLevity) || (aiToastLang != iToastLang)
     fPollInterval = newPoll
     fAlertThreshold = newThr
+    bRealert = abRealert
+    fRealertInterval = newRealertInt
     iLogLevel = aiLogLevel
     bLevity = abLevity
     iToastLang = aiToastLang
     if changed && iLogLevel >= LOG_EVENTS
-        Log(LOG_EVENTS, "life settings poll=" + aiPollSeconds + "s warn=" + aiWarnMinutes + "m level=" + iLogLevel + " levity=" + BoolField(abLevity) + " lang=" + iToastLang)
+        Log(LOG_EVENTS, "life settings poll=" + aiPollSeconds + "s warn=" + aiWarnMinutes + "m realert=" + BoolField(abRealert) + " every=" + aiRealertMinutes + "m level=" + iLogLevel + " levity=" + BoolField(abLevity) + " lang=" + iToastLang)
     endif
-    ; Mirror SetEnabled dormancy: poll 0 must kill a pending single-update, not only
-    ; skip re-arm (otherwise one last OnUpdate can still fire after the user turns the loop off).
-    ; Re-arm only when the interval itself changes or we leave the running-poll path.
+    ; Poll 0 must Unregister, not only skip re-arm (else one last OnUpdate can still fire).
     if bEnabled && fPollInterval >= 1.0
         if pollChanged
             Rearm()
@@ -123,14 +126,13 @@ Function ApplySettings(int aiPollSeconds, int aiWarnMinutes, int aiLogLevel, boo
     endif
 EndFunction
 
-; ===================================================================== the poll
+; --- poll
 
-; Runs on the timer and out-of-band on MCM open, so the readout is never poll-stale.
+; Timer path and MCM-open refresh (readout never poll-stale).
 Function RunCheck()
     Scene liveScene = PlayerRef.GetCurrentScene()
 
     if liveScene != currentScene
-        ; scene changed -- retire the old one to history, adopt the new one
         if currentScene
             float dur = ElapsedInScene()
             PushHistory(currentScene, dur)
@@ -140,37 +142,89 @@ Function RunCheck()
         endif
         currentScene = liveScene
         fSceneFirstSeen = Utility.GetCurrentRealTime()
+        fSceneFirstSeenGame = Utility.GetCurrentGameTime()
+        fTsAtEnter = CurrentTimescale()
         bAlerted = false
+        bAlertHoldLogged = false
+        fLastAlertReal = -1.0
         if liveScene && iLogLevel >= LOG_EVENTS
             Log(LOG_EVENTS, "scene enter scene=" + SceneKey(liveScene) + " name=" + QuietEdid(liveScene) + " el=0s")
         endif
         return
     endif
 
-    ; Only branch that can alert; gated on bEnabled so manual reads stay silent while dormant.
-    if bEnabled && currentScene && !bAlerted && fAlertThreshold >= 1.0
-        float elapsed = ElapsedInScene()
-        if elapsed > fAlertThreshold && currentScene.IsPlaying()
-            ; two short lines -- Skyrim shrinks a single long notification
-            Debug.Notification(fth_IJW_Toasts.Alert(iToastLang) + " " + ElapsedLabel(elapsed))
-            if bLevity
-                Debug.Notification("See? It Just Works!")   ; English sign-off; Levity off omits it
-            endif
-            bAlerted = true
-            if iLogLevel >= LOG_EVENTS
-                Log(LOG_EVENTS, "alert fire scene=" + SceneKey(currentScene) + " name=" + QuietEdid(currentScene) + " el=" + (elapsed as int) + "s thr=" + (fAlertThreshold as int) + "s sig=wall")
-            endif
+    if !bEnabled || !currentScene || fAlertThreshold < 1.0
+        return
+    endif
+
+    ; Fire when wallclock and game-time gate both clear (AND).
+    float ts = CurrentTimescale()
+    if ts > 0.0 && Math.abs(ts - fTsAtEnter) > TS_EPSILON
+        ; Mid-scene timescale change: restamp game origin only; wallclock stamp stays.
+        fSceneFirstSeenGame = Utility.GetCurrentGameTime()
+        fTsAtEnter = ts
+        if iLogLevel >= LOG_EVENTS
+            Log(LOG_EVENTS, "heal rebaseline-ts scene=" + SceneKey(currentScene) + " ts=" + (ts as int))
         endif
+    endif
+
+    float realSec = ElapsedInScene()
+    float realMin = realSec / 60.0
+    float gameMin = ElapsedGameInScene() * 1440.0     ; game days -> minutes
+    float gateMin = (fAlertThreshold / 60.0) * ts     ; warn_min * ts; ts<=0 => gate 0 => wallclock-only
+    bool realOk = realSec >= fAlertThreshold
+    bool gameOk = gameMin >= gateMin
+    bool playing = currentScene.IsPlaying()
+
+    ; One-shot unless re-alert; reload rewinds session clock => treat as due.
+    bool due
+    if bRealert && fRealertInterval >= 60.0
+        float nowReal = Utility.GetCurrentRealTime()
+        due = (fLastAlertReal < 0.0) || (nowReal < fLastAlertReal) || ((nowReal - fLastAlertReal) >= fRealertInterval)
+    else
+        due = !bAlerted
+    endif
+
+    bool fired = false
+    if playing && due && realOk && gameOk
+        FireAlert(realSec, gameMin, gateMin, ts)
+        fired = true
+    endif
+
+    ; One Events hold per episode (latch also set on fire so cadence waits stay quiet).
+    if realOk && !fired && !bAlertHoldLogged
+        string why
+        if !playing
+            why = "not-playing"
+        ElseIf !due
+            why = "already"
+        Else
+            why = "gate"                  ; wallclock met, game half short
+        endif
+        if iLogLevel >= LOG_EVENTS
+            Log(LOG_EVENTS, "alert hold scene=" + SceneKey(currentScene) + " real=" + (realMin as int) + "m game=" + (gameMin as int) + "m gate=" + (gateMin as int) + "m why=" + why)
+        endif
+        bAlertHoldLogged = true
     endif
 EndFunction
 
-; Seconds in the current scene. Utility.GetCurrentRealTime() is session-relative and
-; resets to ~0 each game launch, but fSceneFirstSeen persists in the save -- so after a
-; save/reload while still in the same scene, the raw difference goes negative and the
-; alert never fires (the marquee stuck-across-reload case). Detect the reset (now below
-; the stored stamp) and re-baseline, restarting the stuck-timer from the reload. Always
-; non-negative; identical to a plain subtraction when no reload happened. The re-baseline
-; is a genuine self-correction, so it says so (from whichever caller trips it first).
+; Advisory toast + one-shot / re-alert stamps + episode latch. Two short lines (UI truncates long ones).
+Function FireAlert(float afRealSec, float afGameMin, float afGateMin, float afTs)
+    Debug.Notification(fth_IJW_Toasts.Alert(iToastLang) + " " + ElapsedLabel(afRealSec))
+    if bLevity
+        Debug.Notification("See? It Just Works!")   ; English punchline; Levity off omits it
+    endif
+    bAlerted = true
+    fLastAlertReal = Utility.GetCurrentRealTime()
+    bAlertHoldLogged = true
+    if iLogLevel >= LOG_EVENTS
+        Log(LOG_EVENTS, "alert fire scene=" + SceneKey(currentScene) + " name=" + QuietEdid(currentScene) + " real=" + ((afRealSec / 60.0) as int) + "m game=" + (afGameMin as int) + "m gate=" + (afGateMin as int) + "m ts=" + (afTs as int))
+    endif
+EndFunction
+
+; Wallclock seconds in this scene. GetCurrentRealTime is session-relative and resets each
+; launch while fSceneFirstSeen persists -- now < stamp means reload; restamp so stuck-across-
+; reload still works. Always non-negative.
 float Function ElapsedInScene()
     float now = Utility.GetCurrentRealTime()
     if now < fSceneFirstSeen
@@ -183,7 +237,37 @@ float Function ElapsedInScene()
     return now - fSceneFirstSeen
 EndFunction
 
-; ============================================================ readout for MCM
+; Game-time days in this scene. Calendar time persists across reload (no session reset).
+; Stamp <= 0: field never set on this save (upgrade mid-scene) -- stamp now, do not treat
+; whole calendar as elapsed. Backwards now < stamp: restamp as a correction.
+float Function ElapsedGameInScene()
+    float now = Utility.GetCurrentGameTime()
+    if fSceneFirstSeenGame <= 0.0
+        fSceneFirstSeenGame = now
+        fTsAtEnter = CurrentTimescale()
+        Log(LOG_CHECK, "life gametime-init scene=" + SceneKey(currentScene))
+        return 0.0
+    endif
+    if now < fSceneFirstSeenGame
+        if iLogLevel >= LOG_EVENTS
+            Log(LOG_EVENTS, "heal rebaseline-game scene=" + SceneKey(currentScene) + " was=" + (fSceneFirstSeenGame as int) + " now=" + (now as int))
+        endif
+        RecordCorrection("$fth_IJW_Heal_Rebaseline")
+        fSceneFirstSeenGame = now
+        return 0.0
+    endif
+    return now - fSceneFirstSeenGame
+EndFunction
+
+; Live TimeScale (ESP-filled 0x3A). ts <= 0 => gate off (wallclock-only). None => 0 (OnInit FAULT).
+float Function CurrentTimescale()
+    if !TimeScale
+        return 0.0
+    endif
+    return TimeScale.GetValue()
+EndFunction
+
+; --- MCM readout
 
 Scene Function GetCurrentSceneRef()
     return currentScene
@@ -234,9 +318,7 @@ string[] Function GetHistoryLabels()
     return histLabel
 EndFunction
 
-; Loop-alive state, in calm words, for the Diagnostics readout. Returns a $-key the MCM
-; localizes. "Waking up" covers the post-reload window (never ticked, or the real-time
-; reset makes now < the stamp) so a fresh load never reads as a stall.
+; Diagnostics loop status $-key. "Waking up" = never ticked or post-reload now < stamp.
 string Function GetLoopStatus()
     if !bEnabled
         return "$fth_IJW_Loop_Dormant"
@@ -254,8 +336,7 @@ string Function GetLoopStatus()
     return "$fth_IJW_Loop_Late"
 EndFunction
 
-; The most recent genuine self-repair, as a $-key the MCM localizes, or "none" when
-; the tool has never had to correct itself this save.
+; Last self-repair $-key for Diagnostics, or "none".
 string Function GetLastCorrection()
     if sLastCorrection == ""
         return "$fth_IJW_Heal_None"
@@ -268,19 +349,17 @@ bool Function EditorIdMissing()
     return currentScene && PO3_SKSEFunctions.GetFormEditorID(currentScene as Form) == ""
 EndFunction
 
-; True when po3 Tweaks is loading Editor IDs, probed via PlayerRef (which carries an
-; edid only when loading is on). Scene-independent, so the MCM shows it as a status light.
+; po3 Load EditorIDs on? Probe PlayerRef (and base); independent of current scene.
 bool Function EditorIdsLoading()
     if PO3_SKSEFunctions.GetFormEditorID(PlayerRef as Form) != ""
         return true
     endif
-    return PO3_SKSEFunctions.GetFormEditorID(PlayerRef.GetActorBase() as Form) != ""  ; check the base too
+    return PO3_SKSEFunctions.GetFormEditorID(PlayerRef.GetActorBase() as Form) != ""
 EndFunction
 
-; ======================================================== the hammer (from MCM)
+; --- Stop Scene (MCM)
 
-; Stops the tracked scene. Returns true only once the ref goes None -- IsPlaying()
-; isn't trusted here (it lies for stuck scenes).
+; True only when the ref is gone after Stop(); IsPlaying() lies for stuck scenes.
 bool Function StopCurrentScene()
     if !currentScene
         return false
@@ -299,10 +378,9 @@ bool Function StopCurrentScene()
     return cleared
 EndFunction
 
-; =========================================================== enable / hotkey (MCM)
+; --- enable / hotkey
 
-; Master switch (Uninstall page). Off = dormant: loop + hotkey unregistered, no state
-; lost, so On restores it exactly.
+; Master switch. Off = dormant (loop + hotkey unregistered); state kept for restore.
 Function SetEnabled(bool abEnabled)
     if abEnabled == bEnabled
         return
@@ -339,15 +417,9 @@ Function RegisterHotkey()
     endif
 EndFunction
 
-; Self-heal net, called on every MCM open: re-registers key + timer unconditionally,
-; restoring anything a mod update or lost co-save dropped (both calls self-guard on
-; bEnabled). A Quest can't catch OnPlayerLoadGame and we won't add an alias for it
-; (that would force-persist the player), so the menu is the recovery point.
-;
-; No Ego: a blind re-register can't prove it fixed anything, so it only claims a heal
-; when the heartbeat proves the loop was actually dead -- enabled, polling, and no tick
-; within ~2x the poll interval. The post-reload window (now < the stamp) is excluded, or
-; a fresh load would fabricate a recovery that never happened. Otherwise it's routine.
+; MCM open: re-register key + timer (no OnPlayerLoadGame on Quest; no player alias).
+; Record a heal only if enabled, polling, and no tick within ~2x poll (exclude post-reload
+; now < stamp so a fresh load does not fake a recovery).
 Function ReassertRegistrations()
     if bEnabled && fPollInterval >= 1.0 && fLastTickRealTime >= 0.0
         float now = Utility.GetCurrentRealTime()
@@ -390,7 +462,7 @@ Event OnKeyDown(int aiKeyCode)
     endif
 EndEvent
 
-; ========================================================================= util
+; --- util
 
 Function PushHistory(Scene akScene, float afDuration)
     EnsureHist()
@@ -402,15 +474,13 @@ Function PushHistory(Scene akScene, float afDuration)
     histLabel[0] = LabelFor(akScene) + "   " + ElapsedLabel(afDuration)
 EndFunction
 
-; Guarantees a usable 10-slot array. Bool-guarded so we never compare an array to None.
-; A rebuild of an already-initialised ring (wrong length after another build) is a genuine
-; self-correction; the first lazy build is benign setup.
+; 10-slot history ring. Lazy first build; wrong length after recompile is a heal.
 Function EnsureHist()
     if !histReady
         histLabel = new string[10]
         histReady = true
         Log(LOG_CHECK, "life hist-init")
-    elseif histLabel.Length != 10   ; heal a ring resized by another build
+    elseif histLabel.Length != 10
         int oldLen = histLabel.Length
         histLabel = new string[10]
         if iLogLevel >= LOG_EVENTS
@@ -420,9 +490,8 @@ Function EnsureHist()
     endif
 EndFunction
 
-; Editor ID when we have one; raw form ID otherwise (Load EditorIDs may be off). This is
-; the DISPLAY path and may fire the one-time hint; log lines must NOT route through it --
-; they use SceneKey/QuietEdid instead.
+; Display label (edid or form id). May fire the one-time names-off hint.
+; Log lines use SceneKey/QuietEdid instead -- never this.
 string Function LabelFor(Scene akScene)
     string edid = PO3_SKSEFunctions.GetFormEditorID(akScene as Form)
     if edid != ""
@@ -457,26 +526,22 @@ string Function HexOf(int aiFormID)
     return s
 EndFunction
 
-; =================================================================== logging
+; --- logging
 
-; The single sink. Emits "[fth_IJW] <line>" to the Papyrus log when the active level is
-; at least aiLevel. Callers building a non-literal line gate at the call site first (so
-; the string and any lookups aren't built below level -- Papyrus evaluates args eagerly);
-; bare literal callers can rely on this check alone.
+; "[fth_IJW] <line>" when iLogLevel >= aiLevel. Gate non-literal lines at the call site
+; (Papyrus evaluates args eagerly).
 Function Log(int aiLevel, string asLine)
     if iLogLevel >= aiLevel
         Debug.Trace("[fth_IJW] " + asLine)
     endif
 EndFunction
 
-; Records the $-key of the last genuine self-heal for the readout. Never called for the
-; routine, prove-nothing re-register (only real corrections).
+; Last Fix readout. Real corrections only -- not routine reassert.
 Function RecordCorrection(string asKey)
     sLastCorrection = asKey
 EndFunction
 
-; Side-effect-free scene join key: "0x<formid>" or "-". Cheap native GetFormID, no edid,
-; no hint -- safe on the per-poll hot path and as scene= everywhere in the log.
+; Log join key: "0x<form id>" or "-". No edid, no names hint.
 string Function SceneKey(Scene akScene)
     if !akScene
         return "-"
@@ -484,8 +549,7 @@ string Function SceneKey(Scene akScene)
     return "0x" + HexOf(akScene.GetFormID())
 EndFunction
 
-; Side-effect-free editor id: the edid or "-" when names are off. Never fires the hint;
-; for the rare Events lines only, never the per-poll heartbeat.
+; Edid or "-" for Events lines. Never fires the names hint; not for the poll heartbeat.
 string Function QuietEdid(Scene akScene)
     if !akScene
         return "-"
@@ -510,6 +574,22 @@ string Function BoolField(bool ab)
         return "1"
     endif
     return "0"
+EndFunction
+
+; IsPlaying() of the current scene for the heartbeat, or "-" with no scene. One native read.
+string Function PlayingField()
+    if !currentScene
+        return "-"
+    endif
+    return BoolField(currentScene.IsPlaying())
+EndFunction
+
+; Boot field: TimeScale property bound?
+string Function TsField()
+    if TimeScale
+        return "ok"
+    endif
+    return "fault"
 EndFunction
 
 string Function HotkeyField()

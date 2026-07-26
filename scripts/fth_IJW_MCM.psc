@@ -7,8 +7,7 @@
 
 Scriptname fth_IJW_MCM extends MCM_ConfigBase
 
-; Set when the user confirms Stop; the actual Scene.Stop() runs on menu close,
-; because the world is paused behind an open MCM and the stop won't take there.
+; Set when the user confirms Stop; the actual Scene.Stop() runs on menu close
 bool bStopOnClose
 
 ; Sibling scripts on one quest form can't cast directly; route through the shared Quest base.
@@ -16,32 +15,30 @@ fth_IJW_Watcher Function GetWatcher()
     return (Self as Quest) as fth_IJW_Watcher
 EndFunction
 
-; ================================================================== MCM events
+; --- MCM events
 
 Event OnConfigInit()
-    PushSettingsToWatcher()      ; defaults from settings.ini into the engine
-    PushControlToWatcher()       ; ...and the master switch + bound hotkey
+    PushSettingsToWatcher()
+    PushControlToWatcher()
 EndEvent
 
-; Opened because you think you're stuck, so take a fresh reading, not the last poll's.
+; Fresh reading on open (not last poll).
 Event OnConfigOpen()
     PushSettingsToWatcher()
-    PushControlToWatcher()                        ; reconcile enable/hotkey with disk
-    bStopOnClose = false                          ; never open pre-armed
+    PushControlToWatcher()
+    bStopOnClose = false
     SetModSettingString("sStopHint:Actions", "")
     GetWatcher().RunCheck()
-    PublishAll()                                  ; repaints
+    PublishAll()
 EndEvent
 
 Event OnSettingChange(string a_ID)
     if StringUtil.Find(a_ID, "bNamesLoaded") >= 0
-        ; read-only status light: snap any click back to the real state
         SetModSettingBool("bNamesLoaded:Diagnostics", GetWatcher().EditorIdsLoading())
         RefreshMenu()
         return
     endif
     if StringUtil.Find(a_ID, "iHotkey") >= 0
-        ; rebound in the keymap -> mirror the new code into the engine
         GetWatcher().SetHotkey(GetModSettingInt("iHotkey:Control"))
         return
     endif
@@ -49,11 +46,10 @@ Event OnSettingChange(string a_ID)
         GetWatcher().SetEnabled(GetModSettingBool("bEnabled:Control"))
         return
     endif
-    PushSettingsToWatcher()      ; any watchdog slider/toggle -> re-apply the trio
+    PushSettingsToWatcher()
 EndEvent
 
-; The world resumes the instant the menu closes, so a confirmed Stop is carried out
-; here -- the only moment Scene.Stop() actually bites.
+; Stop runs on close.
 Event OnConfigClose()
     if bStopOnClose
         bStopOnClose = false
@@ -67,19 +63,14 @@ Event OnConfigClose()
     endif
 EndEvent
 
-; ================================================================ page buttons
+; --- page buttons
 
-; config.json CallFunction: immediate re-read + repaint.
 Function Refresh()
     GetWatcher().RunCheck()
     PublishAll()
 EndFunction
 
-; Two-step confirm: ShowMessage() can't display from a CallFunction action, so press
-; once to arm (the hint row says so), again to cancel. The stop itself runs on menu
-; close (OnConfigClose). Guards against an accidental misfire on a working scene.
-; Hint row uses $keys so MCM Helper localizes them (same pattern as Diagnostics
-; loop/heal status). Stop result toasts use fth_IJW_Toasts on close, not this row.
+; Two-step arm/cancel; Stop executes on OnConfigClose.
 Function StopScene()
     if !GetWatcher().GetCurrentSceneRef()
         SetStopHint("$fth_IJW_NoScene")
@@ -98,32 +89,32 @@ Function SetStopHint(string asText)
     RefreshMenu()
 EndFunction
 
-; Clear button beneath the keymap: ESC won't unbind here (ESC is Pause), so this
-; zeroes the stored keycode, drops the live registration, and repaints as unbound.
+; Clear button beneath the keymap
 Function ClearHotkey()
     SetModSettingInt("iHotkey:Control", -1)
     GetWatcher().SetHotkey(-1)
     RefreshMenu()
 EndFunction
 
-; =================================================================== plumbing
+; --- plumbing
 
 Function PushSettingsToWatcher()
     int poll = GetModSettingInt("iPollSeconds:Watchdog")
     int warn = GetModSettingInt("iWarnMinutes:Watchdog")
+    bool realert = GetModSettingBool("bRealert:Watchdog")
+    int realertMin = GetModSettingInt("iRealertMinutes:Watchdog")
     int level = GetModSettingInt("iLogLevel:Diagnostics")
     bool levity = GetModSettingBool("bLevity:Control")
     int lang = GetModSettingInt("iToastLang:Control")
-    GetWatcher().ApplySettings(poll, warn, level, levity, lang)
+    GetWatcher().ApplySettings(poll, warn, realert, realertMin, level, levity, lang)
 EndFunction
 
-; Master switch + hotkey. Disk is the source of truth; the watcher mirrors it.
-; Idempotent, so pushing on every open self-heals drift between save and settings.
+; Disk is source of truth; push enable/hotkey and reassert registrations.
 Function PushControlToWatcher()
     fth_IJW_Watcher w = GetWatcher()
     w.SetEnabled(GetModSettingBool("bEnabled:Control"))
     w.SetHotkey(GetModSettingInt("iHotkey:Control"))
-    w.ReassertRegistrations()    ; heal any registration dropped since last open
+    w.ReassertRegistrations()
 EndFunction
 
 Function PublishAll()

@@ -6,28 +6,28 @@ It Just Works™ nabízí svou herní nabídku (MCM) i manuál v deseti jazycíc
 
 ## Důležité: vše kromě angličtiny bylo strojově přeloženo
 
-Angličtinu píše autor. **Každý další jazyk přeložila umělá inteligence (velký jazykový model), nikoli rodilý mluvčí.** Překlady jsou pečlivé a technicky konzistentní – názvy souborů, nastavení a termíny jako `Editor ID`, `Form ID` a `Papyrus` jsou záměrně ponechány nepřeložené, abyste je mohli i nadále vzájemně dohledávat – ale žádný plynulý člověk je nezkontroloval.
+Angličtinu píše autor. Každý další jazyk přeložil velký jazykový model, nikoli rodilý mluvčí. Překlady jsou pečlivé a technicky konzistentní - názvy souborů, nastavení a termíny jako `Editor ID`, `Form ID` a `Papyrus` jsou záměrně ponechány nepřeložené, abyste je mohli nadále vzájemně dohledávat - ale žádný plynulý mluvčí je nezkontroloval.
 
-Pokud některým z těchto jazyků mluvíte a něco zní špatně, kostrbatě nebo je to prostě nesprávné: **prosím, vylepšete to.** Právě o tom je celý smysl otevřeného zdroje a sdílitelné licence. Otevřete pull request nebo pošlete opravy, jakkoli vám to vyhovuje – zásluha je vaše a vděčnost zaručená. Úprava od rodilého mluvčího je jediná věc, kterou tomuto projektu stroj dát nemůže, a je vítána u každého jazyka, včetně angličtiny.
+Pokud některým z těchto jazyků mluvíte a něco zní špatně, kostrbatě nebo je to prostě nesprávné: **prosím, vylepšete to.** Otevřete pull request, nebo pošlete opravy, jakkoli vám to vyhovuje - zásluha je vaše a vděčnost zaručená. Úprava od rodilého mluvčího je jediná věc, kterou tomu stroj nemůže dát, a je vítána pro každý jazyk, včetně angličtiny.
 
-Abyste pomohli, nemusíte být ani plynulí. Pokud některý řádek v nabídce vypadá **oříznutě** nebo přetéká přes okraj panelu – nejpravděpodobněji v čínštině nebo japonštině, kde jsou znaky širší – je to opravdu užitečné hlášení a snadno se posílá: stačí snímek obrazovky a jazyk. Sloupec nabídky je úzký, takže občasný příliš dlouhý řádek je otázkou přizpůsobení zobrazení k oříznutí, nikoli vadný překlad.
+Abyste pomohli, nemusíte být ani plynulí. Pokud některý řádek v menu vypadá **oříznutý** nebo přetéká přes okraj panelu - nejpravděpodobněji v čínštině nebo japonštině, kde jsou znaky širší - je to opravdu užitečné hlášení a snadno se posílá: stačí snímek obrazovky a jazyk.
 
 ## Co je přeloženo
 
-- **Nabídka MCM** – plně přeložena: každý popisek volby, každý text nápovědy i dynamické stavové řetězce, které skripty vkládají do nabídky (pokyny k aktivaci/zrušení Stop, stav hlídače, poslední fráze samoopravy).
-- **Manuál** (`docs/manual.<lang>.md`) – plně přeložen.
-- **Herní vyskakovací oznámení** – přeložena. Upozornění hlídače, oznámení „názvy jsou vypnuté", výsledky Stop a výpis klávesových zkratek se řídí nastavením **Jazyk oznámení** na stránce **Nastavení** v MCM, ve všech deseti jazycích; instalátor je předvyplní podle vámi zvoleného jazyka nabídky.
+- **Menu MCM**
+- **Manuál** (`docs/manual.<lang>.md`)
+- **Herní vyskakovací oznámení** - řídí se nastavením **Jazyk oznámení** na stránce **Nastavení** v MCM; instalátor ho předvyplní podle vaší volby jazyka menu.
 
 ## Co je záměrně anglicky
 
-- **Zakončení `See? It Just Works!`** – tento vtip je rodilý anglicky. Věc vkusu, nikoli omezení.
-- **Diagnostický protokol Papyrus** – volitelné řádky `[fth_IJW] …`, které mod zapisuje, když zapnete protokolování, zůstávají záměrně anglicky. Jde o strukturovaný, grep-ovatelný dialekt `key=value` určený k vyhledávání a vkládání do hlášení o chybě; jejich překlad by tuto grep-ovatelnost narušil a rozvětvil se do neudržovatelné matice podle jazyků, k ničímu prospěchu.
+- **Zakončení `See? It Just Works!`** - ten vtip je rodilý anglicky. Věc vkusu, nikoli omezení.
+- **Diagnostický log Papyrus** - řádky, které mod zapisuje, když zapnete logování, zůstávají záměrně anglicky. Jsou to strukturovaný, grep-ovatelný dialekt `key=value` určený k vyhledávání a vkládání do hlášení chyby; jejich překlad by narušil hodně užitečnosti za malý přínos.
 
 ## Jazyky
 
-Nastavení **Jazyk oznámení** vypisuje těchto deset jazyků pod jejich anglickými názvy, takže rozevírací seznam zůstává čitelný, ať máte jakékoli písmo. Najděte ten svůj zde (pořadí shora dolů odpovídá pořadí v rozevíracím seznamu):
+Výchozí písmo Skyrimu pro anglické hráče neumí vykreslit neLatinská písma, takže použití jazykových endonym v MCM by mod dělalo rozbitým. Jako řešení nastavení **Jazyk oznámení** vypisuje těchto deset jazyků pod jejich anglickými názvy. Najděte ten svůj zde, pokud ho ještě neznáte:
 
-| V nabídce | Váš jazyk | Kód Skyrimu |
+| V menu | Váš jazyk | Kód Skyrimu |
 |-------------|---------------|-------------|
 | English | English | `ENGLISH` |
 | French | Français | `FRENCH` |
@@ -40,7 +40,7 @@ Nastavení **Jazyk oznámení** vypisuje těchto deset jazyků pod jejich anglic
 | Japanese | 日本語 | `JAPANESE` |
 | Czech | Čeština | `CZECH` |
 
-Jazyk **nabídky** se řídí souborem jazyka vaší hry Skyrim, dokud jej nepřepíšete (krok výchozího menu v instalátoru, nebo ruční přejmenování na `fth_ItJustWorks_ENGLISH.txt`). Ovládací prvek **Jazyk oznámení** v Nastavení je samostatný: instalátor jej může předvyplnit, když zvolíte výchozí jazyk menu, ale ruční přejmenování menu ne - pokud toasty zůstávají anglicky, nastavte tento výčet tak, aby odpovídal.
+Jazyk **menu** se řídí souborem jazyka hry Skyrim, dokud ho nepřepíšete (krok výchozího menu v instalátoru, nebo ruční přejmenování na `fth_ItJustWorks_ENGLISH.txt`). Ovládací prvek **Jazyk oznámení** v Nastavení je samostatný: instalátor ho předvyplní, když zvolíte výchozí jazyk menu, ale ruční přejmenování menu ne. Pokud jsou oznámení ve špatném jazyce, nastavte ho tak, aby odpovídalo.
 
 ## Manuály
 

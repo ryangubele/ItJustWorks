@@ -54,6 +54,20 @@
           "type": "slider",
           "help": "$fth_IJW_Poll_Help",
           "valueOptions": { "min": 0, "max": 240, "step": 10, "formatString": "{0}s", "sourceType": "ModSettingInt" }
+        },
+        {
+          "id": "bRealert:Watchdog",
+          "text": "$fth_IJW_Realert",
+          "type": "toggle",
+          "help": "$fth_IJW_Realert_Help",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "id": "iRealertMinutes:Watchdog",
+          "text": "$fth_IJW_RealertEvery",
+          "type": "slider",
+          "help": "$fth_IJW_RealertEvery_Help",
+          "valueOptions": { "min": 1, "max": 30, "step": 1, "formatString": "{0}m", "sourceType": "ModSettingInt" }
         }
       ]
     },

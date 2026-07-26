@@ -6,26 +6,26 @@ It Just Works™ liefert sein Ingame-Menü (das MCM) und sein Handbuch in zehn S
 
 ## Wichtig: Alles außer Englisch wurde maschinell übersetzt
 
-Das Englische stammt vom Autor. **Jede andere Sprache wurde von einer KI (einem großen Sprachmodell) übersetzt, nicht von einem Muttersprachler.** Die Übersetzungen sind sorgfältig und technisch konsistent - Dateinamen, Einstellungen und Begriffe wie `Editor ID`, `Form ID` und `Papyrus` bleiben bewusst unübersetzt, damit du sie weiterhin abgleichen kannst - aber kein fließend sprechender Mensch hat sie geprüft.
+Das Englische wird vom Autor verfasst. Jede andere Sprache wurde von einem großen Sprachmodell übersetzt, nicht von einem Muttersprachler. Die Übersetzungen sind sorgfältig und technisch konsistent - Dateinamen, Einstellungen und Begriffe wie `Editor ID`, `Form ID` und `Papyrus` bleiben bewusst unübersetzt, damit du sie weiterhin abgleichen kannst - aber kein fließend sprechender Mensch hat sie geprüft.
 
-Wenn du eine dieser Sprachen sprichst und etwas falsch, holprig oder schlicht unrichtig klingt: **verbessere es bitte.** Genau darum geht es bei Open Source und einer teilbaren Lizenz. Öffne einen Pull Request oder schicke Korrekturen, wie es dir passt - die Anerkennung gehört dir, und der Dank ist garantiert. Eine muttersprachliche Durchsicht ist das Einzige, was eine Maschine hier nicht geben kann, und sie ist für jede Sprache willkommen, einschließlich Englisch.
+Wenn du eine dieser Sprachen sprichst und etwas falsch, holprig oder schlicht unrichtig klingt: **verbessere es bitte.** Öffne einen Pull Request, oder schicke Korrekturen, wie es dir passt - die Anerkennung gehört dir, und der Dank ist garantiert. Eine muttersprachliche Durchsicht ist das Einzige, was eine Maschine hier nicht geben kann, und sie ist für jede Sprache willkommen, einschließlich Englisch.
 
-Du musst auch nicht fließend sein, um zu helfen. Wenn eine Zeile im Menü **abgeschnitten** aussieht oder über den Rand des Panels hinausläuft - am wahrscheinlichsten im Chinesischen oder Japanischen, wo die Zeichen breiter sind - ist das eine wirklich nützliche Meldung und eine leicht zu sendende: ein Screenshot und die Sprache genügen. Die Menüspalte ist schmal, daher ist eine gelegentlich zu lange Zeile eine Anzeigeanpassung, die zu kürzen ist, und keine kaputte Übersetzung.
+Du musst auch nicht fließend sein, um zu helfen. Wenn eine Zeile im Menü **abgeschnitten** aussieht oder über den Rand des Panels hinausläuft - am wahrscheinlichsten im Chinesischen oder Japanischen, wo die Zeichen breiter sind - ist das eine wirklich nützliche Meldung, und eine leicht zu sendende: ein Screenshot und die Sprache genügen.
 
 ## Was übersetzt ist
 
-- **Das MCM-Menü** - vollständig übersetzt: jede Optionsbezeichnung, jede Hilfebeschreibung und die dynamischen Statustexte, die die Skripte in das Menü schieben (Hinweise zum Scharfschalten/Abbrechen von Stop, Watchdog-Status, letzte Selbstreparatur-Meldungen).
-- **Das Handbuch** (`docs/manual.<lang>.md`) - vollständig übersetzt.
-- **Die Ingame-Popup-Benachrichtigungen** - übersetzt. Die Watchdog-Warnung, der Hinweis „die Namen stimmen nicht", die Stop-Ergebnisse und die Tastenanzeige folgen der Einstellung **Sprache der Benachrichtigungen** auf der Seite **Einstellungen** des MCM, in allen zehn Sprachen; der Installer setzt sie anhand deiner Menüsprachen-Wahl vor.
+- **Das MCM-Menü**
+- **Das Handbuch** (`docs/manual.<lang>.md`)
+- **Die Ingame-Popup-Benachrichtigungen** - folgen der Einstellung **Sprache der Benachrichtigungen** auf der Seite **Einstellungen** des MCM; der Installer belegt sie anhand deiner Menüsprachen-Wahl vor.
 
 ## Was bewusst Englisch ist
 
 - **Die Abschiedsformel `See? It Just Works!`** - der Witz ist englischsprachig gedacht. Geschmackssache, keine Einschränkung.
-- **Das Papyrus-Diagnoseprotokoll** - die optionalen `[fth_IJW] …`-Zeilen, die der Mod schreibt, wenn du die Protokollierung einschaltest, bleiben absichtlich Englisch. Sie sind ein strukturierter, „grepbarer" `key=value`-Dialekt, gedacht zum Durchsuchen und Einfügen in einen Fehlerbericht; sie zu übersetzen würde diese Durchsuchbarkeit zerstören und sich zu einer unpflegbaren Matrix pro Sprache auffächern, ohne Nutzen für irgendjemanden.
+- **Das Papyrus-Diagnoseprotokoll** - die Zeilen, die der Mod schreibt, wenn du die Protokollierung einschaltest, bleiben absichtlich Englisch. Sie sind ein strukturierter, „grepbarer" `key=value`-Dialekt, gedacht zum Durchsuchen und Einfügen in einen Fehlerbericht; sie zu übersetzen würde viel von diesem Nutzen zerstören, für wenig Gewinn.
 
 ## Sprachen
 
-Die Einstellung **Sprache der Benachrichtigungen** listet die zehn Sprachen unter ihren englischen Namen auf, damit das Dropdown-Menü lesbar bleibt, welche Schriftart du auch hast. Finde deine hier (von oben nach unten entspricht der Reihenfolge des Dropdown-Menüs):
+Die Standard-Skyrim-Schriftart für englischsprachige Spieler kann keine nicht-lateinischen Schriften darstellen, daher würde die Verwendung von Sprachen-Endonymen im MCM den Mod kaputt aussehen lassen. Als Umgehung listet die Einstellung **Sprache der Benachrichtigungen** die zehn Sprachen unter ihren englischen Namen auf. Finde deine hier, falls du sie noch nicht kennst:
 
 | Im Menü | Deine Sprache | Skyrim-Code |
 |-------------|---------------|-------------|
@@ -40,7 +40,7 @@ Die Einstellung **Sprache der Benachrichtigungen** listet die zehn Sprachen unte
 | Japanese | 日本語 | `JAPANESE` |
 | Czech | Čeština | `CZECH` |
 
-Die **Menü**-Sprache folgt Skyrims Spielsprachdatei, sofern du sie nicht überschreibst (Installer-Schritt für die Standard-Menüsprache oder Umbenennen von Hand auf `fth_ItJustWorks_ENGLISH.txt`). Die Steuerung **Sprache der Benachrichtigungen** auf der Seite Einstellungen ist davon getrennt: Der Installer kann sie vorbelegen, wenn du eine Standard-Menüsprache wählst, ein Umbenennen des Menüs von Hand jedoch nicht - stelle das Enum passend ein, falls die Toasts englisch bleiben.
+Die **Menü**-Sprache folgt Skyrims Spielsprachdatei, sofern du sie nicht überschreibst (Installer-Schritt für die Standard-Menüsprache, oder Umbenennen von Hand auf `fth_ItJustWorks_ENGLISH.txt`). Die Einstellung **Sprache der Benachrichtigungen** auf der Seite Einstellungen ist davon getrennt: Der Installer belegt sie vor, wenn du eine Standard-Menüsprache wählst, ein Umbenennen des Menüs von Hand jedoch nicht. Stelle sie passend ein, falls die Benachrichtigungen in der falschen Sprache sind.
 
 ## Handbücher
 
