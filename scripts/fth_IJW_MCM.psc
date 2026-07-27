@@ -1,14 +1,14 @@
 ; Copyright (c) 2026 Ryan Gubele
 ; SPDX-License-Identifier: MPL-2.0
 ;
-; MCM glue. config.json is the menu; this pushes the watcher's live state into the
-; ModSetting sources the page shows and wires the buttons. Both scripts sit on the
-; same quest, so `Self as fth_IJW_Watcher` resolves the sibling instance.
+; MCM glue. config.json is the menu; this pushes watcher state into ModSettings and
+; wires buttons. Same quest as the watcher: `Self as fth_IJW_Watcher`.
+;
+; Stop Scene: session-only Scene ref. Clear on open and before close-time stop.
 
 Scriptname fth_IJW_MCM extends MCM_ConfigBase
 
-; Set when the user confirms Stop; the actual Scene.Stop() runs on menu close
-bool bStopOnClose
+Scene stopTarget
 
 ; Sibling scripts on one quest form can't cast directly; route through the shared Quest base.
 fth_IJW_Watcher Function GetWatcher()
@@ -18,17 +18,20 @@ EndFunction
 ; --- MCM events
 
 Event OnConfigInit()
+    stopTarget = None
     PushSettingsToWatcher()
     PushControlToWatcher()
 EndEvent
 
-; Fresh reading on open (not last poll).
+; Clear stopTarget first, then re-push settings and RunCheck.
 Event OnConfigOpen()
+    stopTarget = None
+    SetModSettingString("sStopHint:Actions", "")
     PushSettingsToWatcher()
     PushControlToWatcher()
-    bStopOnClose = false
-    SetModSettingString("sStopHint:Actions", "")
-    GetWatcher().RunCheck()
+    fth_IJW_Watcher w = GetWatcher()
+    w.RequestRateRetry()
+    w.RunCheck("mcm", false)
     PublishAll()
 EndEvent
 
@@ -43,45 +46,63 @@ Event OnSettingChange(string a_ID)
         return
     endif
     if StringUtil.Find(a_ID, "bEnabled") >= 0
-        GetWatcher().SetEnabled(GetModSettingBool("bEnabled:Control"))
+        fth_IJW_Watcher we = GetWatcher()
+        bool turnedOn = GetModSettingBool("bEnabled:Control")
+        we.SetEnabled(turnedOn)
+        if turnedOn
+            we.RunCheck("mcm", false)
+        endif
+        PublishAll()
         return
     endif
+    ; Publish only when poll crosses armed/unarmed (not every slider step).
+    fth_IJW_Watcher wp = GetWatcher()
+    bool wasArmed = wp.IsArmed()
     PushSettingsToWatcher()
+    bool nowArmed = wp.IsArmed()
+    if wasArmed != nowArmed
+        if nowArmed
+            wp.RunCheck("mcm", false)
+        endif
+        PublishAll()
+    endif
 EndEvent
 
-; Stop runs on close.
 Event OnConfigClose()
-    if bStopOnClose
-        bStopOnClose = false
-        bool cleared = GetWatcher().StopCurrentScene()
-        int lang = GetModSettingInt("iToastLang:Control")
-        if cleared
-            Debug.Notification(fth_IJW_Toasts.StopOk(lang))
-        else
-            Debug.Notification(fth_IJW_Toasts.StopFail(lang))
-        endif
+    Scene target = stopTarget
+    stopTarget = None
+    if !target
+        return
     endif
+    int result = GetWatcher().StopScene(target)
+    NotifyStopResult(result)
 EndEvent
 
 ; --- page buttons
 
 Function Refresh()
-    GetWatcher().RunCheck()
+    fth_IJW_Watcher w = GetWatcher()
+    w.RequestRateRetry()
+    w.RunCheck("mcm", false)
     PublishAll()
 EndFunction
 
-; Two-step arm/cancel; Stop executes on OnConfigClose.
 Function StopScene()
-    if !GetWatcher().GetCurrentSceneRef()
+    fth_IJW_Watcher w = GetWatcher()
+    if stopTarget
+        w.LogStopArm(stopTarget, false)
+        stopTarget = None
+        SetStopHint("$fth_IJW_StopCancelled")
+        return
+    endif
+    Scene live = w.GetLiveSceneRef()
+    if !live
         SetStopHint("$fth_IJW_NoScene")
         return
     endif
-    bStopOnClose = !bStopOnClose
-    if bStopOnClose
-        SetStopHint("$fth_IJW_StopArmed")
-    else
-        SetStopHint("$fth_IJW_StopCancelled")
-    endif
+    stopTarget = live
+    w.LogStopArm(live, true)
+    SetStopHint("$fth_IJW_StopArmed")
 EndFunction
 
 Function SetStopHint(string asText)
@@ -89,7 +110,6 @@ Function SetStopHint(string asText)
     RefreshMenu()
 EndFunction
 
-; Clear button beneath the keymap
 Function ClearHotkey()
     SetModSettingInt("iHotkey:Control", -1)
     GetWatcher().SetHotkey(-1)
@@ -97,6 +117,20 @@ Function ClearHotkey()
 EndFunction
 
 ; --- plumbing
+
+Function NotifyStopResult(int aiResult)
+    fth_IJW_Watcher w = GetWatcher()
+    int lang = GetModSettingInt("iToastLang:Control")
+    if aiResult == w.STOP_CLEARED
+        Debug.Notification(fth_IJW_Toasts.StopOk(lang))
+    elseif aiResult == w.STOP_CHANGED
+        Debug.Notification(fth_IJW_Toasts.StopChanged(lang))
+    elseif aiResult == w.STOP_PLAYING
+        Debug.Notification(fth_IJW_Toasts.StopFail(lang))
+    else
+        Debug.Notification(fth_IJW_Toasts.StopNoAction(lang))
+    endif
+EndFunction
 
 Function PushSettingsToWatcher()
     int poll = GetModSettingInt("iPollSeconds:Watchdog")
@@ -109,7 +143,6 @@ Function PushSettingsToWatcher()
     GetWatcher().ApplySettings(poll, warn, realert, realertMin, level, levity, lang)
 EndFunction
 
-; Disk is source of truth; push enable/hotkey and reassert registrations.
 Function PushControlToWatcher()
     fth_IJW_Watcher w = GetWatcher()
     w.SetEnabled(GetModSettingBool("bEnabled:Control"))
@@ -124,6 +157,7 @@ Function PublishAll()
     SetModSettingString("sQuest:Current",   w.GetQuestLabel())
     SetModSettingString("sElapsed:Current", w.GetElapsedLabel())
     SetModSettingBool("bNamesLoaded:Diagnostics", w.EditorIdsLoading())
+    SetModSettingString("sRateStatus:Diagnostics", w.GetRateStatus())
     SetModSettingString("sLoopStatus:Diagnostics", w.GetLoopStatus())
     SetModSettingString("sLastFix:Diagnostics", w.GetLastCorrection())
 

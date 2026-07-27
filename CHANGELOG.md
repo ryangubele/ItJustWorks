@@ -5,6 +5,20 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.6.1
+
+- **Clock selection and algorithm refined** so timekeeping is even more
+  accurate. Same idea as 0.6.0 - one rough minutes-in-scene for the menu,
+  history, and Warn me after - with fewer bad edge cases.
+- **Safe upgrade from 0.6.0.** Fine mid-playthrough. The scene you're in
+  starts from zero under the new timer. Papyrus may print a few harmless
+  missing-variable lines for old timing fields - expected noise, not a
+  broken save.
+- **Self-repair no longer fires just because you sat in the menus a while.**
+- **Status row labels are shorter** - should stop text running past the row in
+  all ten languages.
+- **The log stopped asking to re-find a game clock that was working.**
+
 ## 0.6.0
 
 - **Times a scene the way you mean "stuck".** Game time is considered alongside

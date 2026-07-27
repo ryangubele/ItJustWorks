@@ -56,6 +56,8 @@ Pass these as parameters to `build.ps1`:
 - `-SkipSanitization` - skip the private identity-scrub checks (see Build above).
 - `-Repo "https://github.com/you/your-fork"` - stamped into the shipped license breadcrumb so it points back at the source. Optional.
 - `-Website "https://www.nexusmods.com/..."` - the mod page URL for the FOMOD metadata. Optional; blank until the page exists.
+- `-Author "Your Name"` - the lead copyright holder named in the ESP header and the shipped license breadcrumb. Set it on a fork or on handover so the credit follows the steward. Optional; defaults to the current maintainer.
+- `-VerifyPublicLink` - fetch `-Repo` and fail if it doesn't resolve. This is the only step that touches the network, so it's off by default; turn it on for a release build, where a dead source breadcrumb would ship.
 
 ## Troubleshooting
 

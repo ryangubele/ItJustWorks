@@ -20,7 +20,7 @@ Five pages: **Scene**, **Watchdog**, **Settings**, **Diagnostics**, **Uninstall*
 
 Readout of the current scene, or **None**. The menu is refreshed on opening.
 
-- **Time in scene** - roughly how long you've been in this scene this session (real time).
+- **Time in scene** - roughly how long you've been in this scene.
 - **Scene** - name when available; otherwise an ID number.
 - **Form ID** - the raw ID, always shown. Handy for the console or a bug report.
 - **Owning quest** - which quest that scene belongs to.
@@ -47,7 +47,7 @@ Last ten scenes, newest first, with rough duration.
 Watches so you don't have to.
 
 - **Warn me after** - how long a scene can run before you get a nudge. Default **6** minutes. **0** = never.  
-  Nothing in the game marks a scene stuck, and nothing in the game tells us how long a scene is supposed to run. So we set a threshold and nudge you. We combine game time and real time in a way we hope roughly represents "real time spent actually playing" so that the control is intuitive.
+  Nothing in the game marks a scene stuck, and nothing in the game tells us how long a scene is supposed to run. So we set a threshold and nudge you. We combine game time and save time in a way that roughly represents "time spent actually playing" so that the control is intuitive.
 - **Check every** - seconds between checks. Default **30**. **0** = turn the watchdog off.
 - **Repeat alerts** - off by default, so you get one nudge per scene. Turn it on to keep nudging while you're still over the threshold.
 - **Repeat every** - minutes between nudges, used only when repeat alerts is on. Default **5**.
@@ -59,7 +59,7 @@ A nudge is two lines in the corner, for example:
 
 One nudge per scene by default, until you leave it or the scene changes. Missed it? Open the menu - the readout still shows what you're in and for how long. The mod does not stop the scene for you; use stop scene on the Scene page for that.
 
-The watchdog behaves the same whether your menus pause the world (vanilla) or keep it running (unpause setups like [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) - a nudge still just means the scene's been running a while.
+Unpause setups (e.g. [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) should work; played time still follows the game's saved play counter.
 
 ---
 
@@ -88,14 +88,16 @@ The watchdog behaves the same whether your menus pause the world (vanilla) or ke
 
 - **Editor IDs loaded** - an indicator. Names on the Scene page and owning quest when lit; ID numbers when dark. Form ID is still the raw `0x…` either way.
 
+- **Timing** - which clocks this scene is using for the warn threshold: played time plus game clock when both look sane, or played time only if the game clock dropped out for this scene. **--** when the watchdog is off, dormant, or you are not in a scene.
+
 - **Watchdog** - whether the background check is up:
   - **Running** - fine
-  - **Waking up** - normal right after a reload
+  - **Waking up** - normal right after a reload or before the first tick
   - **Late** - still working, but checks are slower than usual (busy game)
   - **Off** - you set check every to 0
   - **Dormant** - enabled is off on Settings
 
-- **Last self-repair** - the mod sometimes fixes its own bookkeeping (often after a reload). A line here is normal.
+- **Last self-repair** - the mod sometimes fixes its own bookkeeping. A line here is normal.
 
 - **Version**
 
@@ -137,7 +139,7 @@ Check the Diagnostics page's Watchdog status, then the Watchdog dials:
 - Status **Off** - check every is 0. Set it back to 10-240s.
 - Warn me after is **0** - that disables the nudge. Set the minutes you want.
 
-The nudge uses time the way warn me after does, so time in scene can occasionally read high without a nudge - that's normal. It's real time and resets on a reload. Even with no notification, the menu always shows the current scene and how long you have been in it.
+The nudge waits on **both** played time and the game calendar when both are usable, so **Time in scene** can read past the threshold while the nudge still holds for the game clock - that's normal. Even with no notification, the menu always shows the current scene and how long you have been in it.
 
 ### Stop Scene didn't clear the scene
 

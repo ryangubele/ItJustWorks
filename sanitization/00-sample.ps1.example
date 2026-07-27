@@ -24,8 +24,9 @@
 #
 # Compiled and binary artifacts:
 #   - .pex headers embed the compiling account's USERNAME and MACHINE/HOSTNAME,
-#     plus the source file name. (build.ps1 already scrubs these from the .pex,
-#     but know they exist.)
+#     plus the compile time and the source file name. (build.ps1 rewrites the
+#     username, machine and time; it does NOT touch the source file name, so
+#     check that one yourself if your .psc paths say anything about you.)
 #   - Absolute compile/source PATHS baked into any binary (C:\Users\<you>\...).
 #   - The plugin's author field -- usually intentional, but it IS your name.
 #

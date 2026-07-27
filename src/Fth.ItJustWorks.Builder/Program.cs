@@ -1,8 +1,8 @@
-// Copyright (c) 2026 Ryan Gubele SPDX-License-Identifier: MPL-2.0
+// Copyright (c) 2026 Ryan Gubele
+// SPDX-License-Identifier: MPL-2.0
 //
-// Generates fth_ItJustWorks.esp from code, so the plugin diffs in git -- no
-// Creation Kit authoring. One QUST record, ESL- flagged, master Skyrim.esm
-// only, carrying two script bindings on its VMAD.
+// Generates fth_ItJustWorks.esp (git-diffable; no CK authoring). One ESL QUST,
+// master Skyrim.esm, two VMAD script bindings.
 
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
@@ -22,7 +22,6 @@ for (int i = 0; i < args.Length; i++)
     }
 }
 
-// Require a valid X.Y.Z; fail loud rather than stamp a bogus header.
 if (!System.Text.RegularExpressions.Regex.IsMatch(version, @"^\d+\.\d+\.\d+$"))
 {
     Console.Error.WriteLine($"FATAL: --version '{version}' is missing or not X.Y.Z");
@@ -35,44 +34,35 @@ Directory.CreateDirectory(Path.GetDirectoryName(outPath)!);
 var modKey = ModKey.FromNameAndExtension("fth_ItJustWorks.esp");
 var mod = new SkyrimMod(modKey, SkyrimRelease.SkyrimSE);
 
-// Header metadata (shown in Vortex/MO2/SSEEdit). The author credit is intended;
-// overridable via --author for a fork or handover. Only the machine-local
-// username/hostname are scrubbed, and only from the .pex.
 mod.ModHeader.Author = author;
-// Keeps the literal "v{version}" so the build's version gate can find it.
+// Description includes "v{version}" for the build version gate.
 mod.ModHeader.Description = $"It Just Works v{version} - a debug menu for a game that doesn't need one";
 mod.ModHeader.Flags |= SkyrimModHeader.HeaderFlag.Small; // ESL flag (bit 0x200)
 
-// The one record.
 var quest = mod.Quests.AddNew("fth_IJW");
 quest.Name = "It Just Works";
 quest.Flags = Quest.Flag.StartGameEnabled | Quest.Flag.RunOnce;
 
-// ESL plugins must keep every new FormID in 0x800-0xFFF. Fail loud if Mutagen
-// ever allocates outside that window rather than shipping a broken light master.
+// ESL: new FormIDs must stay in 0x800-0xFFF.
 if (quest.FormKey.ID is < 0x800 or > 0xFFF)
 {
     Console.Error.WriteLine($"FATAL: quest FormID 0x{quest.FormKey.ID:X} is outside the ESL range 0x800-0xFFF.");
     return 1;
 }
 
-// VMAD: two scripts on the quest. fth_IJW_Watcher gets PlayerRef; fth_IJW_MCM
-// gets ModName.
 var adapter = new QuestAdapter();
 
 var watcher = new ScriptEntry { Name = "fth_IJW_Watcher", Flags = ScriptEntry.Flag.Local };
 var playerProp = new ScriptObjectProperty { Name = "PlayerRef", Flags = ScriptProperty.Flag.Edited };
 playerProp.Object.SetTo(FormKey.Factory("000014:Skyrim.esm"));
 watcher.Properties.Add(playerProp);
-// Vanilla TimeScale GLOB (Skyrim.esm 0x3A) for the detection game-time gate.
+// Skyrim.esm TimeScale (0x3A) for the calendar gate.
 var timescaleProp = new ScriptObjectProperty { Name = "TimeScale", Flags = ScriptProperty.Flag.Edited };
 timescaleProp.Object.SetTo(FormKey.Factory("00003A:Skyrim.esm"));
 watcher.Properties.Add(timescaleProp);
 adapter.Scripts.Add(watcher);
 
-// ModName must match the MCM/Config folder name. This inherited SKI_ConfigBase
-// property doesn't actually bind through the VMAD, so MCM Helper falls back to the
-// plugin filename regardless.
+// ModName = MCM/Config folder. SKI_ConfigBase VMAD fill is ignored; Helper uses the plugin name.
 var menu = new ScriptEntry { Name = "fth_IJW_MCM", Flags = ScriptEntry.Flag.Local };
 menu.Properties.Add(new ScriptStringProperty { Name = "ModName", Flags = ScriptProperty.Flag.Edited, Data = "fth_ItJustWorks" });
 adapter.Scripts.Add(menu);
@@ -84,7 +74,7 @@ mod.WriteToBinary(outPath, new BinaryWriteParameters
     MastersListContent = MastersListContentOption.Iterate,
 });
 
-// SEQ: reliably start the StartGameEnabled quest on a mid-playthrough save.
+// SEQ: start StartGameEnabled quest on mid-playthrough install.
 int masterCount;
 int sgeCount = 0;
 bool ourQuestIsSge = false;

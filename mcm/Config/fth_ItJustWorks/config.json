@@ -106,6 +106,7 @@
           "help": "$fth_IJW_NamesLoaded_Help",
           "valueOptions": { "sourceType": "ModSettingBool" }
         },
+        { "id": "sRateStatus:Diagnostics", "text": "$fth_IJW_RateStatus", "type": "text", "help": "$fth_IJW_RateStatus_Help", "valueOptions": { "sourceType": "ModSettingString" } },
         { "id": "sLoopStatus:Diagnostics", "text": "$fth_IJW_LoopStatus", "type": "text", "help": "$fth_IJW_LoopStatus_Help", "valueOptions": { "sourceType": "ModSettingString" } },
         { "id": "sLastFix:Diagnostics", "text": "$fth_IJW_LastFix", "type": "text", "help": "$fth_IJW_LastFix_Help", "valueOptions": { "sourceType": "ModSettingString" } },
         { "text": "$fth_IJW_Header_About", "type": "header" },

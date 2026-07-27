@@ -2,9 +2,9 @@
 
 ## Co dělá
 
-Skyrim používá *scény* pro rozhovory, cutscény a další skriptované momenty. Někdy scéna nikdy neskončí. To může tiše zablokovat pozdější scény - quest, který se nehne, bez chyby a bez pádu. Tento mod sleduje scénu, ve které jste, upozorní vás, pokud jste v jedné byli už chvíli, ukáže vám, co to je, a nechá vás ji zastavit, pokud se zasekla.
+Skyrim používá *scény* pro rozhovory, cutscény a další skriptované momenty. Někdy scéna nikdy neskončí. To může tiše zablokovat pozdější scény - quest, který se nehne, bez chyby a bez pádu. Tento mod sleduje scénu, ve které jste, upozorní vás, pokud jste v ní už chvíli, ukáže vám, co to je, a nechá vás ji zastavit, pokud se zasekla.
 
-**Stručně:** nechte výchozí hodnoty zapnuté a hrajte dál. Když přijde upozornění, otevřete **Menu konfigurace modů > It Just Works**.
+**Stručně:** nechte výchozí hodnoty zapnuté a hrajte dál. Když dostanete upozornění, otevřete **Menu konfigurace modů > It Just Works**.
 
 Neupravuje záznamy jiných modů ani nepotřebuje patche, takže na pořadí v load orderu vůči vašemu obsahu nezáleží. Nezmění scénu, dokud mu to neřeknete.
 
@@ -20,7 +20,7 @@ Pět stránek: **Scéna**, **Hlídač**, **Nastavení**, **Diagnostika**, **Odin
 
 Výpis aktuální scény, nebo **Žádná**. Menu se při otevření obnoví.
 
-- **Čas ve scéně** - zhruba jak dlouho jste v této scéně během této relace (reálný čas).
+- **Čas ve scéně** - zhruba jak dlouho jste v této scéně.
 - **Scéna** - jméno, pokud je k dispozici; jinak číslo ID.
 - **Form ID** - surové ID, vždy zobrazené. Hodí se pro konzoli nebo hlášení chyby.
 - **Nadřazený úkol** - kterému questu ta scéna patří.
@@ -47,7 +47,7 @@ Posledních deset scén, nejnovější první, s přibližnou délkou.
 Hlídá, abyste nemuseli.
 
 - **Upozornit po** - jak dlouho může scéna běžet, než přijde upozornění. Výchozí **6** minut. **0** = nikdy.  
-  Nic ve hře neoznačuje scénu jako zaseknutou a nic ve hře neříká, jak dlouho má scéna běžet. Proto nastavíme prahovou hodnotu a upozorníme vás. Kombinujeme herní čas a reálný čas způsobem, který má podle nás zhruba odpovídat „reálnému času stráveného skutečným hraním", aby byl ovládací prvek intuitivní.
+  Nic ve hře neoznačuje scénu jako zaseknutou a nic ve hře neříká, jak dlouho má scéna běžet. Proto nastavíme prahovou hodnotu a upozorníme vás. Kombinujeme herní čas a odehraný čas způsobem, který zhruba odpovídá „času stráveného skutečným hraním", aby byl ovládací prvek intuitivní.
 - **Kontrolovat každých** - sekundy mezi kontrolami. Výchozí **30**. **0** = hlídač vypnout.
 - **Opakovat upozornění** - ve výchozím stavu vypnuto, takže dostanete jedno upozornění na scénu. Zapněte, pokud chcete dál dostávat upozornění, dokud jste nad prahovou hodnotou.
 - **Opakovat každých** - minuty mezi upozorněními, použije se jen když je zapnuto opakování upozornění. Výchozí **5**.
@@ -59,7 +59,7 @@ Upozornění jsou dva řádky v rohu, například:
 
 Ve výchozím stavu jedno upozornění na scénu, dokud ji neopustíte nebo se scéna nezmění. Minuli jste ho? Otevřete menu - výpis pořád ukazuje, v čem jste a jak dlouho. Mod scénu sám nezastaví; k tomu použijte Zastavit scénu na stránce Scéna.
 
-Hlídač se chová stejně, ať už vaše menu svět pozastavují (vanilla), nebo ho nechávají běžet (sestavy pro zrušení pauzy jako [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) - upozornění pořád jen znamená, že scéna běží už chvíli.
+Sestavy pro zrušení pauzy (např. [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) by měly fungovat; odehraný čas se pořád řídí uloženým čítačem hraní hry.
 
 ---
 
@@ -70,7 +70,7 @@ Hlídač se chová stejně, ať už vaše menu svět pozastavují (vanilla), neb
 - **Jazyk oznámení** - jazyk vlastních oznámení modu v rohu. Instalátor ho může předvyplnit, když zvolíte výchozí jazyk menu; kdykoli ho můžete změnit na této stránce. Ve výchozím stavu i jako záloha angličtina; nezávislý na nastavení jazyka hry.
 - **Pojmenovat aktuální scénu** - přiřaďte klávesu; jejím stisknutím uvidíte jméno aktuální scény bez otevření menu.
 - **Zrušit klávesu** - odstraní vazbu.
-- **Diagnostický log** - kolik jde do Papyrus logu. Pro běžné hraní nechte **Vypnuto**. Použijte **Události** při hlášení chyby; **Každá kontrola** jen pokud stíháte timing problém, pak ho zase vypněte. Může ovlivnit výkon, zvlášť při každé kontrole.
+- **Diagnostický log** - kolik jde do Papyrus logu. Pro běžné hraní nechte **Vypnuto**. Použijte **Události** při hlášení chyby; **Každá kontrola** jen pokud řešíte problém s časováním, pak ho zase vypněte. Může ovlivnit výkon, zvlášť při každé kontrole.
 
   Logování funguje, jen když hra zapisuje Papyrus logy. V `Documents\My Games\Skyrim Special Edition\` upravte `Skyrim.ini` nebo `SkyrimCustom.ini`:
 
@@ -88,14 +88,16 @@ Hlídač se chová stejně, ať už vaše menu svět pozastavují (vanilla), neb
 
 - **Editor ID načteny** - indikátor. Jména na stránce Scéna a nadřazený úkol, když svítí; čísla ID, když je zhasnutý. Form ID je pořád surové `0x…` v obou případech.
 
+- **Měření času** - jaké hodiny tato scéna používá pro práh upozornění: odehraný čas plus herní hodiny, když obojí vypadá v pořádku, nebo jen odehraný čas, pokud herní hodiny pro tuto scénu vypadly. **--** když je hlídač vypnutý, uspaný, nebo nejste ve scéně.
+
 - **Hlídač** - zda běží kontrola na pozadí:
   - **Běží** - v pořádku
-  - **Probouzí se** - normální hned po načtení
+  - **Probouzí se** - normální hned po načtení nebo před prvním tikem
   - **Opožděno** - stále pracuje, ale kontroly jsou pomalejší než obvykle (vytížená hra)
   - **Vypnuto** - nastavili jste Kontrolovat každých na 0
   - **Uspáno** - Zapnuto je vypnuté v Nastavení
 
-- **Poslední samooprava** - mod občas opraví vlastní účetnictví (často po načtení). Řádek tady je normální.
+- **Poslední samooprava** - mod občas opraví vlastní účetnictví. Řádek tady je normální.
 
 - **Verze**
 
@@ -137,7 +139,7 @@ Zkontrolujte stav Hlídače na stránce Diagnostika, pak číselníky Hlídače:
 - Stav **Vypnuto** - Kontrolovat každých je 0. Nastavte zpět na 10-240 s.
 - Upozornit po je **0** - to vypíná upozornění. Nastavte počet minut, který chcete.
 
-Upozornění používá čas stejným způsobem jako Upozornit po, takže čas ve scéně může občas ukazovat vysokou hodnotu bez upozornění - to je normální. Je to reálný čas a při načtení se vynuluje. I bez oznámení menu vždy ukazuje aktuální scénu a jak dlouho v ní jste.
+Upozornění čeká na **oba** ukazatele - odehraný čas i herní kalendář - když jsou oba použitelné, takže **Čas ve scéně** může ukazovat hodnotu nad prahem, zatímco upozornění pořád čeká na herní hodiny - to je normální. I bez oznámení menu vždy ukazuje aktuální scénu a jak dlouho v ní jste.
 
 ### Zastavit scénu scénu nevyčistilo
 

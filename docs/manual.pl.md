@@ -20,7 +20,7 @@ Pięć stron: **Scena**, **Strażnik**, **Ustawienia**, **Diagnostyka**, **Odins
 
 Odczyt bieżącej sceny albo **Brak**. Menu odświeża się przy otwarciu.
 
-- **Czas w scenie** - w przybliżeniu, jak długo jesteś w tej scenie w tej sesji (czas rzeczywisty).
+- **Czas w scenie** - w przybliżeniu, jak długo jesteś w tej scenie.
 - **Scena** - nazwa, gdy dostępna; w przeciwnym razie numer ID.
 - **Form ID** - surowy ID, zawsze widoczny. Przydatny w konsoli albo w zgłoszeniu błędu.
 - **Zadanie nadrzędne** - do którego zadania należy ta scena.
@@ -47,8 +47,8 @@ Ostatnie dziesięć scen, najnowsza pierwsza, z przybliżonym czasem trwania.
 Pilnuje, żebyś ty nie musiał.
 
 - **Ostrzeż po** - jak długo scena może trwać, zanim dostaniesz alert. Domyślnie **6** minut. **0** = nigdy.  
-  Nic w grze nie oznacza sceny jako zaciętej i nic w grze nie mówi nam, jak długo scena powinna trwać. Więc ustawiamy próg i ostrzegamy cię. Łączymy czas gry i czas rzeczywisty w sposób, który - mamy nadzieję - w przybliżeniu odzwierciedla „czas rzeczywiście spędzony na graniu", żeby ta kontrolka była intuicyjna.
-- **Sprawdzaj co** - sekundy między sprawdzeniami. Domyślnie **30**. **0** = wyłącza strażnika.
+  Nic w grze nie oznacza sceny jako zaciętej i nic nie mówi nam, jak długo scena powinna trwać. Więc ustawiamy próg i cię ostrzegamy. Łączymy czas gry i czas zapisu w sposób, który w przybliżeniu odzwierciedla "czas faktycznie spędzony na graniu", tak by ta kontrolka była intuicyjna.
+- **Sprawdzaj co** - sekundy między sprawdzeniami. Domyślnie **30**. **0** = wyłącza strażnika (i kończy bieżącą obserwację).
 - **Powtarzaj alerty** - domyślnie wyłączone, więc dostajesz jeden alert na scenę. Włącz, by alert powtarzał się, dopóki wciąż przekraczasz próg.
 - **Powtarzaj co** - minuty między alertami, używane tylko gdy powtarzanie alertów jest włączone. Domyślnie **5**.
 
@@ -59,7 +59,7 @@ Alert to dwa wiersze w rogu, na przykład:
 
 Domyślnie jeden alert na scenę, dopóki jej nie opuścisz albo scena się nie zmieni. Przegapiłeś go? Otwórz menu - odczyt nadal pokazuje, w czym jesteś i jak długo. Mod nie zatrzymuje sceny za ciebie; służy do tego Zatrzymaj scenę na stronie Scena.
 
-Strażnik zachowuje się tak samo niezależnie od tego, czy twoje menu pauzuje świat (wanilia), czy pozwala mu działać dalej (konfiguracje znoszące pauzę, takie jak [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) - alert nadal oznacza tylko tyle, że scena trwa już jakiś czas.
+Konfiguracje znoszące pauzę (np. [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) powinny działać; czas gry nadal podąża za zapisanym licznikiem rozgrywki gry.
 
 ---
 
@@ -88,14 +88,16 @@ Strażnik zachowuje się tak samo niezależnie od tego, czy twoje menu pauzuje �
 
 - **Editor ID wczytane** - wskaźnik. Nazwy na stronie Scena i zadanie nadrzędne, gdy świeci; numery ID, gdy zgaszony. Form ID i tak zawsze pozostaje surowym `0x…`.
 
+- **Pomiar czasu** - z jakich zegarów korzysta ta scena przy progu ostrzegania: czas gry plus zegar gry, gdy oba wyglądają poprawnie, albo sam czas gry (i dlaczego), jeśli zegar gry wypadł dla tej sceny. **--** gdy strażnik jest wyłączony, uśpiony, albo nie jesteś w scenie.
+
 - **Strażnik** - czy sprawdzanie w tle działa:
   - **Działa** - w porządku
-  - **Budzi się** - normalne zaraz po przeładowaniu
-  - **Opóźniony** - nadal działa, ale sprawdzenia są wolniejsze niż zwykle (zajęta gra)
+  - **Budzi się** - normalne zaraz po przeładowaniu albo przed pierwszym sprawdzeniem
+  - **Opóźniony** - wciąż działa, ale sprawdzenia są wolniejsze niż zwykle (zajęta gra)
   - **Wyłączony** - ustawiłeś sprawdzaj co na 0
-  - **Uśpiony** - włączony jest wyłączony w Ustawieniach
+  - **Uśpiony** - włączony jest wyłączone w Ustawieniach
 
-- **Ostatnia samonaprawa** - mod czasem poprawia własną księgowość (często po przeładowaniu). Wiersz tutaj jest normalny.
+- **Ostatnia samonaprawa** - mod czasem poprawia własną księgowość. Wiersz tutaj jest normalny.
 
 - **Wersja**
 
@@ -110,7 +112,7 @@ po3 Tweaks nie wczytuje Editor ID. W `po3_Tweaks.ini` ustaw `Load EditorIDs = tr
 - **MO2:** folder moda Tweaks w lewym panelu albo Overwrite / mod o wyższym priorytecie.
 - **Vortex:** folder staging Tweaks albo mod override. Sprawdzaj ponownie po każdej aktualizacji.
 
-Form ID i tak się wyświetla, więc nigdy nie zostajesz całkiem po ciemku.
+Form ID wyświetla się tak czy inaczej, więc nigdy nie zostajesz całkiem po ciemku.
 
 ### Powiadomienia są w niewłaściwym języku
 
@@ -137,11 +139,11 @@ Sprawdź status Strażnika na stronie Diagnostyka, potem pokrętła Strażnika:
 - Status **Wyłączony** - sprawdzaj co jest ustawione na 0. Ustaw je z powrotem na 10-240s.
 - Ostrzeż po jest na **0** - to wyłącza alert. Ustaw liczbę minut, jaką chcesz.
 
-Alert korzysta z czasu w taki sam sposób jak ostrzeż po, więc czas w scenie może czasem pokazywać wysoką wartość bez wywołania alertu - to normalne. To czas rzeczywisty i zeruje się po przeładowaniu. Nawet bez powiadomienia menu zawsze pokazuje bieżącą scenę i jak długo w niej jesteś.
+Alert czeka na **oba** warunki naraz - czas gry i kalendarz gry - gdy oba są sprawne, więc **Czas w scenie** (czas gry) może pokazywać wartość ponad progiem, a alert wciąż czeka na zegar gry - to normalne. Przeładowanie nie zeruje czasu gry. Nawet bez powiadomienia menu zawsze pokazuje bieżącą scenę i jak długo w niej jesteś.
 
 ### Zatrzymanie sceny nie usunęło sceny
 
-Zatrzymanie ani razu nie zawiodło przez ponad 10 lat odblokowywania zapisów - najpierw prowizorycznymi, jednorazowymi wersjami, a teraz tym modem. Więc jeśli kiedykolwiek zgłosi, że scena się nie zakończyła, to albo znalazłeś błąd w modzie, albo coś naprawdę nowego. To ekscytujące. Zaskoczenie to miejsce, gdzie rodzi się nauka. Kompletny log to najlepsza szansa, by to wytropić. Włącz logowanie Papyrus, ustaw log diagnostyczny na **Każde sprawdzenie** i włącz każdą opcję logowania lub debugowania, jaką znajdziesz w całej swojej kolejności wczytywania, tak by - jeśli zdarzy się ponownie - zostało to uchwycone. Potem wyślij kompletny `Papyrus.0.log` jako zgłoszenie błędu. Przeładuj sprzed zacięcia, żeby grać dalej w międzyczasie.
+Zatrzymanie ani razu nie zawiodło przez ponad 10 lat odblokowywania zapisów - najpierw prowizorycznymi, jednorazowymi wersjami, a teraz tym modem. Więc jeśli kiedykolwiek zgłosi, że scena się nie zakończyła, to albo znalazłeś błąd w modzie, albo coś naprawdę nowego. To ekscytujące. Zaskoczenie to miejsce, w którym rodzi się nauka. Kompletny log to najlepsza szansa, by to wytropić. Włącz logowanie Papyrus, ustaw log diagnostyczny na **Każde sprawdzenie** i włącz każdą opcję logowania albo debugowania, jaką znajdziesz w całej swojej kolejności wczytywania, tak by - jeśli zdarzy się ponownie - zostało to uchwycone. Potem wyślij kompletny `Papyrus.0.log` jako zgłoszenie błędu. Przeładuj zapis sprzed zacięcia, żeby grać dalej w międzyczasie.
 
 ### Zgłaszanie błędu albo prośba o pomoc
 

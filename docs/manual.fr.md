@@ -20,7 +20,7 @@ Cinq pages : **Scène**, **Surveillance**, **Paramètres**, **Diagnostic**, **D�
 
 Affichage de la scène actuelle, ou **Aucune**. Le menu est actualisé à l'ouverture.
 
-- **Temps dans la scène** - à peu près depuis combien de temps vous êtes dans cette scène pour cette session (temps réel).
+- **Temps dans la scène** - à peu près depuis combien de temps vous êtes dans cette scène.
 - **Scène** - le nom quand disponible ; sinon un numéro d'ID.
 - **Form ID** - l'ID brut, toujours affiché. Utile pour la console ou un rapport de bug.
 - **Quête associée** - à quelle quête appartient cette scène.
@@ -47,7 +47,7 @@ Les dix dernières scènes, la plus récente en premier, avec une durée approxi
 Surveille pour que vous n'ayez pas à le faire.
 
 - **M'avertir après** - combien de temps une scène peut tourner avant que vous receviez une alerte. Par défaut **6** minutes. **0** = jamais.  
-  Rien dans le jeu ne marque une scène comme coincée, et rien ne nous dit combien de temps une scène est censée durer. Nous fixons donc un seuil et vous avertissons. Nous combinons le temps de jeu et le temps réel d'une façon qui, nous l'espérons, représente à peu près « le temps réel passé à vraiment jouer », pour que le réglage reste intuitif.
+  Rien dans le jeu ne marque une scène comme coincée, et rien ne nous dit combien de temps une scène est censée durer. Nous fixons donc un seuil et vous alertons. Nous combinons temps de jeu et temps de sauvegarde d'une façon qui représente à peu près le « temps réellement passé à jouer », pour que le réglage reste intuitif.
 - **Vérifier toutes les** - secondes entre les vérifications. Par défaut **30**. **0** = désactive la surveillance.
 - **Répéter les alertes** - désactivé par défaut, donc vous recevez une alerte par scène. Activez-le pour continuer à être alerté tant que vous dépassez le seuil.
 - **Répéter toutes les** - minutes entre les alertes, utilisé seulement quand Répéter les alertes est activé. Par défaut **5**.
@@ -59,7 +59,7 @@ Une alerte, ce sont deux lignes dans le coin, par exemple :
 
 Une alerte par scène par défaut, jusqu'à ce que vous la quittiez ou que la scène change. Manqué ? Ouvrez le menu - l'affichage montre encore ce dans quoi vous êtes et depuis combien de temps. Le mod n'arrête pas la scène pour vous ; utilisez **Arrêter la scène** sur la page **Scène** pour cela.
 
-La surveillance se comporte de la même façon que vos menus mettent le monde en pause (vanilla) ou le laissent tourner (configurations sans pause comme [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) - une alerte signifie toujours simplement que la scène tourne depuis un moment.
+Les configurations qui empêchent la pause (par ex. [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) devraient fonctionner ; le temps de jeu continue de suivre le compteur de temps joué sauvegardé du jeu.
 
 ---
 
@@ -88,14 +88,16 @@ La surveillance se comporte de la même façon que vos menus mettent le monde en
 
 - **Editor ID chargés** - un voyant. Les noms sur la page **Scène** et la quête associée quand il est allumé ; des numéros d'ID quand il est éteint. Le **Form ID** reste le `0x…` brut dans tous les cas.
 
+- **Chronométrage** - quels chronomètres cette scène utilise pour le seuil d'alerte : temps de jeu plus horloge du jeu quand les deux semblent fiables, ou temps de jeu seul si l'horloge du jeu a lâché pour cette scène. **--** quand la surveillance est désactivée, en veille, ou que vous n'êtes pas dans une scène.
+
 - **Surveillance** - si le contrôle en arrière-plan tourne :
   - **En marche** - tout va bien
-  - **Réveil en cours** - normal juste après un rechargement
+  - **Réveil en cours** - normal juste après un rechargement ou avant la première vérification
   - **En retard** - toujours actif, mais les vérifications sont plus lentes que d'habitude (jeu chargé)
   - **Désactivée (vérifications coupées)** - vous avez mis **Vérifier toutes les** à 0
-  - **En veille (désactivé)** - **Activé** est désactivé sur **Paramètres**
+  - **En veille** - **Activé** est désactivé sur **Paramètres**
 
-- **Dernière auto-réparation** - le mod corrige parfois sa propre comptabilité (souvent après un rechargement). Une ligne ici est normale.
+- **Dernière auto-réparation** - le mod corrige parfois sa propre comptabilité. Une ligne ici est normale.
 
 - **Version**
 
@@ -134,10 +136,10 @@ Le texte est correct - c'est juste que votre jeu n'a aucune police capable de de
 Vérifiez l'état de la **Surveillance** sur la page **Diagnostic**, puis les réglages de **Surveillance** :
 
 - État **En veille (désactivé)** - le mod est éteint. Activez **Activé** (Paramètres).
-- État **Désactivée (vérifications coupées)** - **Vérifier toutes les** est à 0. Remettez-le entre 10 et 240 s.
+- État **Désactivée** - **Vérifier toutes les** est à 0. Remettez-le entre 10 et 240 s.
 - **M'avertir après** est à **0** - cela désactive l'alerte. Réglez les minutes voulues.
 
-L'alerte utilise le temps de la même façon que **M'avertir après**, donc le **Temps dans la scène** peut occasionnellement afficher une valeur élevée sans alerte - c'est normal. C'est du temps réel qui se remet à zéro au rechargement. Même sans notification, le menu montre toujours la scène actuelle et depuis combien de temps vous y êtes.
+L'alerte attend **à la fois** le temps de jeu et le calendrier du jeu quand les deux sont utilisables, donc le **Temps dans la scène** peut afficher une valeur au-delà du seuil pendant que l'alerte patiente encore sur l'horloge du jeu - c'est normal. Même sans notification, le menu montre toujours la scène actuelle et depuis combien de temps vous y êtes.
 
 ### Arrêter la scène n'a pas dissipé la scène
 

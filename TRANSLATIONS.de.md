@@ -21,7 +21,7 @@ Du musst auch nicht fließend sein, um zu helfen. Wenn eine Zeile im Menü **abg
 ## Was bewusst Englisch ist
 
 - **Die Abschiedsformel `See? It Just Works!`** - der Witz ist englischsprachig gedacht. Geschmackssache, keine Einschränkung.
-- **Das Papyrus-Diagnoseprotokoll** - die Zeilen, die der Mod schreibt, wenn du die Protokollierung einschaltest, bleiben absichtlich Englisch. Sie sind ein strukturierter, „grepbarer" `key=value`-Dialekt, gedacht zum Durchsuchen und Einfügen in einen Fehlerbericht; sie zu übersetzen würde viel von diesem Nutzen zerstören, für wenig Gewinn.
+- **Das Papyrus-Diagnoseprotokoll** - die Zeilen, die der Mod schreibt, wenn du die Protokollierung einschaltest, bleiben absichtlich Englisch. Sie sind ein strukturierter, "grepbarer" `key=value`-Dialekt, gedacht zum Durchsuchen und Einfügen in einen Fehlerbericht; sie zu übersetzen würde viel von diesem Nutzen zerstören, für wenig Gewinn.
 
 ## Sprachen
 

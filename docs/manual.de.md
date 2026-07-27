@@ -20,7 +20,7 @@ Fünf Seiten: **Szene**, **Wächter**, **Einstellungen**, **Diagnose**, **Deinst
 
 Anzeige der aktuellen Szene, oder **Keine**. Das Menü aktualisiert sich beim Öffnen.
 
-- **Zeit in der Szene** - ungefähr, wie lange du in dieser Sitzung schon in dieser Szene bist (Echtzeit).
+- **Zeit in der Szene** - ungefähr, wie lange du schon in dieser Szene bist.
 - **Szene** - Name, wenn verfügbar; sonst eine ID-Nummer.
 - **Form ID** - die rohe ID, immer sichtbar. Nützlich für die Konsole oder einen Fehlerbericht.
 - **Zugehörige Quest** - zu welcher Quest die Szene gehört.
@@ -46,10 +46,10 @@ Die letzten zehn Szenen, neueste zuerst, mit grober Dauer.
 
 Wacht, damit du es nicht musst.
 
-- **Warnen nach** - wie lange eine Szene laufen darf, bevor du eine Warnung bekommst. Standard **6** Minuten. **0** = nie.  
-  Nichts im Spiel markiert eine Szene als feststeckend, und nichts im Spiel sagt uns, wie lange eine Szene laufen soll. Also setzen wir eine Schwelle und warnen dich. Wir kombinieren Spielzeit und Echtzeit auf eine Art, von der wir hoffen, dass sie ungefähr „tatsächlich mit Spielen verbrachte Echtzeit" abbildet, damit sich die Einstellung intuitiv anfühlt.
-- **Prüfen alle** - Sekunden zwischen Prüfungen. Standard **30**. **0** = schaltet den Wächter aus.
-- **Wiederholte Warnungen** - standardmäßig aus, sodass du eine Warnung pro Szene bekommst. Einschalten, um weiter zu warnen, solange du über der Schwelle bist.
+- **Warnen nach** - wie lange eine Szene laufen darf, bevor du eine Warnung bekommst. Standard **6** Minuten. **0** = nie.
+  Nichts im Spiel markiert eine Szene als feststeckend, und nichts im Spiel sagt uns, wie lange eine Szene laufen soll. Also setzen wir eine Schwelle und erinnern dich. Wir kombinieren Spielzeit und Save-Zeit so, dass es ungefähr "tatsächlich verbrachte Spielzeit" darstellt, damit die Einstellung intuitiv ist.
+- **Prüfen alle** - Sekunden zwischen Prüfungen. Standard **30**. **0** = schaltet den Wächter aus (und beendet die laufende Beobachtung).
+- **Wiederholte Warnungen** - standardmäßig aus, sodass du eine Warnung pro Szene bekommst. Einschalten, um weiter zu warnen, solange die Szene noch läuft.
 - **Wiederholen alle** - Minuten zwischen Warnungen, nur verwendet, wenn Wiederholte Warnungen an ist. Standard **5**.
 
 Eine Warnung besteht aus zwei Zeilen in der Ecke, zum Beispiel:
@@ -59,7 +59,7 @@ Eine Warnung besteht aus zwei Zeilen in der Ecke, zum Beispiel:
 
 Standardmäßig eine Warnung pro Szene, bis du sie verlässt oder die Szene wechselt. Verpasst? Öffne das Menü - die Anzeige zeigt weiterhin, worin du steckst und wie lange. Der Mod stoppt die Szene nicht von selbst; benutze dafür Szene stoppen auf der Seite Szene.
 
-Der Wächter verhält sich gleich, egal ob deine Menüs die Welt pausieren (unverändertes Spiel) oder weiterlaufen lassen (Unpause-Setups wie [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) - eine Warnung bedeutet weiterhin nur, dass die Szene schon eine Weile läuft.
+Unpause-Setups (z. B. [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) sollten funktionieren; die Spielzeit folgt weiterhin dem gespeicherten Spielzeitzähler des Spiels.
 
 ---
 
@@ -88,14 +88,16 @@ Der Wächter verhält sich gleich, egal ob deine Menüs die Welt pausieren (unve
 
 - **Editor IDs geladen** - eine Anzeige. Namen auf der Seite Szene und bei der zugehörigen Quest, wenn sie leuchtet; ID-Nummern, wenn sie dunkel ist. Form ID bleibt so oder so die rohe `0x…`.
 
+- **Zeitmessung** - mit welchen Uhren diese Szene für die Warnschwelle gemessen wird: Spielzeit plus Ingame-Uhr, wenn beide plausibel aussehen, oder nur Spielzeit (und warum), wenn die Ingame-Uhr für diese Szene ausgefallen ist. **--** wenn der Wächter aus, ruhend ist, oder du dich in keiner Szene befindest.
+
 - **Wächter** - ob die Hintergrundprüfung läuft:
   - **Läuft** - in Ordnung
-  - **Wacht auf** - normal direkt nach einem Neuladen
+  - **Wacht auf** - normal direkt nach einem Neuladen oder vor dem ersten Tick
   - **Verspätet** - arbeitet noch, aber Prüfungen sind langsamer als gewöhnlich (viel los im Spiel)
   - **Aus (Prüfungen deaktiviert)** - du hast Prüfen alle auf 0 gesetzt
   - **Ruht (abgeschaltet)** - Aktiviert ist unter Einstellungen aus
 
-- **Letzte Selbstreparatur** - der Mod korrigiert manchmal seine eigene Buchhaltung (oft nach einem Neuladen). Eine Zeile hier ist normal.
+- **Letzte Selbstreparatur** - der Mod korrigiert manchmal seine eigene Buchhaltung. Eine Zeile hier ist normal.
 
 - **Version**
 
@@ -137,7 +139,7 @@ Prüfe den Wächter-Status auf der Seite Diagnose, dann die Wächter-Regler:
 - Status **Aus (Prüfungen deaktiviert)** - Prüfen alle steht auf 0. Setze es zurück auf 10-240 s.
 - Warnen nach ist **0** - das schaltet die Warnung ab. Stelle die gewünschten Minuten ein.
 
-Die Warnung nutzt Zeit auf dieselbe Art wie Warnen nach, daher kann Zeit in der Szene gelegentlich hoch anzeigen, ohne dass eine Warnung kommt - das ist normal. Es ist Echtzeit und setzt sich bei einem Neuladen zurück. Auch ohne Benachrichtigung zeigt das Menü immer die aktuelle Szene und wie lange du schon darin bist.
+Die Warnung wartet auf **beides**, Spielzeit und Ingame-Uhr, sofern beide brauchbar sind - deshalb kann **Zeit in der Szene** (Spielzeit) schon über der Schwelle liegen, während die Warnung noch auf die Ingame-Uhr wartet - das ist normal. Auch ohne Benachrichtigung zeigt das Menü immer die aktuelle Szene und wie lange du schon darin bist.
 
 ### Szene stoppen hat die Szene nicht aufgelöst
 

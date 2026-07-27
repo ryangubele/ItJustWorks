@@ -1,18 +1,9 @@
 // Copyright (c) 2026 Ryan Gubele
 // SPDX-License-Identifier: MPL-2.0
 //
-// Scrubs machine identity out of compiled Skyrim .pex files (username, hostname,
-// compile time). Optional --replace <map.json> rewrites string-table entries by
-// exact key match to UTF-8 values: PapyrusCompiler mishandles non-ASCII string
-// literals in .psc, so the toast bake ships ASCII placeholders and this step
-// installs the real strings. Body opcodes use string indices only, so the table
-// can change length without touching code.
-//
-// --time <unix-epoch> sets compile time (build.ps1 supplies SOURCE_DATE_EPOCH,
-// clean HEAD date, or now). Header strings are ASCII; content strings are UTF-8.
-//
-// PEX (big-endian): magic FA57C0DE, major, minor, gameID, u64 time, sourceFile,
-// user, machine, then u16 stringCount and (u16 len + bytes)* string table, then body.
+// Scrub .pex user/machine/compile time. Optional --replace rewrites string-table
+// entries by exact key (toast bake: ASCII placeholders -> UTF-8). Table length may
+// change; opcodes hold indices only. --time is unix-epoch.
 
 using System.Text;
 using System.Text.Json;
@@ -123,41 +114,46 @@ static void Scrub(string path, long compileTime, Dictionary<string, string>? rep
 {
     byte[] data = File.ReadAllBytes(path);
 
+    Need(data, 0, 4, "magic");
     uint magic = (uint)((data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]);
     if (magic != Magic)
         throw new InvalidDataException($"bad magic 0x{magic:X8} (expected 0x{Magic:X8}) -- not a Skyrim .pex");
 
     int pos = 4;
+    Need(data, pos, 12, "fixed header (major/minor/gameID/compileTime)");
     pos += 1; // major
     pos += 1; // minor
     pos += 2; // gameID
     int timeOff = pos;
     pos += 8; // compileTime
 
-    (string src, pos) = ReadStrAscii(data, pos);
-    (string oldUser, pos) = ReadStrAscii(data, pos);
-    (string oldMachine, pos) = ReadStrAscii(data, pos);
+    (string src, pos) = ReadStrAscii(data, pos, "sourceFile");
+    (string oldUser, pos) = ReadStrAscii(data, pos, "user");
+    (string oldMachine, pos) = ReadStrAscii(data, pos, "machine");
 
-    if (pos + 2 > data.Length)
-        throw new InvalidDataException("truncated: no string table count");
+    Need(data, pos, 2, "string table count");
     int stringCount = (data[pos] << 8) | data[pos + 1];
     pos += 2;
+    // Min entry size 2 bytes; reject a count that cannot fit the remainder.
+    if ((long)stringCount * 2 > data.Length - pos)
+        throw new InvalidDataException(
+            $"string table count {stringCount} cannot fit in {data.Length - pos} remaining byte(s) at offset {pos}");
 
     var strings = new List<byte[]>(stringCount);
     for (int i = 0; i < stringCount; i++)
     {
-        if (pos + 2 > data.Length)
-            throw new InvalidDataException($"truncated: string {i} length");
+        Need(data, pos, 2, $"string {i} length");
         int len = (data[pos] << 8) | data[pos + 1];
         pos += 2;
-        if (pos + len > data.Length)
-            throw new InvalidDataException($"truncated: string {i} data (len={len})");
+        Need(data, pos, len, $"string {i} payload (len={len})");
         var bytes = new byte[len];
         Buffer.BlockCopy(data, pos, bytes, 0, len);
         pos += len;
         strings.Add(bytes);
     }
     int bodyOff = pos;
+    if (bodyOff > data.Length)
+        throw new InvalidDataException($"string table ends past end of file (offset {bodyOff} > {data.Length})");
 
     int replaced = 0;
     var missing = new List<string>();
@@ -179,9 +175,7 @@ static void Scrub(string path, long compileTime, Dictionary<string, string>? rep
             if (!usedKeys.Contains(k))
                 missing.Add(k);
         }
-        // Map is shared across all .pex in one run; only the toast script has hits.
-        // Fail partial apply on any file that matched some keys. Zero hits is normal for
-        // non-toast pex; build.ps1 fails the package if placeholders remain in Toasts.pex.
+        // Partial apply fails; zero hits OK (non-toast pex). build.ps1 checks Toasts.pex leftovers.
         if (replaced > 0 && missing.Count > 0)
             throw new InvalidDataException(
                 $"{Path.GetFileName(path)}: {missing.Count} toast placeholder(s) not found in string table " +
@@ -208,17 +202,29 @@ static void Scrub(string path, long compileTime, Dictionary<string, string>? rep
     }
     ms.Write(data, bodyOff, data.Length - bodyOff);
 
-    File.WriteAllBytes(path, ms.ToArray());
+    // Temp + move: avoid leaving a truncated .pex on mid-write I/O failure.
+    var tmp = path + ".pexscrub.tmp";
+    File.WriteAllBytes(tmp, ms.ToArray());
+    File.Move(tmp, path, overwrite: true);
 
     Console.WriteLine(
         $"  {Path.GetFileName(path)}: user '{oldUser}'->'{NewUser}', machine '{oldMachine}'->'{NewMachine}', " +
         $"time={compileTime}" + (replaced > 0 ? $", strings replaced={replaced}" : ""));
 }
 
-static (string, int) ReadStrAscii(byte[] data, int pos)
+static void Need(byte[] data, int pos, int count, string what)
 {
+    if (pos < 0 || count < 0 || (long)pos + count > data.Length)
+        throw new InvalidDataException(
+            $"truncated: need {count} byte(s) for {what} at offset {pos}, file is {data.Length} byte(s)");
+}
+
+static (string, int) ReadStrAscii(byte[] data, int pos, string what)
+{
+    Need(data, pos, 2, $"{what} length");
     int len = (data[pos] << 8) | data[pos + 1];
     pos += 2;
+    Need(data, pos, len, $"{what} payload (len={len})");
     string s = Encoding.ASCII.GetString(data, pos, len);
     return (s, pos + len);
 }

@@ -20,7 +20,7 @@ Cinque pagine: **Scena**, **Sentinella**, **Impostazioni**, **Diagnostica**, **D
 
 Lettura della scena attuale, oppure **Nessuna**. Il menu si aggiorna all'apertura.
 
-- **Tempo nella scena** - all'incirca da quanto tempo sei in questa scena in questa sessione (tempo reale).
+- **Tempo nella scena** - all'incirca da quanto tempo sei in questa scena.
 - **Scena** - il nome quando disponibile; altrimenti un numero di ID.
 - **Form ID** - l'ID grezzo, sempre mostrato. Utile per la console o una segnalazione di bug.
 - **Missione proprietaria** - a quale missione appartiene quella scena.
@@ -47,8 +47,8 @@ Le ultime dieci scene, la più recente per prima, con durata approssimativa.
 Controlla al posto tuo.
 
 - **Avvisami dopo** - per quanto tempo una scena può durare prima che tu riceva un avviso. Predefinito **6** minuti. **0** = mai.  
-  Niente nel gioco segna una scena come bloccata, e niente nel gioco ci dice per quanto tempo una scena dovrebbe durare. Quindi impostiamo una soglia e ti avvisiamo. Combiniamo tempo di gioco e tempo reale in un modo che speriamo rappresenti all'incirca il "tempo reale passato a giocare davvero", così che il controllo risulti intuitivo.
-- **Controlla ogni** - secondi tra i controlli. Predefinito **30**. **0** = spegne la sentinella.
+  Niente nel gioco segna una scena come bloccata, e niente ci dice per quanto tempo una scena dovrebbe durare. Quindi impostiamo una soglia e ti avvisiamo. Combiniamo tempo di gioco e tempo di salvataggio in un modo che rappresenta all'incirca "il tempo che hai davvero passato a giocare", così che il controllo sia intuitivo.
+- **Controlla ogni** - secondi tra i controlli. Predefinito **30**. **0** = spegne la sentinella (e chiude l'osservazione in corso).
 - **Ripeti avvisi** - disattivato per impostazione predefinita, così ricevi un avviso per scena. Attivalo per continuare a ricevere avvisi finché resti oltre la soglia.
 - **Ripeti ogni** - minuti tra un avviso e l'altro, usato solo quando ripeti avvisi è attivo. Predefinito **5**.
 
@@ -59,7 +59,7 @@ Un avviso sono due righe nell'angolo, ad esempio:
 
 Un avviso per scena per impostazione predefinita, finché non la lasci o la scena cambia. L'hai perso? Apri il menu - la lettura mostra ancora in cosa sei e da quanto tempo. Il mod non ferma la scena al posto tuo; usa Ferma scena nella pagina Scena per farlo.
 
-La sentinella si comporta allo stesso modo sia che i tuoi menu mettano in pausa il mondo (vanilla), sia che lo lascino andare avanti (configurazioni senza pausa come [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) - un avviso significa semplicemente che la scena è in corso da un po'.
+Le configurazioni senza pausa (per esempio [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) dovrebbero funzionare; il tempo giocato segue comunque il contatore di gioco salvato.
 
 ---
 
@@ -70,7 +70,7 @@ La sentinella si comporta allo stesso modo sia che i tuoi menu mettano in pausa 
 - **Lingua delle notifiche** - la lingua delle notifiche del mod nell'angolo. L'installer può impostarla quando scegli una lingua predefinita del menu; cambiala quando vuoi in questa pagina. Inglese per impostazione predefinita e come ripiego; indipendente dall'impostazione della lingua del gioco.
 - **Mostra la scena attuale** - assegna un tasto; premilo per vedere il nome della scena attuale senza aprire il menu.
 - **Cancella tasto** - rimuove l'assegnazione.
-- **Log diagnostico** - quanto viene scritto nel log Papyrus. Lascia **Spento** per il gioco normale. Usa **Eventi** quando segnali un bug; **Ogni controllo** solo se stai rincorrendo un problema di timing, poi rispegnilo. Può influire sulle prestazioni, specialmente a ogni controllo.
+- **Log diagnostico** - quanto viene scritto nel log Papyrus. Lascia **Spento** per il gioco normale. Usa **Eventi** quando segnali un bug; **Ogni controllo** solo se stai rincorrendo un problema di tempistica, poi rispegnilo. Può influire sulle prestazioni, specialmente a ogni controllo.
 
   La registrazione funziona solo se il gioco sta scrivendo i log Papyrus. In `Documents\My Games\Skyrim Special Edition\`, modifica `Skyrim.ini` o `SkyrimCustom.ini`:
 
@@ -88,14 +88,16 @@ La sentinella si comporta allo stesso modo sia che i tuoi menu mettano in pausa 
 
 - **Editor ID caricati** - un indicatore. Nomi nella pagina Scena e nella missione proprietaria quando acceso; numeri di ID quando spento. Form ID resta comunque l'`0x…` grezzo.
 
+- **Cronometraggio** - quali orologi sta usando questa scena per la soglia di avviso: tempo giocato più orologio di gioco quando entrambi sembrano affidabili, oppure solo tempo giocato (e perché) se l'orologio di gioco è venuto meno per questa scena. **--** quando la sentinella è spenta, inattiva, o non sei in una scena.
+
 - **Sentinella** - se il controllo in background è attivo:
   - **Attivo** - tutto a posto
-  - **In avvio** - normale subito dopo un ricaricamento
+  - **In avvio** - normale subito dopo un ricaricamento o prima del primo controllo
   - **In ritardo** - ancora in funzione, ma i controlli sono più lenti del solito (gioco impegnato)
-  - **Spento (controlli disattivati)** - hai impostato controlla ogni a 0
-  - **Inattivo (spenta)** - abilitata è disattivata in Impostazioni
+  - **Spento** - hai impostato controlla ogni a 0
+  - **Inattivo** - abilitata è disattivata in Impostazioni
 
-- **Ultima auto-riparazione** - il mod a volte corregge la propria contabilità (spesso dopo un ricaricamento). Una riga qui è normale.
+- **Ultima auto-riparazione** - il mod a volte corregge la propria contabilità. Una riga qui è normale.
 
 - **Versione**
 
@@ -133,11 +135,11 @@ Il testo è corretto - è solo che il tuo gioco non ha alcun font in grado di di
 
 Controlla lo stato della Sentinella nella pagina Diagnostica, poi le manopole della Sentinella:
 
-- Stato **Inattivo (spenta)** - il mod è spento. Attiva Abilitata (Impostazioni).
-- Stato **Spento (controlli disattivati)** - controlla ogni è a 0. Riportalo tra 10 e 240 s.
+- Stato **Inattivo** - il mod è spento. Attiva Abilitata (Impostazioni).
+- Stato **Spento** - controlla ogni è a 0. Riportalo tra 10 e 240 s.
 - Avvisami dopo è a **0** - questo disattiva l'avviso. Imposta i minuti che vuoi.
 
-L'avviso usa il tempo nello stesso modo di avvisami dopo, quindi il tempo nella scena può occasionalmente apparire alto senza un avviso - è normale. È tempo reale e si azzera a un ricaricamento. Anche senza notifica, il menu mostra sempre la scena attuale e da quanto tempo ci sei.
+L'avviso aspetta **entrambi**, tempo giocato e calendario di gioco, quando sono entrambi utilizzabili, quindi **Tempo nella scena** (giocato) può segnare oltre la soglia mentre l'avviso attende ancora l'orologio di gioco - è normale. Un ricaricamento non azzera il tempo giocato. Anche senza notifica, il menu mostra sempre la scena attuale e da quanto tempo ci sei.
 
 ### Ferma scena non ha eliminato la scena
 

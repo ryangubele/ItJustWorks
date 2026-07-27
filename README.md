@@ -21,7 +21,7 @@ Stuck scenes (dialogue, cutscenes, scripted moments) can stay "playing" forever 
 |--|--|
 | **Watchdog** | Polls current scene (default 30s); one advisory notification after a time threshold (default 6 min); optional repeat |
 | **Stop Scene** | Two-step confirm in the MCM; runs when the menu closes |
-| **Readout** | Scene name / form ID / owning quest, time-in-scene (session real time), last 10 scenes |
+| **Readout** | Scene name / form ID / owning quest, time-in-scene (saved played time), last 10 scenes |
 | **Hotkey** | Optional bind: name current scene without opening the menu |
 | **Settings** | Enable/disable (dormant without uninstall), Levity (copy only), Notification language, poll/warn dials, diagnostics log |
 | **Safety** | Alias-free quest, mid-playthrough add/remove, SEQ for start-on-load, holds no world state |

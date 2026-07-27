@@ -20,7 +20,7 @@ Cinco páginas: **Escena**, **Vigilante**, **Ajustes**, **Diagnóstico**, **Desi
 
 Lectura de la escena actual, o **Ninguna**. El menú se actualiza al abrirse.
 
-- **Tiempo en la escena** - aproximadamente cuánto tiempo llevas en esta escena en esta sesión (tiempo real).
+- **Tiempo en la escena** - aproximadamente cuánto tiempo llevas en esta escena.
 - **Escena** - el nombre cuando está disponible; si no, un número de ID.
 - **Form ID** - el ID en bruto, siempre visible. Útil para la consola o un informe de error.
 - **Misión propietaria** - a qué misión pertenece esa escena.
@@ -47,8 +47,8 @@ Las últimas diez escenas, la más reciente primero, con duración aproximada.
 Vigila para que no tengas que hacerlo tú.
 
 - **Avisarme tras** - cuánto puede durar una escena antes de que recibas un aviso. Por defecto, **6** minutos. **0** = nunca.  
-  Nada en el juego marca una escena como atascada, y nada en el juego nos dice cuánto se supone que debe durar una escena. Así que fijamos un umbral y te avisamos. Combinamos tiempo de juego y tiempo real de un modo que esperamos que represente aproximadamente "tiempo real dedicado a jugar de verdad", para que el control sea intuitivo.
-- **Comprobar cada** - segundos entre comprobaciones. Por defecto, **30**. **0** = apaga el vigilante.
+  Nada en el juego marca una escena como atascada, y nada en el juego nos dice cuánto se supone que debe durar una escena. Así que fijamos un umbral y te avisamos. Combinamos el reloj del juego y el tiempo jugado de un modo que representa aproximadamente "tiempo dedicado a jugar de verdad", para que el control sea intuitivo.
+- **Comprobar cada** - segundos entre comprobaciones. Por defecto, **30**. **0** = apaga el vigilante (y borra la vigilancia actual).
 - **Repetir alertas** - desactivado por defecto, así que recibes un aviso por escena. Actívalo para seguir recibiendo avisos mientras sigas por encima del umbral.
 - **Repetir cada** - minutos entre avisos, se usa solo cuando repetir alertas está activado. Por defecto, **5**.
 
@@ -59,7 +59,7 @@ Un aviso son dos líneas en la esquina, por ejemplo:
 
 Un aviso por escena por defecto, hasta que la dejes o la escena cambie. ¿Te lo perdiste? Abre el menú - la lectura sigue mostrando en qué escena estás y durante cuánto tiempo. El mod no detiene la escena por ti; usa Detener escena en la página Escena para eso.
 
-El vigilante se comporta igual tanto si tus menús pausan el mundo (vanilla) como si lo mantienen en marcha (configuraciones sin pausa como [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) - un aviso solo significa que la escena lleva un rato en marcha.
+Las configuraciones sin pausa (p. ej. [Souls](https://www.nexusmods.com/skyrimspecialedition/mods/27859)) deberían funcionar; el tiempo jugado sigue el contador de partida guardado del juego.
 
 ---
 
@@ -88,14 +88,16 @@ El vigilante se comporta igual tanto si tus menús pausan el mundo (vanilla) com
 
 - **Editor ID cargados** - un indicador. Nombres en la página Escena y en la misión propietaria cuando está encendido; números de ID cuando está apagado. Form ID sigue siendo el `0x…` en bruto en cualquier caso.
 
+- **Temporización** - qué relojes está usando esta escena para el umbral de aviso: tiempo jugado más reloj del juego cuando ambos parecen fiables, o solo tiempo jugado si el reloj del juego se ha perdido para esta escena. **--** cuando el vigilante está apagado, inactivo, o no estás en una escena.
+
 - **Vigilante** - si la comprobación en segundo plano está activa:
   - **En marcha** - bien
-  - **Despertando** - normal justo después de una recarga
+  - **Despertando** - normal justo después de una recarga o antes de la primera comprobación
   - **Con retraso** - sigue funcionando, pero las comprobaciones son más lentas de lo habitual (juego ocupado)
   - **Apagado** - pusiste comprobar cada en 0
   - **Inactivo** - activado está desactivado en Ajustes
 
-- **Última autorreparación** - el mod a veces corrige su propia contabilidad (a menudo tras una recarga). Una línea aquí es normal.
+- **Última autorreparación** - el mod a veces corrige su propia contabilidad interna. Una línea aquí es normal.
 
 - **Versión**
 
@@ -137,7 +139,7 @@ Comprueba el estado del Vigilante en la página Diagnóstico, y luego los contro
 - Estado **Apagado** - comprobar cada está en 0. Vuelve a ponerlo en 10-240s.
 - Avisarme tras está en **0** - eso desactiva el aviso. Pon los minutos que quieras.
 
-El aviso usa el tiempo del mismo modo que avisarme tras, así que tiempo en la escena puede a veces marcar un valor alto sin que llegue un aviso - eso es normal. Es tiempo real y se reinicia al recargar. Incluso sin ninguna notificación, el menú siempre muestra la escena actual y cuánto tiempo llevas en ella.
+El aviso espera a que **tanto** el tiempo jugado como el calendario del juego estén disponibles, así que **Tiempo en la escena** puede marcar un valor por encima del umbral mientras el aviso sigue esperando al reloj del juego - eso es normal. Incluso sin ninguna notificación, el menú siempre muestra la escena actual y cuánto tiempo llevas en ella.
 
 ### Detener escena no eliminó la escena
 

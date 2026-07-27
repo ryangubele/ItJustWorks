@@ -9,7 +9,7 @@ obj/
 # Papyrus compiler leftovers
 *.pex.bak
 
-# Generated at build time from the translation tables (build.ps1 bake step)
+# Generated at build time from the translation tables
 scripts/fth_IJW_Toasts.psc
 
 # Editor / OS
@@ -27,8 +27,7 @@ sanitization/private/
 
 # Third-party Papyrus API stubs (MCM Helper, po3 Extender, SkyUI, PapyrusUtil,
 # UIExtensions, and base-game signatures). Compile-time only, and not ours to
-# redistribute - they belong to their authors - so they live here locally but stay
-# out of the public repo. See docs/BUILDING.md for how to supply them.
+# redistribute. See docs/BUILDING.md for how to supply them.
 headers/
 
 # Local scratch
