@@ -547,17 +547,28 @@ $langFileNodes = @($langStep.SelectNodes('.//plugin/files/file'))
 $defFileNodes  = @($defStep.SelectNodes('.//plugin/files/file'))
 
 $fomodRefs = [System.Collections.Generic.HashSet[string]]::new()
-$fomodSources  = @($mc.config.SelectNodes('requiredInstallFiles/file')   | ForEach-Object { $_.GetAttribute('source') })
-$fomodSources += @($mc.config.SelectNodes('requiredInstallFiles/folder') | ForEach-Object { $_.GetAttribute('source') })
-$fomodSources += @($langFileNodes | ForEach-Object { $_.GetAttribute('source') })
-$fomodSources += @($defFileNodes  | ForEach-Object { $_.GetAttribute('source') })
-foreach ($src in ($fomodSources | Where-Object { $_ })) {
+$fomodSources = @(
+    $mc.config.SelectNodes('requiredInstallFiles/file') |
+        ForEach-Object { $_.GetAttribute('source') }
+    $mc.config.SelectNodes('requiredInstallFiles/folder') |
+        ForEach-Object { $_.GetAttribute('source') }
+    $langFileNodes |
+        ForEach-Object { $_.GetAttribute('source') }
+    $defFileNodes |
+        ForEach-Object { $_.GetAttribute('source') }
+) | Where-Object { $_ }
+
+foreach ($src in $fomodSources) {
     $full = Join-Path $pkg $src
-    if (-not (Test-Path $full)) { Fail "FOMOD references a missing source: $src" }
+    if (-not (Test-Path $full)) {
+        Fail "FOMOD references a missing source: $src"
+    }
     if (Test-Path $full -PathType Container) {
-        Get-ChildItem $full -Recurse -File | ForEach-Object { [void]$fomodRefs.Add($_.FullName.ToLower()) }
-    } else {
-        [void]$fomodRefs.Add((Resolve-Path $full).Path.ToLower())
+        Get-ChildItem $full -Recurse -File |
+            ForEach-Object { [void] $fomodRefs.Add($_.FullName.ToLower()) }
+    }
+    else {
+        [void] $fomodRefs.Add((Resolve-Path $full).Path.ToLower())
     }
 }
 
