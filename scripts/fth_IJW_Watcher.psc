@@ -130,6 +130,7 @@ EndEvent
 
 ; Loop health reads the played-time arm stamp set here.
 Function Rearm()
+    UnregisterForUpdate()             ; re-registering a live one is undefined; no-op if none pending
     if bEnabled && fPollInterval >= 1.0
         RegisterForSingleUpdate(fPollInterval)
         fLastArmPlayHours = Game.GetRealHoursPassed()
@@ -415,11 +416,11 @@ Function RunCheck(string asSource, bool abMayNotify)
     endif
 EndFunction
 
-; Outgoing: terminal check + history (played elapsed). Incoming: Events seed only.
+; Outgoing: terminal check + history. Incoming: Events seed only.
 Function HandleTransition(string asSource, Scene akLive, float afNowPlay)
     bool ownsTerminal = false
     if currentScene
-        ; Endpoints at the check that saw the leave. History = played; log min() matches warn.
+        ; Endpoints at the check that saw the leave. History, readout and warn all use min().
         float outPlay = -1.0
         float outGame = -1.0
         float outElapsed = -1.0
@@ -443,7 +444,7 @@ Function HandleTransition(string asSource, Scene akLive, float afNowPlay)
                     endif
                 endif
             endif
-            PushHistory(currentScene, outPlay)
+            PushHistory(currentScene, outElapsed)
         endif
         if iLogLevel >= LOG_EVENTS
             Log(LOG_EVENTS, "scene leave scene=" + SceneKey(currentScene) + " name=" + QuietEdid(currentScene) + " play=" + SecField(outPlay) + " elapsed=" + SecField(outElapsed))

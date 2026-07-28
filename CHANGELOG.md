@@ -5,6 +5,11 @@ All notable changes to It Just Works™ are recorded here. This project follows
 for what the numbers mean for a mod. The top heading's version must match `VERSION` -
 the build gate checks it.
 
+## 0.6.2
+
+- **History and nudges** now use the same sense of time.
+- **Update registration** better aligned with Papyrus semantics.
+
 ## 0.6.1
 
 - **Clock selection and algorithm refined** so timekeeping is even more
